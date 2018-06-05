@@ -1,2 +1,1 @@
-# barquitos-pium-pium
-guerra naval HD 100% real no feik
+Repositorio para barquitos pium pium UdeC 
