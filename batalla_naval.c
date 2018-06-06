@@ -1,18 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void ingresarMatriz(char *matriz)
+void ingresarMatriz(char *matriz)//puntero tomado por la funcion
 {
 	int i,c;
 
 	for(i=0;i<100;)
 	{
-		c=fgetc(stdin);
+		c=fgetc(stdin);//lee un caracter
 
-		if(c!='\n')
+		if(c!='\n')//si el caracter no es salto de linea
 		{
-			*(matriz+i)=c;
-			i++;
+			*(matriz+i)=c; // aquello apuntado por el puntero es igual al caracter ingresado
+			i++; //i sirve para desplazar a donde apunta el puntero en la matriz
 		}
 	}
 }
@@ -28,7 +28,7 @@ int main()
 	int i,j,c,aux;
 	char *pt;
 
-	struct barcos	// estructura de los barcos
+	typedef struct // vidas
 	{
 
 		int barcoA; //barco de 5
@@ -36,20 +36,21 @@ int main()
 		int barcoC;	//barco de 3
 		int barcoD; //barco de 3
 		int barcoE; //barco de 2
-	};
+	}barcosVivos;
 
-	struct barcos jugador1={5,4,3,3,2}; //barcos del jugador 1
-	struct barcos jugador2={5,4,3,3,2}; //barcos del jugador 2
+	barcosVivos flota1={5,4,3,3,2}; //barcos del jugador 1
+	barcosVivos flota2={5,4,3,3,2}; //barcos del jugador 2
 
 	printf("jugador 1 ingrese la posiocion de sus barcos\n");
 
-	pt=&tablero_de_barcos1[0][0];
+	pt=&tablero_de_barcos1[0][0];//el puntero a punta a tablero_de_barcos1[0][0]
 
 	ingresarMatriz(pt);
 
 	printf("jugador 2 ingrese la posiocion de sus barcos\n");
 
-	pt=&tablero_de_barcos2[0][0];
+	pt=&tablero_de_barcos2[0][0]; //el puntero a punta a tablero_de_barcos2[0][0]
+
 
 	ingresarMatriz(pt);
 
