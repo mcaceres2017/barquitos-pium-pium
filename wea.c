@@ -11,20 +11,6 @@ typedef struct // vidas
 		int barcoE; //barco de 2
 	}barcosVivos;
 
-typedef struct 
-{
-	char nombre1;
-	char nombre2;
-	char nombre3;
-	char nombre4;
-	char nombre5;
-}identificador;
-
-void punteria(char blanco)
-{
-	if(blanco)
-}
-
 void RellenarMatriz(char *matriz)
 {
 	int i;
@@ -51,7 +37,7 @@ char obtenerBlanco(int n, char cordenadas[n], char *matriz)
 
 	blanco=*(matriz+(i*10+j)); //blanco copia el caracter apuntado
 
-	return blanco; 
+	return blanco; //retorno blanco, somos racistas
 }
 
 void ingresarMatriz(char *matriz)//puntero tomado por la funcion
@@ -91,12 +77,12 @@ int main()
 	barcosVivos flota1={5,4,3,3,2}; //barcos del jugador 1
 	barcosVivos flota2={5,4,3,3,2}; //barcos del jugador 2
 
-	printf("jugador 1 ingrese la posicion de sus barcos\n");
+	printf("jugador 1 ingrese la posiocion de sus barcos\n");
 
 	
 	ingresarMatriz(pt1);
 
-	printf("jugador 2 ingrese la posicion de sus barcos\n");
+	printf("jugador 2 ingrese la posiocion de sus barcos\n");
 
 	ingresarMatriz(pt2);
 
@@ -106,12 +92,12 @@ int main()
 
 	while(barcos_de_jugador_1>0 && barcos_de_jugador_2>0) // condicion del ternimo de juego
 	{
-		/*if (p==1)
-		{*/
-		
-		printf("jugador 1, dispare.\n");	
+		if (p==1)
+		{
+			
 		do
 		{
+			printf("jugador 1, dispare\n");
 
 			aux=0; // auxiliar para las entradas invalidas
 			contador=0; // contador para medir el largo de la entrada
@@ -132,23 +118,17 @@ int main()
 				{
 					aux=1;
 				}
-				
-				if(contador==0 && (c>='A' || c<='J'))
-				{
-					contador++;
-				}
 
-				if(contador==1 && (c<'1' || c>'9')) // si es la segunda cordenada y la entrada no es un numero
+				if(contador==1 && (c<'0' || c>'9')) // si es la segunda cordenada y la entrada no es un numero
 				{
 					aux=1;
 				}
 
-
 				if (contador==1 && c=='1')
 				{
+					disparo[contador]=c;
 					contador++;
 				}
-
 				if (contador==2 && c!='0')
 				{
 					c=0;
@@ -157,74 +137,9 @@ int main()
 				}
 
 			}
-			if (aux==1)
-			{
-				printf("Dispare correctamente.\n");
-			}
 
 		}while(aux==1);
 
-		cordenada_apuntada=obtenerBlanco(contador,disparo,pt1);
-		if (cordenada_apuntada=='A')
-		{
-			
-		}
-		else if (cordenada_apuntada=='B')
-		{
-			
-		}
-		else if (cordenada_apuntada=='C')
-		{
-			
-		}
-		else if (cordenada_apuntada=='D')
-		{
-			
-		}
-		else if (cordenada_apuntada=='E')
-		{
-			
-		}
-		else 
-		{
-			if(p==1)
-			{
-				p=2;
-			}
-			if(p==2)
-			{
-				p=1;
-			}
-		}
-
-
-	}
-
-	/*for(i=0;i<10;i++)
-	{
-		for(j=0;j<10;j++)
-		{
-			printf("%c",tablero_de_barcos1[i][j]);
-		}
-
-		printf("\n");
-	}
-
-	printf("\n");
-
-	for(i=0;i<10;i++)
-	{
-		for(j=0;j<10;j++)
-		{
-			printf("%c",tablero_de_barcos2[i][j]);
-		}
-
-		printf("\n");
-	}
-
-	printf("\n");*/
 
 	return 0;
 }
-
-/*poner mensajes para p1 y p2... cambiar un par de weas con if's*/
