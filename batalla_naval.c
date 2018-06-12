@@ -20,9 +20,185 @@ typedef struct
 	char nombre5;
 }identificador;
 
-void punteria(char blanco)
+void danyar(barcosVivos* pt,disparo)
 {
-	if(blanco)
+
+}
+
+void asignarNombres(char* tablero, identificador* barco)
+{
+	int i,j,k,aux,a,b,aux2;
+	int contador=0;
+	char nombres[5];
+
+	a=0;
+
+	while(a<5)
+	{
+
+		j=0;
+		aux=0;
+
+		for(i=0;i<100;i++)
+		{
+			aux2=0;
+			if(*(tablero+i)!='.')
+			{
+				j=*(tablero+i);
+
+				for(b=0;b<a;b++)
+				{
+					if(j==nombres[b])
+					{
+						aux2=1;
+						break;
+					}
+				}
+
+				if(aux2==1)
+				{
+					continue;
+				}
+
+				if(aux==0)
+				{
+					contador++;
+					aux=1;
+				}
+
+				if(*(tableros+i+1)==j)
+				{
+					contador++;
+				}
+			}
+		}
+
+		aux=0;
+		nombres[a]=j;
+
+		switch(contador)
+		{
+			case 5: barco.nombre1=j;
+					break;
+			case 4: barco.nombre2=j;
+					break;
+			case 3: if(aux==0)
+					{
+						barco.nombre3=j;
+						aux=1;	
+					}
+
+					else
+					{
+						barco.nombre4=j;
+					}
+
+					break;
+			case 2: barco.nombre5=j;
+					break;
+		}
+		a++;
+
+		k=0;
+		contador=0;
+		j=0;
+		aux=0;
+
+		for(i=0;i<100;i=i+10)
+		{
+			aux2=0;
+
+			if(*(tablero+i)!='.')
+			{
+				j=*(tablero+i);
+
+				for(b=0;b<a;b++)
+				{
+					if(j==nombres[b])
+					{
+						aux2=1;
+						break;
+					}
+				}
+			
+				if(aux==1)
+				{
+					continue;
+				}
+
+				if(aux==0)
+				{
+					contador++;
+					aux=1;
+				}
+
+				if(*(tableros+i+1)==j)
+				{
+					contador++;
+				}
+			}
+
+			if(i>90)
+			{
+				k++;
+				i=k;
+			}
+		}
+
+		aux=0;
+
+		switch(contador)
+		{	
+			case 5: barco.nombre1=j;
+					break;
+			case 4: barco.nombre2=j;
+					break;
+			case 3: if(aux==0)
+					{
+						barco.nombre3=j;
+						aux=1;	
+					}
+
+					else
+					{
+						barco.nombre4=j;
+					}
+
+					break;
+			case 2: barco.nombre5=j;
+					break;
+		}
+		a++;
+	}
+
+}
+
+void punteria(char *blanco,int *p)
+{
+	if(*blanco>='A' && *blanco<='Z')
+	{
+		*blanco=='+';
+	}
+
+	else if(*blanco=='-')
+	{
+		printf("error\n");
+	}
+
+	else
+	{
+		*blanco='-';
+
+		if(*p==1)
+		{
+			*p=2;
+		}
+
+		if(*p==2)
+		{
+			*p=1;
+		}
+	}
 }
 
 void RellenarMatriz(char *matriz)
@@ -84,6 +260,8 @@ int main()
 	char *pt2=&tablero_de_barcos2[0][0];
 	char *pt3=&tablero_de_juego1[0][0];
 	char *pt4=&tablero_de_juego2[0][0];
+	int *turno=&p;
+	char *pos;
 
 	RellenarMatriz(pt3);
 	RellenarMatriz(pt4);
@@ -91,14 +269,19 @@ int main()
 	barcosVivos flota1={5,4,3,3,2}; //barcos del jugador 1
 	barcosVivos flota2={5,4,3,3,2}; //barcos del jugador 2
 
+	identificador j1;
+	identificador j2;
+
 	printf("jugador 1 ingrese la posicion de sus barcos\n");
 
 	
 	ingresarMatriz(pt1);
+	asignarNombres(pt1,&j1);
 
 	printf("jugador 2 ingrese la posicion de sus barcos\n");
 
 	ingresarMatriz(pt2);
+	asignarNombres(pt2,&j2);
 
 	int barcos_de_jugador_1=5;
 	int barcos_de_jugador_2=5;
@@ -132,21 +315,10 @@ int main()
 				{
 					aux=1;
 				}
-				
-				if(contador==0 && (c>='A' || c<='J'))
-				{
-					contador++;
-				}
 
 				if(contador==1 && (c<'1' || c>'9')) // si es la segunda cordenada y la entrada no es un numero
 				{
 					aux=1;
-				}
-
-
-				if (contador==1 && c=='1')
-				{
-					contador++;
 				}
 
 				if (contador==2 && c!='0')
@@ -155,6 +327,8 @@ int main()
 					disparo[contador]=c;
 					aux=1;
 				}
+
+				contador++;
 
 			}
 			if (aux==1)
@@ -165,39 +339,9 @@ int main()
 		}while(aux==1);
 
 		cordenada_apuntada=obtenerBlanco(contador,disparo,pt1);
-		if (cordenada_apuntada=='A')
-		{
-			
-		}
-		else if (cordenada_apuntada=='B')
-		{
-			
-		}
-		else if (cordenada_apuntada=='C')
-		{
-			
-		}
-		else if (cordenada_apuntada=='D')
-		{
-			
-		}
-		else if (cordenada_apuntada=='E')
-		{
-			
-		}
-		else 
-		{
-			if(p==1)
-			{
-				p=2;
-			}
-			if(p==2)
-			{
-				p=1;
-			}
-		}
+		pos=&cordenada_apuntada;
 
-
+		punteria(pos,turno);
 	}
 
 	/*for(i=0;i<10;i++)
