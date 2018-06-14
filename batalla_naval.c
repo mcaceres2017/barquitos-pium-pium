@@ -20,14 +20,37 @@ typedef struct
 	char nombre5;
 }identificador;
 
-void danyar(barcosVivos* pt,disparo)
+void danyar(char *blanco)
 {
+	if(*blanco==identificador.nombre1)
+	{
+		barcosVivos.barcoA--;
+	}
+	else if (*blanco==identificador.nombre2)
+	{
+		barcosVivos.barcoB--;
+	}
+	else if (*blanco==identificador.nombre3)
+	{
+		barcosVivos.barcoC--;
+	}
+	else if (*blanco==identificador.nombre4)
+	{
+		barcosVivos.barcoD--;
+	}
+	else if (*blanco==identificador.nombre5)
+	{
+		barcosVivos.barcoE--;
+	}
+	/*ver a la wea que achunto
+	restar barcos barcosVivos
+	si barco qlo cero, restar uno a vidas.*/
 
 }
 
-void asignarNombres(char* tablero, identificador* barco)
+void asignarNombres(char* tablero, identificador* barco) //revisado y seguro
 {
-	int i,j,k,aux,a,b,aux2;
+	int i,j,k,aux,a,b,aux2,aux3=0;
 	int contador=0;
 	char nombres[5];
 
@@ -73,28 +96,28 @@ void asignarNombres(char* tablero, identificador* barco)
 			}
 		}
 
-		aux=0;
 		nombres[a]=j;
+
 
 		switch(contador)
 		{
-			case 5: barco.nombre1=j;
+			case 5: identificador.nombre1=j;
 					break;
-			case 4: barco.nombre2=j;
+			case 4: identificador.nombre2=j;
 					break;
-			case 3: if(aux==0)
+			case 3: if(aux3==0)
 					{
-						barco.nombre3=j;
-						aux=1;	
+						identificador.nombre3=j;
+						aux3=1;	
 					}
 
 					else
 					{
-						barco.nombre4=j;
+						identificador.nombre4=j;
 					}
 
 					break;
-			case 2: barco.nombre5=j;
+			case 2: identificador.nombre5=j;
 					break;
 		}
 		a++;
@@ -104,7 +127,7 @@ void asignarNombres(char* tablero, identificador* barco)
 		j=0;
 		aux=0;
 
-		for(i=0;i<100;i=i+10)
+		for(i=0;i<=99;i=i+10)
 		{
 			aux2=0;
 
@@ -121,7 +144,7 @@ void asignarNombres(char* tablero, identificador* barco)
 					}
 				}
 			
-				if(aux==1)
+				if(aux2==1)
 				{
 					continue;
 				}
@@ -138,51 +161,51 @@ void asignarNombres(char* tablero, identificador* barco)
 				}
 			}
 
-			if(i>90)
+			if(i>=90)
 			{
 				k++;
 				i=k;
 			}
 		}
 
-		aux=0;
+		nombres[a]=j;
 
 		switch(contador)
 		{	
-			case 5: barco.nombre1=j;
+			case 5: identificador.nombre1=j;
 					break;
-			case 4: barco.nombre2=j;
+			case 4: identificador.nombre2=j;
 					break;
-			case 3: if(aux==0)
+			case 3: if(aux3==0)
 					{
-						barco.nombre3=j;
-						aux=1;	
+						identificador.nombre3=j;
+						aux3=1;	
 					}
 
 					else
 					{
-						barco.nombre4=j;
+						identificador.nombre4=j;
 					}
 
 					break;
-			case 2: barco.nombre5=j;
+			case 2: identificador.nombre5=j;
 					break;
 		}
 		a++;
 	}
-
 }
 
-void punteria(char *blanco,int *p)
+void punteria(char *blanco,int *p) //revisado
 {
 	if(*blanco>='A' && *blanco<='Z')
 	{
-		*blanco=='+';
+		*blanco='+';
+		printf("acertaste dispara de nuevo\n");
 	}
 
-	else if(*blanco=='-')
+	else if(*blanco=='-' || *blanco=='+')
 	{
-		printf("error\n");
+		printf("dispare invalide, apunte nuevemente:\n");
 	}
 
 	else
@@ -201,7 +224,7 @@ void punteria(char *blanco,int *p)
 	}
 }
 
-void RellenarMatriz(char *matriz)
+void RellenarMatriz(char *matriz)  //comprobado
 {
 	int i;
 	for(i=0;i<100;i++)
@@ -210,7 +233,7 @@ void RellenarMatriz(char *matriz)
 	}
 }
 
-char obtenerBlanco(int n, char cordenadas[n], char *matriz)
+char obtenerBlanco(int n, char cordenadas[n], char *matriz) //revisado
 {	
 	int i,k;
 	int j=0;
@@ -218,7 +241,7 @@ char obtenerBlanco(int n, char cordenadas[n], char *matriz)
 
 	i=cordenadas[0]-'A'; //traspaso de letra a entero
 
-	for(k=1;k<n;k++) // traspaso de numero caracter a numero entero
+	for(k=1;k<n-1;k++) // traspaso de numero caracter a numero entero
 	{
 		j=j*10+(cordenadas[k]-'0');
 	}
@@ -230,7 +253,7 @@ char obtenerBlanco(int n, char cordenadas[n], char *matriz)
 	return blanco; 
 }
 
-void ingresarMatriz(char *matriz)//puntero tomado por la funcion
+void ingresarMatriz(char *matriz)//puntero tomado por la funcion //funciona
 {
 	int i,c;
 
@@ -249,13 +272,13 @@ void ingresarMatriz(char *matriz)//puntero tomado por la funcion
 int main()
 {
 	char tablero_de_barcos1[10][10];
-	char tablero_de_barcos2[10][10]; //declaracion de los tableros de posiocion de barcos
+	char tablero_de_barcos2[10][10]; //declaracion de los tableros de posicion de barcos
 	char disparo[3];
 	
 	char tablero_de_juego1[10][10];
 	char tablero_de_juego2[10][10]; //declaracion  de los tableros visibles para los jugadores
 
-	int i,j,c,aux,contador,p;
+	int i,j,c,aux,contador,p=1;
 	char *pt1=&tablero_de_barcos1[0][0];
 	char *pt2=&tablero_de_barcos2[0][0];
 	char *pt3=&tablero_de_juego1[0][0];
@@ -276,12 +299,12 @@ int main()
 
 	
 	ingresarMatriz(pt1);
-	asignarNombres(pt1,&j1);
+	identificador j1=asignarNombres(pt1,&j1);
 
 	printf("jugador 2 ingrese la posicion de sus barcos\n");
 
 	ingresarMatriz(pt2);
-	asignarNombres(pt2,&j2);
+	identificador j2=asignarNombres(pt2,&j2);
 
 	int barcos_de_jugador_1=5;
 	int barcos_de_jugador_2=5;
@@ -289,10 +312,12 @@ int main()
 
 	while(barcos_de_jugador_1>0 && barcos_de_jugador_2>0) // condicion del ternimo de juego
 	{
-		/*if (p==1)
-		{*/
 		
-		printf("jugador 1, dispare.\n");	
+		if (p==1)
+		{
+			printf("jugador 1, dispare.\n");
+		}	
+		
 		do
 		{
 
@@ -342,6 +367,7 @@ int main()
 		pos=&cordenada_apuntada;
 
 		punteria(pos,turno);
+		danyar(parametros y wea);
 	}
 
 	/*for(i=0;i<10;i++)
@@ -372,3 +398,4 @@ int main()
 }
 
 /*poner mensajes para p1 y p2... cambiar un par de weas con if's*/
+/*funcion dañar recibe pos y un puntero a las estructuras identificador de j1 y j2*/
