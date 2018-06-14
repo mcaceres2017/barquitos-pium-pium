@@ -142,10 +142,10 @@ void asignarNombres(char* tablero, identificador* barco) //revisado y seguro
 			}
 		}
 
-		if(contador>=2 && contador<=5)
+		if(contador>=2 && contador<=5) //si el contador esta dentro del rango del tamaño de los barcos
 		{		
 			nombres[a]=j; //se copia el "nombre" al comparador
-			printf("se copio %c al comparador\n",j);
+			printf("se copio %c al comparador\n",j); //bandera para revisar el programa
 
 
 			switch(contador)  // se asigna ese nombre al barco correspondiente segun el largo
@@ -212,7 +212,7 @@ void asignarNombres(char* tablero, identificador* barco) //revisado y seguro
 				}
 
 				if(*(tablero+i+10)!=j) //si se pilla con un caracter distinto
-				{
+				{                      // ojo, aqui es el siguiente caracter en la columna, no en la fila
 					contador_aux=contador; // se va  a guardar el tamaño del barco anterior
 					aux=0;
 					contador=0;
@@ -232,7 +232,7 @@ void asignarNombres(char* tablero, identificador* barco) //revisado y seguro
 			}
 		}
 
-		if(contador>=2 && contador<=5)
+		if(contador>=2 && contador<=5) //si el contador esta dentro del rango
 		{
 
 			nombres[a]=j; // se copia el "nombre" al comparador
@@ -310,27 +310,24 @@ void RellenarMatriz(char *matriz)  //comprobado
 	}
 }
 
-char obtenerBlanco(int n, char cordenadas[n], char *matriz) //revisado
+char * obtenerBlanco(int n, char cordenadas[n], char *matriz) //revisado
 {	
 	int i=0,k;
 	int j=0;
-	char blanco;
+	char *blanco;
 
 	i=cordenadas[0]-'A'; //traspaso de letra a entero
-	printf("i=%d\n",i);
 
 	for(k=1;k<n;k++) // traspaso de numero caracter a numero entero
 	{
 		j=j*10+(cordenadas[k]-'0');
-		printf("j for=%d\n",j);
 	}
 
 	j--; //restar uno porque la matriz empieza en cero
-	printf("j=%d\n",j);
 
-	blanco=*(matriz+(i*10+j)); //blanco copia el caracter apuntado
+	blanco=&(*(matriz+(i*10+j))); //blanco copia la direccion de memoria del caracter apuntado
 	printf("blanco apunta hacia la posicion %d\n",0+(i*10+j));
-	return blanco; 
+	return blanco; //y se retorna un puntero, ojo.
 }
 
 void ingresarMatriz(char *matriz)//puntero tomado por la funcion //funciona
@@ -364,8 +361,6 @@ int main()
 	char *pt3=&tablero_de_juego1[0][0];
 	char *pt4=&tablero_de_juego2[0][0];
 	int *turno=&p;
-	char *pos_barco;
-	char *pos_pantalla;
 
 	RellenarMatriz(pt3);
 	RellenarMatriz(pt4);
@@ -380,9 +375,7 @@ int main()
 
 	
 	ingresarMatriz(pt1); //se le pide al jugador ingresar la matriz
-	printf("termino el ingreso\n");
 	asignarNombres(pt1,&j1);   //y se asignas los nombres a cada barco
-	printf("asigne los nombres\n");
 
 	printf("jugador 2 ingrese la posicion de sus barcos\n");
 
@@ -391,10 +384,10 @@ int main()
 
 	int barcos_de_jugador_1=5; 
 	int barcos_de_jugador_2=5; //contadores para barcos restantes
-	char cordenada_apuntada;
-	char cordenada_pantalla;
+	char *ca; //cordenada apuntada.. guarda la direccion de memoria del lugar al que se apunto de la matriz de barcos
+	char *cp; // cordenada pantalla guarda la direccion de memoria del lugar al que se apunto de la matriz de juegos
 
-	printf("Mostrando matriz jugador 1\n");
+	printf("Mostrando matriz jugador 1\n"); //para revisar
 
 	for(i=0;i<10;i++)
 	{
@@ -408,7 +401,7 @@ int main()
 
 	printf("\n");
 
-	printf("Mostrando matriz jugador 2\n");
+	printf("Mostrando matriz jugador 2\n"); //para revisar
 
 	for(i=0;i<10;i++)
 	{
@@ -425,9 +418,9 @@ int main()
 	while(barcos_de_jugador_1>0 && barcos_de_jugador_2>0) // condicion del ternimo de juego
 	{
 
-		/*if(p==1) //imprime la matriz que se muestra por pantalla
+		if(p==1) //imprime la matriz que se muestra por pantalla
 		{
-			printf("\n\n\n\n");
+			printf("\n\n\n\n"); //estos son solo para separar entre disparo y disparo
 			for(i=0;i<10;i++)
 			{
 				for(j=0;j<10;j++)
@@ -441,7 +434,7 @@ int main()
 
 		if(p==2) //imprime la matriz que se muestra por pantalla
 		{
-			printf("\n\n\n\n");
+			printf("\n\n\n\n"); //estos son solo para separar entre disparo y disparo
 			for(i=0;i<10;i++)
 			{
 				for(j=0;j<10;j++)
@@ -451,69 +444,7 @@ int main()
 
 				printf("\n");
 			}
-		}*/
-
-
-		printf("matriz barcos 1\n");
-
-		for(i=0;i<10;i++)
-		{
-			for(j=0;j<10;j++)
-			{
-				printf("%c",tablero_de_barcos1[i][j]);
-			}
-
-			printf("\n");
 		}
-
-		printf("\n");
-
-		printf("matriz barcos 2\n");
-
-		for(i=0;i<10;i++)
-		{
-			for(j=0;j<10;j++)
-			{
-				printf("%c",tablero_de_barcos2[i][j]);
-			}	
-
-			printf("\n");
-		}
-
-		printf("\n");
-
-
-
-
-		printf("tablero de juego 1");
-
-
-
-
-		printf("\n\n\n\n");
-		for(i=0;i<10;i++)
-		{
-			for(j=0;j<10;j++)
-			{
-				printf("%c",tablero_de_juego1[i][j]);
-			}
-		printf("\n");
-		}
-
-
-
-		printf("tablero de juego 2\n");
-
-		for(i=0;i<10;i++)
-		{
-			for(j=0;j<10;j++)
-			{
-				printf("%c",tablero_de_juego2[i][j]);
-			}
-		printf("\n");
-		}
-
-
 
 		
 		if (p==1)
@@ -575,31 +506,29 @@ int main()
 		}while(aux==1);
 
 		
-		if(p==1)
-		{
-			cordenada_apuntada=obtenerBlanco(contador,disparo,pt2);
-			cordenada_pantalla=obtenerBlanco(contador,disparo,pt4);
+		if(p==1) //se obtiene la direccion de memoria del lugar al que se apunto, tanto para la matriz que
+		{        //se muestra como para la matriz de barcos enemiga
+			ca=obtenerBlanco(contador,disparo,pt2);
+			cp=obtenerBlanco(contador,disparo,pt4);
 		}
 
 		if(p==2)
 		{
-			cordenada_apuntada=obtenerBlanco(contador,disparo,pt1);
-			cordenada_pantalla=obtenerBlanco(contador,disparo,pt3);
+			ca=obtenerBlanco(contador,disparo,pt1);
+			cp=obtenerBlanco(contador,disparo,pt3);
 		}
 		
-		printf("cordenada apuntada=%c cordenada pantalla=%c\n",cordenada_apuntada,cordenada_pantalla);
-		pos_barco=&cordenada_apuntada;
-		pos_pantalla=&cordenada_pantalla;
+		printf("cordenada apuntada=%c cordenada pantalla=%c\n",*ca,*cp);
 
 		if(p==1) // si es el turno del J1
 		{
-			punteria(pos_barco,pos_pantalla,&flota2,&j2,turno,&barcos_de_jugador_2);
+			punteria(ca,cp,&flota2,&j2,turno,&barcos_de_jugador_2);
 			continue; //si el j1 fallo, esto evita que se meta al if del p2 inmediatamente despues
 		} 
 
 		if(p==2) // si es el turno del J2
 		{
-			punteria(pos_barco,pos_pantalla,&flota1,&j1,turno,&barcos_de_jugador_1);
+			punteria(ca,cp,&flota1,&j1,turno,&barcos_de_jugador_1);
 		}		
 	}
 
