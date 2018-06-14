@@ -20,27 +20,52 @@ typedef struct
 	char nombre5;
 }identificador;
 
-void danyar(char *blanco)
+void danyar(char *blanco,barcosVivos* objetivo,identificador* id,int* vidas)
 {
-	if(*blanco==identificador.nombre1)
+	if(*blanco==id->nombre1)
 	{
-		barcosVivos.barcoA--;
+		objetivo->barcoA--;
+
+		if(objetivo->barcoA==0) // si todos los barcos A fueron destruidos
+		{
+			*vidas--;
+		}
 	}
-	else if (*blanco==identificador.nombre2)
+	else if (*blanco==id->nombre2)
 	{
-		barcosVivos.barcoB--;
+		objetivo->barcoB--;
+
+		if(objetivo->barcoB==0)  // si todos los barcos B fueron destruidos
+		{
+			*vidas--;
+		}
 	}
-	else if (*blanco==identificador.nombre3)
+	else if (*blanco==id->nombre3)
 	{
-		barcosVivos.barcoC--;
+		objetivo->barcoC--;
+
+		if(objetivo->barcoC==0)  // si todos los barcos C fueron destruidos
+		{
+			*vidas--;
+		}
 	}
-	else if (*blanco==identificador.nombre4)
+	else if (*blanco==id->nombre4)
 	{
-		barcosVivos.barcoD--;
+		objetivo->barcoD--;
+
+		if(objetivo->barcoD==0)  // si todos los barcos D fueron destruidos
+		{
+			*vidas--;
+		}
 	}
-	else if (*blanco==identificador.nombre5)
+	else if (*blanco==id->nombre5)
 	{
-		barcosVivos.barcoE--;
+		objetivo->barcoE--;
+
+		if(objetivo->barcoE==0)  // si todos los barcos E fueron destruidos
+		{
+			*vidas--;
+		}
 	}
 	/*ver a la wea que achunto
 	restar barcos barcosVivos
@@ -89,7 +114,7 @@ void asignarNombres(char* tablero, identificador* barco) //revisado y seguro
 					aux=1;
 				}
 
-				if(*(tableros+i+1)==j)
+				if(*(tablero+i+1)==j)
 				{
 					contador++;
 				}
@@ -101,23 +126,23 @@ void asignarNombres(char* tablero, identificador* barco) //revisado y seguro
 
 		switch(contador)
 		{
-			case 5: identificador.nombre1=j;
+			case 5: barco->nombre1=j;
 					break;
-			case 4: identificador.nombre2=j;
+			case 4: barco->nombre2=j;
 					break;
 			case 3: if(aux3==0)
 					{
-						identificador.nombre3=j;
+						barco->nombre3=j;
 						aux3=1;	
 					}
 
 					else
 					{
-						identificador.nombre4=j;
+						barco->nombre4=j;
 					}
 
 					break;
-			case 2: identificador.nombre5=j;
+			case 2: barco->nombre5=j;
 					break;
 		}
 		a++;
@@ -155,7 +180,7 @@ void asignarNombres(char* tablero, identificador* barco) //revisado y seguro
 					aux=1;
 				}
 
-				if(*(tableros+i+1)==j)
+				if(*(tablero+i+1)==j)
 				{
 					contador++;
 				}
@@ -172,33 +197,35 @@ void asignarNombres(char* tablero, identificador* barco) //revisado y seguro
 
 		switch(contador)
 		{	
-			case 5: identificador.nombre1=j;
+			case 5: barco->nombre1=j;
 					break;
-			case 4: identificador.nombre2=j;
+			case 4: barco->nombre2=j;
 					break;
 			case 3: if(aux3==0)
 					{
-						identificador.nombre3=j;
+						barco->nombre3=j;
 						aux3=1;	
 					}
 
 					else
 					{
-						identificador.nombre4=j;
+						barco->nombre4=j;
 					}
 
 					break;
-			case 2: identificador.nombre5=j;
+			case 2: barco->nombre5=j;
 					break;
 		}
 		a++;
 	}
 }
 
-void punteria(char *blanco,int *p) //revisado
+void punteria(char *blanco,barcosVivos* objetivo,identificador* id,int *p,int* vidas) //revisado
 {
 	if(*blanco>='A' && *blanco<='Z')
 	{
+		danyar(blanco,objetivo,id,vidas); // funcion para dañar
+
 		*blanco='+';
 		printf("acertaste dispara de nuevo\n");
 	}
@@ -299,12 +326,12 @@ int main()
 
 	
 	ingresarMatriz(pt1);
-	identificador j1=asignarNombres(pt1,&j1);
+	asignarNombres(pt1,&j1);
 
 	printf("jugador 2 ingrese la posicion de sus barcos\n");
 
 	ingresarMatriz(pt2);
-	identificador j2=asignarNombres(pt2,&j2);
+	asignarNombres(pt2,&j2);
 
 	int barcos_de_jugador_1=5;
 	int barcos_de_jugador_2=5;
@@ -366,8 +393,29 @@ int main()
 		cordenada_apuntada=obtenerBlanco(contador,disparo,pt1);
 		pos=&cordenada_apuntada;
 
-		punteria(pos,turno);
-		danyar(parametros y wea);
+		if(p==1) // si es el turno del J1
+		{
+			punteria(pos,&flota2,&j2,turno,&barcos_de_jugador_2);
+			continue;
+		}
+
+		if(p==2) // si es el turno del J2
+		{
+			punteria(pos,&flota1,&j1,turno,&barcos_de_jugador_1);
+			continue;
+		}
+	}
+
+	printf("el juego termino\n");
+
+	if(barcos_de_jugador_1!=0)
+	{
+		printf("gana el jugador uno\n");
+	}
+
+	else
+	{
+		printf("gana el jugador dos\n");
 	}
 
 	/*for(i=0;i<10;i++)
