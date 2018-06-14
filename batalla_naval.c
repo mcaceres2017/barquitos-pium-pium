@@ -111,9 +111,13 @@ void asignarNombres(char* tablero, identificador* barco) //revisado y seguro
 					aux=1;
 				}
 
-				if(*(tablero+i+1)==j) // y este if son para contar el largo del barco
+				if(*(tablero+i)==j && *(tablero+i+1)==j) // y este if son para contar el largo del barco
 				{
 					contador++;
+				}
+				if(contador==1)
+				{
+					contador=0;
 				}
 			}
 		}
