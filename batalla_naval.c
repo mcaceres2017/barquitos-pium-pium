@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 
 typedef struct // vidas
 	{
@@ -355,7 +356,7 @@ int main()
 	char tablero_de_juego1[10][10];
 	char tablero_de_juego2[10][10]; //declaracion  de los tableros visibles para los jugadores
 
-	int i,j,c,aux,contador,p=1;
+	int i,j,c,aux,contador,p=1,aux2=0;
 	char *pt1=&tablero_de_barcos1[0][0];
 	char *pt2=&tablero_de_barcos2[0][0];
 	char *pt3=&tablero_de_juego1[0][0];
@@ -464,6 +465,13 @@ int main()
 
 			aux=0; // auxiliar para las entradas invalidas
 			contador=0; // contador para medir el largo de la entrada
+
+			if(aux2==0) // LO QUE CAMBIO,REVISA LIBRERIA
+			{
+				c=fgetc(stdin);
+				assert(c=='\n');
+				aux2=1;
+			}
 
 			while((c=fgetc(stdin))!='\n')// lee hasta el salto de linea
 			{
