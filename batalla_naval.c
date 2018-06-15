@@ -466,10 +466,10 @@ int main()
 			aux=0; // auxiliar para las entradas invalidas
 			contador=0; // contador para medir el largo de la entrada
 
-			if(aux2==0) // LO QUE CAMBIO,REVISA LIBRERIA
+			if(aux2==0) //Esto evita el bug del player uno.
 			{
 				c=fgetc(stdin);
-				assert(c=='\n');
+				//aqui habia un assert
 				aux2=1;
 			}
 
