@@ -93,10 +93,12 @@ void asignarNombres(char* tablero, identificador* barco) //revisado y seguro
 
 		for(i=0;i<=99;i++) //este for revisa las filas de la matriz
 		{
+			//printf("i en ciclo %d\n",i);
 			aux2=0;
 			if(*(tablero+i)!='.') //si se pilla con una letra
 			{
 				j=*(tablero+i);   // jota copia el ASCII de esa letra
+				//printf("jota es %c\n",*(tablero+i));
 
 				for(b=0;b<a;b++) //se revisa si esa letra ya fue asignada a un barco
 				{
@@ -109,29 +111,38 @@ void asignarNombres(char* tablero, identificador* barco) //revisado y seguro
 
 				if(aux2==1) // si es asi... se sigue al siguiente ciclo
 				{
+					//printf("saltando ciclo\n");
 					continue;
 				}
 
 				if(aux==0)   //este if
 				{
+					//printf("se activo la primera cuenta\n");
 					contador++;
+					//printf("contador=%d\n",contador);
 					aux=1;
 				}
 
 				if(*(tablero+i+1)==j && (i+1)<=99) // y este if son para contar el largo del barco
 				{
+					//printf("caracter igual siguiente espacio\n");
 					contador++;
+					//printf("contador=%d\n",contador);
 				}
 				
 				if(*(tablero+i+1)!=j && (i+1)<=99) //si se pilla con un caracter distinto
 				{
+					//printf("caracter distinto siguiente espacio\n");
 					contador_aux=contador; // se va  a guardar el tamaño del barco anterior
 					aux=0;
 					contador=0;
+					//printf("contador aux=%d\n",contador_aux);
+					//printf("contador=%d\n",contador);
 				}
 				
 				if(contador_aux>=2 && contador_aux<=5) // si el tamaño del barco anterior esta
-				{                                      // dentro del rango, se rompe el ciclo para
+				{   
+					//printf("contador dentro de rango\n");  // dentro del rango, se rompe el ciclo para
 					contador=contador_aux;             // guardar dicho barco.
 					break;
 				}
@@ -176,16 +187,19 @@ void asignarNombres(char* tablero, identificador* barco) //revisado y seguro
 
 		for(i=0;i<=99;i=i+10)  //esto revisa la matriz por columnas
 		{
+			//printf("i en ciclo %d\n",i);
 			aux2=0;
 
 			if(*(tablero+i)!='.') //y el mismo proceso
 			{
 				j=*(tablero+i);
+				//printf("jota copio: %c\n",j);
 
 				for(b=0;b<a;b++)
 				{
 					if(j==nombres[b])
 					{
+						//printf("wea igual: %c\n",j);
 						aux2=1;
 						break;
 					}
@@ -193,33 +207,47 @@ void asignarNombres(char* tablero, identificador* barco) //revisado y seguro
 			
 				if(aux2==1)
 				{
+					//printf("saltando ciclo\n");
+					if(i>=90 && i<99) // cuando se llega a la ultima posicion de la columna
+					{
+						i=k;  // para que i recorra la siguiente columna
+						k++; //k aumenta
+					}
 					continue;
 				}
 
 				if(aux==0)
 				{
+					//printf("primera vez contador\n");
 					contador++;
+					//printf("contador=%d\n",contador);
 					aux=1;
 				}
 
 				if(*(tablero+i+10)==j && (i+10)<=99)
 				{
+					//printf("caracter igual siguiente espacio\n");
 					contador++;
+					//printf("contador=%d\n",contador);
 				}
 
 
 				if(*(tablero+i+10)!=j && (i+10)<=99) //si se pilla con un caracter distinto
 				{                      // ojo, aqui es el siguiente caracter en la columna, no en la fila
+					//printf("caracter distinto siguiente espacio\n");
 					contador_aux=contador; // se va  a guardar el tamaño del barco anterior
 					aux=0;
 					contador=0;
+					//printf("contador aux=%d\n",contador_aux);
+					//printf("contador=%d\n",contador);
 				}
 				
 				if(contador_aux>=2 && contador_aux<=5) // si el tamaño del barco anterior esta
-				{                                      // dentro del rango, se rompe el ciclo para
+				{                                      // dentro del rango, se rompe el ciclo para             // guardar dicho barco.
 					contador=contador_aux;             // guardar dicho barco.
 					break;
 				}
+				
 			}
 
 			if(i>=90 && i<99) // cuando se llega a la ultima posicion de la columna
@@ -227,6 +255,8 @@ void asignarNombres(char* tablero, identificador* barco) //revisado y seguro
 				i=k;  // para que i recorra la siguiente columna
 				k++; //k aumenta
 			}
+
+			
 		}
 
 		/*for(b=0;b<5;b++)
@@ -366,247 +396,230 @@ int main()
 	char *pt3=&tablero_de_juego1[0][0];
 	char *pt4=&tablero_de_juego2[0][0];
 	int *turno=&p;
+	int denuevo=1;
 
-	RellenarMatriz(pt3);
-	RellenarMatriz(pt4);
+	while(denuevo==1){
 
-	barcosVivos flota1={5,4,3,3,2}; //barcos del jugador 1
-	barcosVivos flota2={5,4,3,3,2}; //barcos del jugador 2
+		RellenarMatriz(pt3);
+		RellenarMatriz(pt4);
 
-	identificador j1;  //nombres de los barcos p1
-	identificador j2;  //nombres de los barcos p2
+		barcosVivos flota1={5,4,3,3,2}; //barcos del jugador 1
+		barcosVivos flota2={5,4,3,3,2}; //barcos del jugador 2
 
-	printf("jugador 1 ingrese la posicion de sus barcos\n");
+		identificador j1;  //nombres de los barcos p1
+		identificador j2;  //nombres de los barcos p2
+
+		printf("jugador 1 ingrese la posicion de sus barcos\n");
 
 	
-	ingresarMatriz(pt1); //se le pide al jugador ingresar la matriz
-	printf("pos termino el ingreso\n");
-	asignarNombres(pt1,&j1);   //y se asignas los nombres a cada barco
-	printf("pos ya asigne los nombres\n");
+		ingresarMatriz(pt1); //se le pide al jugador ingresar la matriz
+		printf("pos termino el ingreso\n");
+		asignarNombres(pt1,&j1);   //y se asignas los nombres a cada barco
+		printf("pos ya asigne los nombres\n");
 
-	printf("jugador 2 ingrese la posicion de sus barcos\n");
+		printf("jugador 2 ingrese la posicion de sus barcos\n");
 
-	ingresarMatriz(pt2);
-	asignarNombres(pt2,&j2);
+		ingresarMatriz(pt2);
+		asignarNombres(pt2,&j2);
 
-	int barcos_de_jugador_1=5; 
-	int barcos_de_jugador_2=5; //contadores para barcos restantes
-	char *ca; //cordenada apuntada.. guarda la direccion de memoria del lugar al que se apunto de la matriz de barcos
-	char *cp; // cordenada pantalla guarda la direccion de memoria del lugar al que se apunto de la matriz de juegos
+		int barcos_de_jugador_1=5; 
+		int barcos_de_jugador_2=5; //contadores para barcos restantes
+		char *ca; //cordenada apuntada.. guarda la direccion de memoria del lugar al que se apunto de la matriz de barcos
+		char *cp; // cordenada pantalla guarda la direccion de memoria del lugar al que se apunto de la matriz de juegos
 
-	printf("Mostrando matriz jugador 1\n"); //para revisar
+		printf("Mostrando matriz jugador 1\n"); //para revisar
 
-	for(i=0;i<10;i++)
-	{
-		for(j=0;j<10;j++)
+		for(i=0;i<10;i++)
 		{
-			printf("%c",tablero_de_barcos1[i][j]);
+			for(j=0;j<10;j++)
+			{
+				printf("%c",tablero_de_barcos1[i][j]);
+			}
+
+			printf("\n");
 		}
 
 		printf("\n");
-	}
 
-	printf("\n");
+		printf("Mostrando matriz jugador 2\n"); //para revisar
 
-	printf("Mostrando matriz jugador 2\n"); //para revisar
-
-	for(i=0;i<10;i++)
-	{
-		for(j=0;j<10;j++)
+		for(i=0;i<10;i++)
 		{
-			printf("%c",tablero_de_barcos2[i][j]);
+			for(j=0;j<10;j++)
+			{
+				printf("%c",tablero_de_barcos2[i][j]);
+			}
+
+			printf("\n");
 		}
 
 		printf("\n");
-	}
 
-	printf("\n");
-
-	printf("j1.nombre1=%c\n",j1.nombre1);
-	printf("j1.nombre2=%c\n",j1.nombre2);
-	printf("j1.nombre3=%c\n",j1.nombre3);
-	printf("j1.nombre4=%c\n",j1.nombre4);
-	printf("j1.nombre5=%c\n",j1.nombre5);
+		printf("j1.nombre1=%c\n",j1.nombre1);
+		printf("j1.nombre2=%c\n",j1.nombre2);
+		printf("j1.nombre3=%c\n",j1.nombre3);
+		printf("j1.nombre4=%c\n",j1.nombre4);
+		printf("j1.nombre5=%c\n",j1.nombre5);
 
 
-	printf("j2.nombre1=%c\n",j1.nombre1);
-	printf("j2.nombre2=%c\n",j1.nombre2);
-	printf("j2.nombre3=%c\n",j1.nombre3);
-	printf("j2.nombre4=%c\n",j1.nombre4);
-	printf("j2.nombre5=%c\n",j1.nombre5);
+		printf("j2.nombre1=%c\n",j1.nombre1);
+		printf("j2.nombre2=%c\n",j1.nombre2);
+		printf("j2.nombre3=%c\n",j1.nombre3);
+		printf("j2.nombre4=%c\n",j1.nombre4);
+		printf("j2.nombre5=%c\n",j1.nombre5);
 
-	while(barcos_de_jugador_1>0 && barcos_de_jugador_2>0) // condicion del ternimo de juego
-	{
-
-		if(p==1) //imprime la matriz que se muestra por pantalla
+		while(barcos_de_jugador_1>0 && barcos_de_jugador_2>0) // condicion del ternimo de juego
 		{
-			printf("\n\n\n\n"); //estos son solo para separar entre disparo y disparo
-			for(i=0;i<10;i++)
+
+			if(p==1) //imprime la matriz que se muestra por pantalla
 			{
-				for(j=0;j<10;j++)
+				printf("\n\n\n\n"); //estos son solo para separar entre disparo y disparo
+				for(i=0;i<10;i++)
 				{
-					printf("%c",tablero_de_juego2[i][j]);
-				}
+					for(j=0;j<10;j++)
+					{
+						printf("%c",tablero_de_juego2[i][j]);
+					}
 
-				printf("\n");
-			}
-		}
+					printf("\n");
+				}	
+			}	
 
-		if(p==2) //imprime la matriz que se muestra por pantalla
-		{
-			printf("\n\n\n\n"); //estos son solo para separar entre disparo y disparo
-			for(i=0;i<10;i++)
+			if(p==2) //imprime la matriz que se muestra por pantalla
 			{
-				for(j=0;j<10;j++)
+				printf("\n\n\n\n"); //estos son solo para separar entre disparo y disparo
+				for(i=0;i<10;i++)
 				{
-					printf("%c",tablero_de_juego1[i][j]);
-				}
+					for(j=0;j<10;j++)
+					{
+						printf("%c",tablero_de_juego1[i][j]);
+					}
 
-				printf("\n");
+					printf("\n");
+				}
 			}
-		}
 
 		
-		if (p==1)
-		{
-			printf("barcos de jugador 2:%d\n",barcos_de_jugador_2);
-			printf("jugador 1, dispare.\n");
-		}	
-
-		if (p==2)
-		{
-			printf("barcos de jugador 1:%d\n",barcos_de_jugador_1);
-			printf("jugador 2, dispare.\n");
-		}
-
-		printf("Disparo:");
-		
-		do
-		{
-
-			aux=0; // auxiliar para las entradas invalidas
-			contador=0; // contador para medir el largo de la entrada
-
-			if(aux2==0) //Esto evita el bug del player uno.
+			if (p==1)
 			{
-				c=fgetc(stdin);
-				//aqui habia un assert
-				aux2=1;
+				printf("barcos de jugador 2:%d\n",barcos_de_jugador_2);
+				printf("jugador 1, dispare.\n");
+			}	
+
+			if (p==2)
+			{
+				printf("barcos de jugador 1:%d\n",barcos_de_jugador_1);
+				printf("jugador 2, dispare.\n");
 			}
 
-			while((c=fgetc(stdin))!='\n')// lee hasta el salto de linea
+			printf("Disparo:");
+		
+			do
 			{
-				if(contador<3) // si esta dentro del rango
+
+				aux=0; // auxiliar para las entradas invalidas
+				contador=0; // contador para medir el largo de la entrada
+
+				if(aux2==0) //Esto evita el bug del player uno.
 				{
-					disparo[contador]=c;
+					c=fgetc(stdin);
+					//aqui habia un assert
+					aux2=1;
 				}
 
-				else
+				while((c=fgetc(stdin))!='\n')// lee hasta el salto de linea
 				{
-					aux=1;
+					if(contador<3) // si esta dentro del rango
+					{
+						disparo[contador]=c;
+					}
+
+					else
+					{
+						aux=1;
+					}
+
+					if(contador==0 && (c<'A' || c>'J')) // si es la primera cordenada y la entrada no es una letra
+					{
+						aux=1;
+					}
+
+					if(contador==1 && (c<'1' || c>'9')) // si es la segunda cordenada y la entrada no es un numero
+					{
+						aux=1;
+					}
+
+					if (contador==2 && c!='0')
+					{
+						c=0;
+						disparo[contador]=c;
+						aux=1;
+					}
+
+					contador++;
+
+				}
+				if (aux==1)
+				{
+					printf("Dispare correctamente.\n");
 				}
 
-				if(contador==0 && (c<'A' || c>'J')) // si es la primera cordenada y la entrada no es una letra
-				{
-					aux=1;
-				}
-
-				if(contador==1 && (c<'1' || c>'9')) // si es la segunda cordenada y la entrada no es un numero
-				{
-					aux=1;
-				}
-
-				if (contador==2 && c!='0')
-				{
-					c=0;
-					disparo[contador]=c;
-					aux=1;
-				}
-
-				contador++;
-
-			}
-			if (aux==1)
-			{
-				printf("Dispare correctamente.\n");
-			}
-
-		}while(aux==1);
+			}while(aux==1);
 
 		
-		if(p==1) //se obtiene la direccion de memoria del lugar al que se apunto, tanto para la matriz que
-		{        //se muestra como para la matriz de barcos enemiga
-			ca=obtenerBlanco(contador,disparo,pt2);
-			cp=obtenerBlanco(contador,disparo,pt4);
-		}
+			if(p==1) //se obtiene la direccion de memoria del lugar al que se apunto, tanto para la matriz que
+			{        //se muestra como para la matriz de barcos enemiga
+				ca=obtenerBlanco(contador,disparo,pt2);
+				cp=obtenerBlanco(contador,disparo,pt4);
+			}
 
-		if(p==2)
-		{
-			ca=obtenerBlanco(contador,disparo,pt1);
-			cp=obtenerBlanco(contador,disparo,pt3);
-		}
+			if(p==2)
+			{
+				ca=obtenerBlanco(contador,disparo,pt1);
+				cp=obtenerBlanco(contador,disparo,pt3);
+			}
 		
 
-		if(p==1) // si es el turno del J1
-		{
-			punteria(ca,cp,&flota2,&j2,turno,&barcos_de_jugador_2);
-			continue; //si el j1 fallo, esto evita que se meta al if del p2 inmediatamente despues
-		} 
+			if(p==1) // si es el turno del J1
+			{
+				punteria(ca,cp,&flota2,&j2,turno,&barcos_de_jugador_2);
+				continue; //si el j1 fallo, esto evita que se meta al if del p2 inmediatamente despues
+			} 
 
-		if(p==2) // si es el turno del J2
-		{
-			punteria(ca,cp,&flota1,&j1,turno,&barcos_de_jugador_1);
-		}		
-	}
-
-	printf("el juego termino\n");
-
-	if(barcos_de_jugador_2==0)
-	{
-		printf("gana el jugador uno\n");
-	}
-
-	if(barcos_de_jugador_1==0)
-	{
-		printf("gana el jugador dos\n");
-	}
-
-	/*for(i=0;i<10;i++)
-	{
-		for(j=0;j<10;j++)
-		{
-			printf("%c",tablero_de_barcos1[i][j]);
+			if(p==2) // si es el turno del J2
+			{
+				punteria(ca,cp,&flota1,&j1,turno,&barcos_de_jugador_1);
+			}		
 		}
 
-		printf("\n");
-	}
+		printf("el juego termino\n");
 
-	printf("\n");
-
-	for(i=0;i<10;i++)
-	{
-		for(j=0;j<10;j++)
+		if(barcos_de_jugador_2==0)
 		{
-			printf("%c",tablero_de_barcos2[i][j]);
+			printf("gana el jugador uno\n");
 		}
 
-		printf("\n");
-	}
+		if(barcos_de_jugador_1==0)
+		{
+			printf("gana el jugador dos\n");
+		}
 
-	printf("\n");*/
+		printf("desea jugar de nuevo?\n");
+		printf("1:si\n");
+		printf("2:no\n");
+		scanf("%d",&denuevo);
+
+		while(denuevo!=1 && denuevo!=2){
+			printf("entrada invalida, de nuevo:");
+			scanf("%d",&denuevo);
+		}
+}
+
+
+
 
 	return 0;
 }
 
 
-/*AAAAABBBB.         
-CCCDDDEE..
-..........
-..........
-..........
-..........
-..........
-..........
-..........
-..........*/
 
