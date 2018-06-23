@@ -168,7 +168,7 @@ void asignarNombres(char* tablero, identificador* barco) //revisado y seguro
 			a++;
 		}
 
-		k=-9;
+		k=0;
 		contador=0;
 		contador_aux=0;
 		j=0;
@@ -225,7 +225,8 @@ void asignarNombres(char* tablero, identificador* barco) //revisado y seguro
 			if(i>=90 && i<99) // cuando se llega a la ultima posicion de la columna
 			{
 				i=k;  // para que i recorra la siguiente columna
-				k++; //k aumenta
+				k++;
+				i=i-10; //k aumenta
 			}
 		}
 
