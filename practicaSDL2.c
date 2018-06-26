@@ -14,14 +14,20 @@ int main () {
     SDL_Texture *imgTexture=NULL;  // a partir de la imagen crearemos una textura
     SDL_Renderer *render=NULL;    // y esto es para renderizar la pantalla y cargarle las imagenes
     SDL_Rect posImg; //esto es para ir moviendo la imagen... WIP
-    posImg.x=400;
-    posImg.y=400;
-    posImg.h=100;
-    posImg.w=100;
+    posImg.x=0;
+    posImg.y=300;
+    posImg.h=60;
+    posImg.w=80;
+    SDL_Rect copia;
+
+   	copia.h=60;
+   	copia.w=80;
 
     SDL_Rect estatic[10];
 
-    int i,cnt=0;
+    int i,j,cnt=0;
+
+    int posiciones[10][10]={0};
 
 
 
@@ -49,7 +55,7 @@ int main () {
                                   SDL_WINDOWPOS_UNDEFINED,
                                   SDL_WINDOWPOS_UNDEFINED,
                                   800,
-                                  800,
+                                  600,
                                   SDL_WINDOW_RESIZABLE);
 
 
@@ -63,9 +69,9 @@ int main () {
 
 
 
-    img= IMG_Load("/home/matias/Escritorio/patito.jpg"); //cargamos la imagen.. el comando es de SDL.Image
+    img= IMG_Load("/home/carlos/Escritorio/proyecto/patito.jpg"); //cargamos la imagen.. el comando es de SDL.Image
 
-    render= SDL_CreateRenderer(pantalla, -1, 0);   // renderizamos la pantalla...
+    render= SDL_CreateRenderer(pantalla, -1, 1);   // renderizamos la pantalla...
     //este comando recibe (SDL_Window * pantalla, el numero del driver que hara el render...el menos uno es para que
     // agarre el primer dispositivo disponible, y el cero nuevamente son banderas... el cero es para ninguna
 
@@ -103,58 +109,105 @@ int main () {
                                             // reconocer cada tecla 
 
                     case SDLK_UP:   
-                        posImg.y-=50;
+                        posImg.y-=60;
+                        printf("ariiba\n");
+                        if(posImg.y<0)
+                        {
+                        	posImg.y=0;
+                        }
                         SDL_RenderClear(render);
                         SDL_RenderCopy(render, imgTexture, NULL, &posImg); 
                         break;
 
                     case SDLK_DOWN: 
-                        posImg.y+=50;
+                        posImg.y+=60;
+                        printf("abajo\n");
+                        if(posImg.y>540)
+                        {
+                        	posImg.y=540;
+                        }
                         SDL_RenderClear(render);
                         SDL_RenderCopy(render, imgTexture, NULL, &posImg); 
                         break;
 
                     case SDLK_RIGHT: 
-                        posImg.x+=50;
+                    	printf("derecha\n");
+                        posImg.x+=80;
+                        if(posImg.x>720)
+                        {
+                        	posImg.x=720;
+                        }
                         SDL_RenderClear(render);
                         SDL_RenderCopy(render, imgTexture, NULL, &posImg); 
                         break;
 
                     case SDLK_LEFT: 
-                        posImg.x-=50;
+                        posImg.x-=80;
+                        printf("izquirda\n");
+                        if(posImg.x<0)
+                        {
+                        	posImg.x=0;
+                        }
                         SDL_RenderClear(render);
                         SDL_RenderCopy(render, imgTexture, NULL, &posImg); 
                         break; 
                     
                     case SDLK_a:
-                        cnt++;
+                    	if(posiciones[posImg.x/80][posImg.y/60]==0)
+                    	{
+                    		posiciones[posImg.x/80][posImg.y/60]=1;
+                    	}
+
+                        /*cnt++;
                         if(cnt>10){
                             cnt=10;
                         } 
-                        printf("cnt=%d\n",cnt);
+                        printf("cnt=%d\n",cnt);*/
                         break;
 
                     case SDLK_s:
-                        cnt--;
+
+                    	if(posiciones[posImg.x/60][posImg.y/80]==1)
+                    	{
+                    		posiciones[posImg.x/60][posImg.y/80]=0;
+                    	}
+
+                        /*cnt--;
                         if(cnt<0){
                             cnt=0;
                         }
-                        printf("cnt=%d\n",cnt);
+                        printf("cnt=%d\n",cnt);*/
                         break;
-
                 }
+
+                for(i=0;i<10;i++)
+                {
+                	for(j=0;j<10;j++)
+                	{
+                		if(posiciones[i][j]==1)
+                		{
+                			copia.x=i*60;
+                			copia.y=j*80;
+
+                			SDL_RenderCopy(render,imgTexture,NULL,&copia);
+                		}
+                	}
+                }
+
+                SDL_RenderPresent(render);
+
             }
 
-            if(cnt>0){     
+            /*if(cnt>0){     
                 estatic[cnt-1]=posImg;
                 printf("estatic[%d].x=%d\n",cnt-1,estatic[cnt-1].x);
-            }
+            }*/
 
-            for(i=0;i<cnt;i++){
+            /*for(i=0;i<cnt;i++){
                 SDL_RenderCopy(render, imgTexture, NULL, &estatic[i]); 
             }
 
-            SDL_RenderPresent(render);
+            SDL_RenderPresent(render);*/
 
         }
 
