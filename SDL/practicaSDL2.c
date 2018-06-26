@@ -57,7 +57,7 @@ int main () {
 
 
 
-    img= IMG_Load("./patito.jpg"); //cargamos la imagen.. el comando es de SDL.Image
+    img= IMG_Load("./Data/patito.jpg"); //cargamos la imagen.. el comando es de SDL.Image
 
     render= SDL_CreateRenderer(pantalla, -1, 0);   // renderizamos la pantalla...
     //este comando recibe (SDL_Window * pantalla, el numero del driver que hara el render...el menos uno es para que
