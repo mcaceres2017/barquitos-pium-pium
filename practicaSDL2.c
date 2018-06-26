@@ -11,6 +11,7 @@ int main () {
 
     SDL_Window *pantalla=NULL; // esta sera la ventana.... el cuadrado con nombre
     SDL_Surface *img=NULL;     // superficie que contendra la imagen que queremos
+    SDL_Surface *fusion=NULL;
     SDL_Texture *imgTexture=NULL;  // a partir de la imagen crearemos una textura
     SDL_Renderer *render=NULL;    // y esto es para renderizar la pantalla y cargarle las imagenes
     SDL_Rect posImg; //esto es para ir moviendo la imagen... WIP
@@ -25,9 +26,9 @@ int main () {
 
 
 
-    SDL_Event evento; //esto es para que detecte el cierre de ventana
+    SDL_Event evento; 
 
-    int aux=1; //auxiliar para el ciclo que detecta si presionamos la equis para cerrar ventana
+    int aux=1,aux2=1; //auxiliar para el ciclo que detecta si presionamos la equis para cerrar ventana
 
 
     if(SDL_Init(SDL_INIT_VIDEO) < 0) { // activacion y comprobacion de que el video inicio correctamente
@@ -38,18 +39,11 @@ int main () {
     }
 
 
-
-
-    if(SDL_WasInit(SDL_INIT_VIDEO)) {   //comprobacion de que el video esta activo
-        printf("video activo\n");
-    } 
-
-
     pantalla = SDL_CreateWindow ("probando sdl2",
                                   SDL_WINDOWPOS_UNDEFINED,
                                   SDL_WINDOWPOS_UNDEFINED,
                                   800,
-                                  800,
+                                  600,
                                   SDL_WINDOW_RESIZABLE);
 
 
@@ -63,79 +57,94 @@ int main () {
 
 
 
-    img= IMG_Load("/home/matias/Escritorio/patito.jpg"); //cargamos la imagen.. el comando es de SDL.Image
+    img= IMG_Load("./patito.jpg"); //cargamos la imagen.. el comando es de SDL.Image
 
     render= SDL_CreateRenderer(pantalla, -1, 0);   // renderizamos la pantalla...
     //este comando recibe (SDL_Window * pantalla, el numero del driver que hara el render...el menos uno es para que
     // agarre el primer dispositivo disponible, y el cero nuevamente son banderas... el cero es para ninguna
 
 
-    imgTexture= SDL_CreateTextureFromSurface(render,img); 
-    //a partir de la imagen que tenemos guardada en la surface, creamos una textura
-
-    SDL_FreeSurface(img); //una vez convertimos la imagen a textura destruimos la superficie....no la necesitamos
+    
 
 
-    SDL_RenderClear(render); // limpiamos la pantalla renderizada...
-    SDL_RenderCopy(render, imgTexture, NULL, &posImg); // copiamos la textura hacia la pantalla
-    SDL_RenderPresent(render);  //y se lo "mostramos" al usuario
+
+    
 
     
 
     while(aux==1){  //ciclo para que no se cierre altiro
 
-        while(SDL_PollEvent(&evento)){ //hay tres metodos para "capturar" eventos
-                                // son el SDL poll con el que consultamos una lista de eventos que se van almacenando
-                                // SDL Wait event creo.... con el que esperamos al primer evento que sea activado...
-                                //y el otro no me acuerdo.. pero era para estar atento solo a eventos particulares
-                                // con los que queramos trabajar
-            
+        while(SDL_PollEvent(&evento)){ // con el SDL poll con el que consultamos una lista de eventos que se van almacenando
+                    
+            fusion=SDL_CreateRGBSurface(0,800,600,32,0,0,0,0);
+
             if(evento.type==SDL_QUIT) // si presionamos la equis para cerrar la ventana
             {
                 aux=0; //para terminar el ciclo
                 break;
             }
 
-            i=1;
 
             if(evento.type==SDL_KEYDOWN){ //si se presiono una tecla
-                switch(evento.key.keysym.sym) { //esto para acceder a una tabla de codigos qlos que tiene SDL para 
-                                            // reconocer cada tecla 
+                switch(evento.key.keysym.scancode) { //esto para acceder a una tabla de codigos qlos que tiene SDL para 
+                                                    // reconocer cada tecla 
 
-                    case SDLK_UP:   
-                        posImg.y-=50;
+                    case SDL_SCANCODE_UP: //los scancodes son como codigos internaciones... independiente del teclado  
+                        posImg.y-=50;     //reconocera la tecla....
+                        if(posImg.y<0){  //barrera para que no desaparezca la img
+                            posImg.y=0;
+                        }
+                        printf("posimg.y=%d\n",posImg.y); //indicador
                         SDL_RenderClear(render);
-                        SDL_RenderCopy(render, imgTexture, NULL, &posImg); 
                         break;
 
-                    case SDLK_DOWN: 
+                    case SDL_SCANCODE_DOWN: 
                         posImg.y+=50;
+                        if(posImg.y>500){ //barrera para que no desaparezca la img
+                            posImg.y=500;
+                        }
+                        printf("posimg.y=%d\n",posImg.y); //indicador
                         SDL_RenderClear(render);
-                        SDL_RenderCopy(render, imgTexture, NULL, &posImg); 
                         break;
 
-                    case SDLK_RIGHT: 
+                    case SDL_SCANCODE_RIGHT: 
                         posImg.x+=50;
+                        if(posImg.x>700){ //barrera para que no desaparezca la img
+                            posImg.x=700;
+                        }
+                        printf("posimg.x=%d\n",posImg.x); //indicador
                         SDL_RenderClear(render);
-                        SDL_RenderCopy(render, imgTexture, NULL, &posImg); 
                         break;
 
-                    case SDLK_LEFT: 
+                    case SDL_SCANCODE_LEFT: 
                         posImg.x-=50;
+                        if(posImg.x<0){ //barrera para que no desaparezca la img
+                            posImg.x=0;
+                        }
+                        printf("posimg.x=%d\n",posImg.x); //indicador
                         SDL_RenderClear(render);
-                        SDL_RenderCopy(render, imgTexture, NULL, &posImg); 
                         break; 
                     
-                    case SDLK_a:
+                    case SDL_SCANCODE_A:
                         cnt++;
                         if(cnt>10){
                             cnt=10;
-                        } 
+                        }
+
+                        if(cnt<10){
+                            estatic[cnt-1]=posImg;
+                        }
+
+                        if(cnt==10 && aux2==1){
+                            estatic[cnt-1]=posImg;
+                            aux2=0;
+                        }
                         printf("cnt=%d\n",cnt);
                         break;
 
-                    case SDLK_s:
+                    case SDL_SCANCODE_S:
                         cnt--;
+                        aux2=1;
                         if(cnt<0){
                             cnt=0;
                         }
@@ -145,15 +154,17 @@ int main () {
                 }
             }
 
-            if(cnt>0){     
-                estatic[cnt-1]=posImg;
-                printf("estatic[%d].x=%d\n",cnt-1,estatic[cnt-1].x);
-            }
+
+            SDL_BlitScaled(img,NULL,fusion,&posImg);
+
 
             for(i=0;i<cnt;i++){
-                SDL_RenderCopy(render, imgTexture, NULL, &estatic[i]); 
+                SDL_BlitScaled(img,NULL,fusion,&estatic[i]); 
             }
 
+            imgTexture= SDL_CreateTextureFromSurface(render,fusion); 
+            SDL_FreeSurface(fusion);
+            SDL_RenderCopy(render, imgTexture, NULL, NULL);
             SDL_RenderPresent(render);
 
         }
@@ -161,6 +172,8 @@ int main () {
     }
 
     //al salir destruimos todo y cerramos los subsistemas con SDL_Quit
+    SDL_FreeSurface(fusion);
+    SDL_FreeSurface(img);
     SDL_DestroyTexture(imgTexture);
     SDL_DestroyRenderer(render);
     SDL_DestroyWindow(pantalla);
