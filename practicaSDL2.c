@@ -64,14 +64,6 @@ int main () {
     // agarre el primer dispositivo disponible, y el cero nuevamente son banderas... el cero es para ninguna
 
 
-    
-
-
-
-    
-
-    
-
     while(aux==1){  //ciclo para que no se cierre altiro
 
         while(SDL_PollEvent(&evento)){ // con el SDL poll con el que consultamos una lista de eventos que se van almacenando
