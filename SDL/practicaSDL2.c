@@ -2,11 +2,119 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-void EscanearMatriz(SDL_Rect matriz)
+typedef struct
 {
-    
-}
+    int orientacion; //horzontal o vertical
+    int id; //1.submarino 2.destructor etc
+    int existencia; // 0.no esta disponible 1. esta disponible Ej: no puedes poner 2 destructores
+} barco;
 
+
+void EscanearMatriz(SDL_Rect *matriz,int *inidices, barco *unidad) //pondremos (estatic,ARRI,flota)
+{
+    int i,j,aux,filas,columnas;
+    char tableroDeJuego[10][10];
+
+    for(i=0;i<10;i++) // rellenamos la matriz de puntos
+    {
+        for(j=0;j<10;j++)
+        {
+            tableroDeJuego[i][j]='.';
+        }
+    }
+
+    for(i=0;i<10;i++)
+    {
+        aux=inidices[i];
+        filas=matriz[i].x;
+        columnas=matriz[i].y;
+
+        //1. 5 espacios, 2. 4 espacios , 3. 3 espacios, 4. 3 espacios, 5. 2 espacios
+
+        switch(aux)
+        {
+            case 1: if(unidad[aux].orientacion==0) //horizontal
+            {
+                for(j=0;j<5;j++)
+                {
+                    tableroDeJuego[filas/80+j*80][columnas/60]='A';
+                }
+            }
+
+            else //vertical
+            {
+                for(j=0;j<5;j++)
+                {
+                    tableroDeJuego[filas/80][columnas/60 +j*60]='A';
+                }
+            }
+
+            case 2: if(unidad[aux].orientacion==0) //horizontal
+            {
+                for(j=0;j<4;j++)
+                {
+                    tableroDeJuego[filas/80+j*80][columnas/60]='B';
+                }
+            }
+
+            else //vertical
+            {
+                for(j=0;j<4;j++)
+                {
+                    tableroDeJuego[filas/80][columnas/60 +j*60]='B';
+                }
+            }
+
+            case 3: if(unidad[aux].orientacion==0) //horizontal
+            {
+                for(j=0;j<3;j++)
+                {
+                    tableroDeJuego[filas/80+j*80][columnas/60]='C';
+                }
+            }
+
+            else //vertical
+            {
+                for(j=0;j<3;j++)
+                {
+                    tableroDeJuego[filas/80][columnas/60 +j*60]='C';
+                }
+            }
+
+            case 4: if(unidad[aux].orientacion==0) //horizontal
+            {
+                for(j=0;j<3;j++)
+                {
+                    tableroDeJuego[filas/80+j*80][columnas/60]='D';
+                }
+            }
+
+            else //vertical
+            {
+                for(j=0;j<3;j++)
+                {
+                    tableroDeJuego[filas/80][columnas/60 +j*60]='D';
+                }
+            }
+
+            case 5: if(unidad[aux].orientacion==0) //horizontal
+            {
+                for(j=0;j<2;j++)
+                {
+                    tableroDeJuego[filas/80+j*80][columnas/60]='E';
+                }
+            }
+
+            else //vertical
+            {
+                for(j=0;j<2;j++)
+                {
+                    tableroDeJuego[filas/80][columnas/60 +j*60]='E';
+                }
+            }
+        }
+    }
+}
 
 //a la hora de compilar se pone gcc nombre.c -lSDL2 -lSDL2_image //
 
@@ -35,7 +143,13 @@ int main () {
     int i,cnt=0,indice=1;
     int ARRi[10]={0};
 
+    barco flota[5]; //los cinco barcos
 
+    flota[0].orientacion=0; // cambiaran,luego
+    flota[1].orientacion=0;
+    flota[2].orientacion=0;
+    flota[3].orientacion=0;
+    flota[4].orientacion=0;
 
     SDL_Event evento; 
 
@@ -133,6 +247,17 @@ int main () {
                         break; 
                     
                     case SDL_SCANCODE_A:
+
+                        if(flota[indice].existencia==0) // si no esta disponible
+                        {
+                            continue;
+                        }
+
+                        else
+                        {
+                            flota[indice].existencia=0; // luego haremos el proceso inverso
+                        }
+
                         ARRi[cnt]=indice;
 
                         cnt++;
@@ -161,7 +286,7 @@ int main () {
                         printf("cnt=%d\n",cnt);
                         break;
 
-                    case SDL_SCANCODE_Q:
+                    case SDL_SCANCODE_Q: //hay que ver luego una forma de que no se muestren los que ya estan puestos
                         indice--;
 
                         if(indice<1)
@@ -183,20 +308,17 @@ int main () {
 
             switch(indice)
             {
-                case 1: arreglo=img1;
+                case 1: SDL_BlitScaled(img1,NULL,fusion,&posImg);
                         break;
-                case 2: arreglo=img2;
+                case 2: SDL_BlitScaled(img2,NULL,fusion,&posImg);
                         break;
-                case 3: arreglo=img3;
+                case 3: SDL_BlitScaled(img3,NULL,fusion,&posImg);
                         break;
-                case 4: arreglo=img4;
+                case 4: SDL_BlitScaled(img4,NULL,fusion,&posImg);
                         break;
-                case 5: arreglo=img5;
+                case 5: SDL_BlitScaled(img5,NULL,fusion,&posImg);
                         break;
             }
-
-
-            SDL_BlitScaled(arreglo,NULL,fusion,&posImg);
 
 
             for(i=0;i<cnt;i++){
