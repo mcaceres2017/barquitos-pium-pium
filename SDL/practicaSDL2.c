@@ -2,6 +2,11 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
+void EscanearMatriz(SDL_Rect matriz)
+{
+    
+}
+
 
 //a la hora de compilar se pone gcc nombre.c -lSDL2 -lSDL2_image //
 
@@ -22,8 +27,8 @@ int main () {
     SDL_Rect posImg; //esto es para ir moviendo la imagen... WIP
     posImg.x=400;
     posImg.y=400;
-    posImg.h=100;
-    posImg.w=100;
+    posImg.h=60;
+    posImg.w=80;
 
     SDL_Rect estatic[10];
 
@@ -48,8 +53,8 @@ int main () {
     pantalla = SDL_CreateWindow ("probando sdl2",
                                   SDL_WINDOWPOS_UNDEFINED,
                                   SDL_WINDOWPOS_UNDEFINED,
-                                  800,
-                                  600,
+                                  880,
+                                  660,
                                   SDL_WINDOW_RESIZABLE);
 
 
@@ -92,7 +97,7 @@ int main () {
                                                     // reconocer cada tecla 
 
                     case SDL_SCANCODE_UP: //los scancodes son como codigos internaciones... independiente del teclado  
-                        posImg.y-=50;     //reconocera la tecla....
+                        posImg.y-=60;     //reconocera la tecla....
                         if(posImg.y<0){  //barrera para que no desaparezca la img
                             posImg.y=0;
                         }
@@ -101,25 +106,25 @@ int main () {
                         break;
 
                     case SDL_SCANCODE_DOWN: 
-                        posImg.y+=50;
-                        if(posImg.y>500){ //barrera para que no desaparezca la img
-                            posImg.y=500;
+                        posImg.y+=60;
+                        if(posImg.y>540){ //barrera para que no desaparezca la img
+                            posImg.y=540;
                         }
                         printf("posimg.y=%d\n",posImg.y); //indicador
                         SDL_RenderClear(render);
                         break;
 
                     case SDL_SCANCODE_RIGHT: 
-                        posImg.x+=50;
-                        if(posImg.x>700){ //barrera para que no desaparezca la img
-                            posImg.x=700;
+                        posImg.x+=80;
+                        if(posImg.x>720){ //barrera para que no desaparezca la img
+                            posImg.x=720;
                         }
                         printf("posimg.x=%d\n",posImg.x); //indicador
                         SDL_RenderClear(render);
                         break;
 
                     case SDL_SCANCODE_LEFT: 
-                        posImg.x-=50;
+                        posImg.x-=80;
                         if(posImg.x<0){ //barrera para que no desaparezca la img
                             posImg.x=0;
                         }
