@@ -63,11 +63,11 @@ int main () {
 
 
 
-    img1= IMG_Load("./patito.png"); //cargamos la imagen.. el comando es de SDL.Image
-    img2= IMG_Load("./SuperSanic.png");
-    img3= IMG_Load("./Wario.png");
-    img4= IMG_Load("./Waligui.png");
-    img5= IMG_Load("./uganda.png");
+    img1= IMG_Load("./Data/patito.jpg"); //cargamos la imagen.. el comando es de SDL.Image
+    img2= IMG_Load("./Data/p.jpeg");
+    img3= IMG_Load("./Data/m.jpg");
+    img4= IMG_Load("./Data/s.jpeg");
+    img5= IMG_Load("./Data/u.jpeg");
 
     render= SDL_CreateRenderer(pantalla, -1, 0);   // renderizamos la pantalla...
     //este comando recibe (SDL_Window * pantalla, el numero del driver que hara el render...el menos uno es para que
