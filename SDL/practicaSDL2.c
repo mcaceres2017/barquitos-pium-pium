@@ -29,8 +29,6 @@ void EscanearMatriz(SDL_Rect *matriz,int *indices, barco *unidad) //pondremos (e
         filas=matriz[i].x;
         columnas=matriz[i].y;
 
-        //1. 5 espacios, 2. 4 espacios , 3. 3 espacios, 4. 3 espacios, 5. 2 espacios
-
         switch(aux)
         {
             case 1: if(unidad[aux].orientacion==0) //horizontal
@@ -116,6 +114,38 @@ void EscanearMatriz(SDL_Rect *matriz,int *indices, barco *unidad) //pondremos (e
     }
 }
 
+void limite(int barco,int* posicion,int borde)
+{
+	switch(barco)
+    {
+       	case 1: if(*posicion>borde-4*borde/10){ //barrera para que no desaparezca la img
+                *posicion=borde-4*borde/10;
+                }
+                break;
+
+        case 2: if(*posicion>borde-2*borde/10){ 
+                *posicion=borde-2*borde/10;
+                }
+                break;
+
+        case 3: if(*posicion>borde-3*borde/10){
+                *posicion=borde-3*borde/10;
+                }
+				break;
+
+        case 4: if(*posicion>borde-5*borde/10){
+                *posicion=borde-5*borde/10;
+                }
+                break;
+
+       	case 5: if(*posicion>borde-3*borde/10){
+                *posicion=borde-3*borde/10;
+                }
+                break;
+    }
+}
+
+
 //a la hora de compilar se pone gcc nombre.c -lSDL2 -lSDL2_image //
 
 
@@ -164,21 +194,23 @@ int main () {
     SDL_Event evento;
    
 
-    int i,cnt=0,indice=1;
+    int i,cnt=0,indice=1,k; //indice: 1.acorazado(4), 2.lancha(2), 3.submarino(3), 4.porta aviones(5), 5.acorazado(3)
     int ARRi[10]={0};
-    int aux=1,aux2=1,rot=1;
+    int aux=1,aux2=1,rot=1,borde=1;
 
     barco flota[5]; //los cinco barcos
 
-    flota[0].orientacion=0; // cambiaran,luego
+    flota[0].orientacion=0; // 0:horizontal, 1:vertical
     flota[1].orientacion=0;
     flota[2].orientacion=0;
     flota[3].orientacion=0;
     flota[4].orientacion=0;
 
-     
-
-    
+    flota[0].existencia=1;
+    flota[1].existencia=1;
+    flota[2].existencia=1;
+    flota[3].existencia=1;
+    flota[4].existencia=1;
 
 
     fondo= IMG_Load("./Data/fondo.png");
@@ -272,9 +304,16 @@ int main () {
 
                         posBarco.y+=60;
 
+                        if(rot==1)//si esta horizontal
+                        {
+                        	if(posBarco.y>540){ //barrera para que no desaparezca la img
+                            	posBarco.y=540;
+                        	}
+                        }
 
-                        if(posBarco.y>540){ //barrera para que no desaparezca la img
-                            posBarco.y=540;
+                        else //si esta vertical
+                        {
+                        	limite(indice,&posBarco.y,600);
                         }
 
 
@@ -285,9 +324,16 @@ int main () {
 
                         posBarco.x+=80;
 
+                        if(rot==2)//si esta vertical
+                        {
+                        	if(posBarco.x>720){ //barrera para que no desaparezca la img
+                           		posBarco.x=720;
+                           	}
+                        }
 
-                        if(posBarco.x>720){ //barrera para que no desaparezca la img
-                           posBarco.x=720;
+                        else // si esta horizontal
+                        {
+                        	limite(indice,&posBarco.x,800);
                         }
 
                         SDL_RenderClear(render);
@@ -304,8 +350,6 @@ int main () {
 
                         SDL_RenderClear(render);
                         break; 
-                    
-                    case SDL_SCANCODE_A:
 
                         /*if(flota[indice].existencia==0) // si no esta disponible
                         {
@@ -318,18 +362,36 @@ int main () {
                         }*/
 
                         ARRi[cnt]=indice;
+                        flota[indice-1].existencia=0;
+
+                        indice--;
+
+                        if(indice<1)
+                        {
+                            indice=5;
+                        }
+
+                        while(flota[indice-1].existencia==0)
+                        {
+                        	indice--;
+
+                        	if(indice<1)
+                        	{
+                            	indice=5;
+                        	}
+                        }
 
                         cnt++;
 
-                        if(cnt>10){
-                            cnt=10;
+                        if(cnt>5){
+                            cnt=5;
                         }
 
-                        if(cnt<10){
+                        if(cnt<5){
                             estatic[cnt-1]=posBarco;
                         }
 
-                        if(cnt==10 && aux2==1){
+                        if(cnt==5 && aux2==1){
                             estatic[cnt-1]=posBarco;
                             aux2=0;
                         }
@@ -358,8 +420,30 @@ int main () {
 
                         if(indice<1)
                         {
-                            indice=5;
+                        	indice=5;
                         }
+
+                        while(flota[indice-1].existencia==0)
+                        {
+                        	indice--;
+
+                        	if(indice<1)
+                        	{
+                        		indice=5;
+                        	}
+                        }
+
+                        if(rot==1)
+                        {
+                        	limite(indice,&posBarco.x,800);
+                        }
+
+                        else
+                        {
+                        	limite(indice,&posBarco.y,600);
+                        }
+
+                        printf("%d\n",indice);
 
                         break;
 
@@ -371,6 +455,28 @@ int main () {
                         {
                             indice=1;
                         }
+
+                        while(flota[indice-1].existencia==0)
+                        {
+                        	indice++;
+
+                        	if(indice>5)
+                        	{
+                            	indice=1;
+                        	}
+                        }
+
+                        if(rot==1)
+                        {
+                        	limite(indice,&posBarco.x,800);
+                        }
+
+                        else
+                        {
+                        	limite(indice,&posBarco.y,600);
+                        }
+
+                        printf("%d\n",indice);
 
                         break;   
 
@@ -385,11 +491,20 @@ int main () {
                             rot=1;
                             printf("rot=%d\n",rot);
                         }
+
+                        if(rot==1)
+                        {
+                        	limite(indice,&posBarco.x,800);
+                        }
+
+                        else
+                        {
+                        	limite(indice,&posBarco.y,600);
+                        }
+
                         break;           
                 }
             }
-
-
 
             switch(indice)
             {
@@ -504,6 +619,4 @@ int main () {
 
     SDL_Quit();
     return 0;
-
-
 }
