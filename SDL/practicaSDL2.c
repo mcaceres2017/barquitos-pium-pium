@@ -156,11 +156,11 @@ int main () {
     SDL_Surface *fondo=NULL;
 
 
-    SDL_Surface *red1H=NULL;  
-    SDL_Surface *red2H=NULL;
-    SDL_Surface *red3H=NULL;
-    SDL_Surface *red4H=NULL;
-    SDL_Surface *red5H=NULL;
+    SDL_Surface *red1H=NULL; //barco de 2 destructor
+    SDL_Surface *red2H=NULL; //barco de 3 submarino
+    SDL_Surface *red3H=NULL; //barco de 3 crucero
+    SDL_Surface *red4H=NULL; //barco de 4 acorazado
+    SDL_Surface *red5H=NULL; //barco de 5 portaaviones
 
     SDL_Surface *red1V=NULL;  
     SDL_Surface *red2V=NULL;
@@ -216,31 +216,33 @@ int main () {
     fondo= IMG_Load("./Data/fondo.png");
 
 
-    red1H= IMG_Load("./Data/rojos/acorazado_h.png"); 
-    red2H= IMG_Load("./Data/rojos/destructor_h.png");
-    red3H= IMG_Load("./Data/rojos/submarino_h.png");
-    red4H= IMG_Load("./Data/rojos/portaaviones_h.png");
-    red5H= IMG_Load("./Data/rojos/crucero_h.png");
+    red1H= IMG_Load("./Data/rojos/destructor_h.png");
+    red2H= IMG_Load("./Data/rojos/submarino_h.png");
+    red3H= IMG_Load("./Data/rojos/crucero_h.png");
+    red4H= IMG_Load("./Data/rojos/acorazado_h.png"); 
+    red5H= IMG_Load("./Data/rojos/portaaviones_h.png");
+    
 
-    red1V= IMG_Load("./Data/rojos/acorazado_v.png"); 
-    red2V= IMG_Load("./Data/rojos/destructor_v.png");
-    red3V= IMG_Load("./Data/rojos/submarino_v.png");
-    red4V= IMG_Load("./Data/rojos/portaaviones_v.png");
-    red5V= IMG_Load("./Data/rojos/crucero_v.png");
+    red1V= IMG_Load("./Data/rojos/destructor_v.png");
+    red2V= IMG_Load("./Data/rojos/submarino_v.png");
+    red3V= IMG_Load("./Data/rojos/crucero_v.png");
+    red4V= IMG_Load("./Data/rojos/acorazado_v.png");   
+    red5V= IMG_Load("./Data/rojos/portaaviones_v.png");
+    
+   
+    grn1H= IMG_Load("./Data/verdes/destructor_h.png");
+    grn2H= IMG_Load("./Data/verdes/submarino_h.png");
+    grn3H= IMG_Load("./Data/verdes/crucero_h.png");
+    grn4H= IMG_Load("./Data/verdes/acorazado_h.png"); 
+    grn5H= IMG_Load("./Data/verdes/portaaviones_h.png");
+    
 
-
-    grn1H= IMG_Load("./Data/verdes/acorazado_h.png"); 
-    grn2H= IMG_Load("./Data/verdes/destructor_h.png");
-    grn3H= IMG_Load("./Data/verdes/submarino_h.png");
-    grn4H= IMG_Load("./Data/verdes/portaaviones_h.png");
-    grn5H= IMG_Load("./Data/verdes/crucero_h.png");
-
-
-    grn1H= IMG_Load("./Data/verdes/acorazado_v.png"); 
-    grn2H= IMG_Load("./Data/verdes/destructor_v.png");
-    grn3H= IMG_Load("./Data/verdes/submarino_v.png");
-    grn4H= IMG_Load("./Data/verdes/portaaviones_v.png");
-    grn5H= IMG_Load("./Data/verdes/crucero_v.png");
+    grn1H= IMG_Load("./Data/verdes/destructor_v.png");
+    grn2H= IMG_Load("./Data/verdes/submarino_v.png");
+    grn3H= IMG_Load("./Data/verdes/crucero_v.png");
+    grn4H= IMG_Load("./Data/verdes/acorazado_v.png"); 
+    grn5H= IMG_Load("./Data/verdes/portaaviones_v.png");
+    
 
 
     if(SDL_Init(SDL_INIT_VIDEO) < 0) { // activacion y comprobacion de video
@@ -509,10 +511,13 @@ int main () {
             switch(indice)
             {
                 case 1: if(rot==1){
+
                             SDL_BlitSurface(red1H,NULL,detras,&posBarco);
                         }
+
                         if(rot==2){
-                            SDL_BlitSurface(red1V,NULL,detras,&posBarco);
+
+                            SDL_BlitSurface(red1V,NULL,detras,&posBarco);    
                         }
 
                         break;
