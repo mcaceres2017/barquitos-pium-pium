@@ -360,26 +360,10 @@ int main () {
                         {
                             flota[indice].existencia=0; // luego haremos el proceso inverso
                         }*/
-
+                 	case SDL_SCANCODE_A:
+                 	
                         ARRi[cnt]=indice;
                         flota[indice-1].existencia=0;
-
-                        indice--;
-
-                        if(indice<1)
-                        {
-                            indice=5;
-                        }
-
-                        while(flota[indice-1].existencia==0)
-                        {
-                        	indice--;
-
-                        	if(indice<1)
-                        	{
-                            	indice=5;
-                        	}
-                        }
 
                         cnt++;
 
