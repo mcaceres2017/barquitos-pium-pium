@@ -31,85 +31,113 @@ void EscanearMatriz(SDL_Rect *matriz,int *indices, barco *unidad) //pondremos (e
 
         switch(aux)
         {
-            case 1: if(unidad[aux].orientacion==0) //horizontal
-            {
-                for(j=0;j<5;j++)
-                {
-                    tableroDeJuego[filas/80+j*80][columnas/60]='A';
-                }
-            }
 
-            else //vertical
-            {
-                for(j=0;j<5;j++)
+            case 1: 
+                
+                if(unidad[aux].orientacion==0) //horizontal
                 {
-                    tableroDeJuego[filas/80][columnas/60 +j*60]='A';
+                    for(j=0;j<2;j++)
+                    {
+                        tableroDeJuego[filas/80+j*80][columnas/60]='E';
+                    }
                 }
-            }
 
-            case 2: if(unidad[aux].orientacion==0) //horizontal
-            {
-                for(j=0;j<4;j++)
+                else //vertical
                 {
-                    tableroDeJuego[filas/80+j*80][columnas/60]='B';
+                    for(j=0;j<2;j++)
+                    {
+                        tableroDeJuego[filas/80][columnas/60 +j*60]='E';
+                    }
                 }
-            }
 
-            else //vertical
-            {
-                for(j=0;j<4;j++)
-                {
-                    tableroDeJuego[filas/80][columnas/60 +j*60]='B';
-                }
-            }
+                break;
 
-            case 3: if(unidad[aux].orientacion==0) //horizontal
-            {
-                for(j=0;j<3;j++)
-                {
-                    tableroDeJuego[filas/80+j*80][columnas/60]='C';
-                }
-            }
 
-            else //vertical
-            {
-                for(j=0;j<3;j++)
-                {
-                    tableroDeJuego[filas/80][columnas/60 +j*60]='C';
-                }
-            }
+            case 2: 
 
-            case 4: if(unidad[aux].orientacion==0) //horizontal
-            {
-                for(j=0;j<3;j++)
+                if(unidad[aux].orientacion==0) //horizontal
                 {
-                    tableroDeJuego[filas/80+j*80][columnas/60]='D';
+                    for(j=0;j<3;j++)
+                    {
+                        tableroDeJuego[filas/80+j*80][columnas/60]='D';
+                    }
                 }
-            }
 
-            else //vertical
-            {
-                for(j=0;j<3;j++)
+                else //vertical
                 {
-                    tableroDeJuego[filas/80][columnas/60 +j*60]='D';
+                    for(j=0;j<3;j++)
+                    {
+                        tableroDeJuego[filas/80][columnas/60 +j*60]='D';
+                    }
                 }
-            }
 
-            case 5: if(unidad[aux].orientacion==0) //horizontal
-            {
-                for(j=0;j<2;j++)
-                {
-                    tableroDeJuego[filas/80+j*80][columnas/60]='E';
-                }
-            }
+                break;
 
-            else //vertical
-            {
-                for(j=0;j<2;j++)
+
+
+            case 3:
+
+                if(unidad[aux].orientacion==0) //horizontal
                 {
-                    tableroDeJuego[filas/80][columnas/60 +j*60]='E';
+                    for(j=0;j<3;j++)
+                    {
+                        tableroDeJuego[filas/80+j*80][columnas/60]='C';
+                    }
                 }
-            }
+
+                else //vertical
+                {
+                    for(j=0;j<3;j++)
+                    {
+                        tableroDeJuego[filas/80][columnas/60 +j*60]='C';
+                    }
+                }
+
+                break;
+
+
+            case 4: 
+                
+                if(unidad[aux].orientacion==0) //horizontal
+                {
+                    for(j=0;j<4;j++)
+                    {
+                        tableroDeJuego[filas/80+j*80][columnas/60]='B';
+                    }
+                }
+
+                else //vertical
+                {
+                    for(j=0;j<4;j++)
+                    {
+                        tableroDeJuego[filas/80][columnas/60 +j*60]='B';
+                    }
+                }
+
+                break;
+
+            
+
+            case 5: 
+
+                if(unidad[aux].orientacion==0) //horizontal
+                {
+                    for(j=0;j<5;j++)
+                    {
+                        tableroDeJuego[filas/80+j*80][columnas/60]='A';
+                    }
+                }
+
+                else //vertical
+                {
+                    for(j=0;j<5;j++)
+                    {
+                        tableroDeJuego[filas/80][columnas/60 +j*60]='A';
+                    }
+                }
+
+                break;
+            
         }
     }
 }
@@ -118,13 +146,13 @@ void limite(int barco,int* posicion,int borde)
 {
     switch(barco)
     {
-        case 1: if(*posicion>borde-4*borde/10){ //barrera para que no desaparezca la img
-                *posicion=borde-4*borde/10;
+        case 1: if(*posicion>borde-2*borde/10){ //barrera para que no desaparezca la img
+                *posicion=borde-2*borde/10;
                 }
                 break;
 
-        case 2: if(*posicion>borde-2*borde/10){ 
-                *posicion=borde-2*borde/10;
+        case 2: if(*posicion>borde-3*borde/10){ 
+                *posicion=borde-3*borde/10;
                 }
                 break;
 
@@ -133,13 +161,13 @@ void limite(int barco,int* posicion,int borde)
                 }
                 break;
 
-        case 4: if(*posicion>borde-5*borde/10){
-                *posicion=borde-5*borde/10;
+        case 4: if(*posicion>borde-4*borde/10){
+                *posicion=borde-4*borde/10;
                 }
                 break;
 
-        case 5: if(*posicion>borde-3*borde/10){
-                *posicion=borde-3*borde/10;
+        case 5: if(*posicion>borde-5*borde/10){
+                *posicion=borde-5*borde/10;
                 }
                 break;
     }
