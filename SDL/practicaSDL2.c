@@ -10,7 +10,7 @@ typedef struct
 } barco;
 
 
-void EscanearMatriz(SDL_Rect *matriz,int *inidices, barco *unidad) //pondremos (estatic,ARRI,flota)
+void EscanearMatriz(SDL_Rect *matriz,int *indices, barco *unidad) //pondremos (estatic,ARRI,flota)
 {
     int i,j,aux,filas,columnas;
     char tableroDeJuego[10][10];
@@ -25,7 +25,7 @@ void EscanearMatriz(SDL_Rect *matriz,int *inidices, barco *unidad) //pondremos (
 
     for(i=0;i<10;i++)
     {
-        aux=inidices[i];
+        aux=indices[i];
         filas=matriz[i].x;
         columnas=matriz[i].y;
 
@@ -122,26 +122,51 @@ void EscanearMatriz(SDL_Rect *matriz,int *inidices, barco *unidad) //pondremos (
 int main () {
 
 
-    SDL_Window *pantalla=NULL; // esta sera la ventana.... el cuadrado con nombre
-    SDL_Surface *img1=NULL;   // superficie que contendra la imagen que queremos
-    SDL_Surface *img2=NULL;
-    SDL_Surface *img3=NULL;
-    SDL_Surface *img4=NULL;
-    SDL_Surface *img5=NULL;
-    SDL_Surface *fusion=NULL;
-    SDL_Surface *arreglo=NULL;
-    SDL_Texture *imgTexture=NULL;  // a partir de la imagen crearemos una textura
-    SDL_Renderer *render=NULL;    // y esto es para renderizar la pantalla y cargarle las imagenes
-    SDL_Rect posImg; //esto es para ir moviendo la imagen... WIP
-    posImg.x=400;
-    posImg.y=400;
-    posImg.h=60;
-    posImg.w=80;
+    SDL_Window *pantalla=NULL;
+    SDL_Surface *fondo=NULL;
 
+
+    SDL_Surface *red1H=NULL;  
+    SDL_Surface *red2H=NULL;
+    SDL_Surface *red3H=NULL;
+    SDL_Surface *red4H=NULL;
+    SDL_Surface *red5H=NULL;
+
+    SDL_Surface *red1V=NULL;  
+    SDL_Surface *red2V=NULL;
+    SDL_Surface *red3V=NULL;
+    SDL_Surface *red4V=NULL;
+    SDL_Surface *red5V=NULL;
+
+
+    SDL_Surface *grn1H=NULL;
+    SDL_Surface *grn2H=NULL;
+    SDL_Surface *grn3H=NULL;
+    SDL_Surface *grn4H=NULL;
+    SDL_Surface *grn5H=NULL;
+
+
+    SDL_Surface *grn1V=NULL;
+    SDL_Surface *grn2V=NULL;
+    SDL_Surface *grn3V=NULL;
+    SDL_Surface *grn4V=NULL;
+    SDL_Surface *grn5V=NULL;
+
+
+    SDL_Surface *detras=NULL;
+    SDL_Surface *arreglo=NULL;
+    SDL_Texture *imgTexture=NULL; 
+    SDL_Renderer *render=NULL;  
     SDL_Rect estatic[10];
+    SDL_Rect posBarco; 
+    posBarco.x=0;
+    posBarco.y=0;
+    SDL_Event evento;
+   
 
     int i,cnt=0,indice=1;
     int ARRi[10]={0};
+    int aux=1,aux2=1,rot=1;
 
     barco flota[5]; //los cinco barcos
 
@@ -151,12 +176,42 @@ int main () {
     flota[3].orientacion=0;
     flota[4].orientacion=0;
 
-    SDL_Event evento; 
+     
 
-    int aux=1,aux2=1; //auxiliar para el ciclo que detecta si presionamos la equis para cerrar ventana
+    
 
 
-    if(SDL_Init(SDL_INIT_VIDEO) < 0) { // activacion y comprobacion de que el video inicio correctamente
+    fondo= IMG_Load("./Data/fondo.png");
+
+
+    red1H= IMG_Load("./Data/rojos/acorazado_h.png"); 
+    red2H= IMG_Load("./Data/rojos/destructor_h.png");
+    red3H= IMG_Load("./Data/rojos/submarino_h.png");
+    red4H= IMG_Load("./Data/rojos/portaaviones_h.png");
+    red5H= IMG_Load("./Data/rojos/crucero_h.png");
+
+    red1V= IMG_Load("./Data/rojos/acorazado_v.png"); 
+    red2V= IMG_Load("./Data/rojos/destructor_v.png");
+    red3V= IMG_Load("./Data/rojos/submarino_v.png");
+    red4V= IMG_Load("./Data/rojos/portaaviones_v.png");
+    red5V= IMG_Load("./Data/rojos/crucero_v.png");
+
+
+    grn1H= IMG_Load("./Data/verdes/acorazado_h.png"); 
+    grn2H= IMG_Load("./Data/verdes/destructor_h.png");
+    grn3H= IMG_Load("./Data/verdes/submarino_h.png");
+    grn4H= IMG_Load("./Data/verdes/portaaviones_h.png");
+    grn5H= IMG_Load("./Data/verdes/crucero_h.png");
+
+
+    grn1H= IMG_Load("./Data/verdes/acorazado_v.png"); 
+    grn2H= IMG_Load("./Data/verdes/destructor_v.png");
+    grn3H= IMG_Load("./Data/verdes/submarino_v.png");
+    grn4H= IMG_Load("./Data/verdes/portaaviones_v.png");
+    grn5H= IMG_Load("./Data/verdes/crucero_v.png");
+
+
+    if(SDL_Init(SDL_INIT_VIDEO) < 0) { // activacion y comprobacion de video
                                        // el subsistema de video tambien activa el subsistema de eventos
 
         fprintf(stderr,"No se pudo iniciar SDL video: %s\n", SDL_GetError());
@@ -164,16 +219,13 @@ int main () {
     }
 
 
-    pantalla = SDL_CreateWindow ("probando sdl2",
+    pantalla = SDL_CreateWindow ("barquitos 2000 remastered",
                                   SDL_WINDOWPOS_UNDEFINED,
                                   SDL_WINDOWPOS_UNDEFINED,
-                                  880,
-                                  660,
+                                  800,
+                                  600,
                                   SDL_WINDOW_RESIZABLE);
 
-
-    //creacion de la pantalla con el formato (nombre,posicion x,posicion y, ancho, alto, banderas)
-    //las banderas son caleta... puse esa para ver si se puede ajustar la pantalla
 
 
     if(pantalla == NULL) {   //comprobamos que la ventana se crea correctamente  
@@ -182,26 +234,19 @@ int main () {
 
 
 
-    img1= IMG_Load("./Data/patito.jpg"); //cargamos la imagen.. el comando es de SDL.Image
-    img2= IMG_Load("./Data/p.jpeg");
-    img3= IMG_Load("./Data/m.jpg");
-    img4= IMG_Load("./Data/s.jpeg");
-    img5= IMG_Load("./Data/u.jpeg");
-
-    render= SDL_CreateRenderer(pantalla, -1, 0);   // renderizamos la pantalla...
-    //este comando recibe (SDL_Window * pantalla, el numero del driver que hara el render...el menos uno es para que
-    // agarre el primer dispositivo disponible, y el cero nuevamente son banderas... el cero es para ninguna
-
+    render= SDL_CreateRenderer(pantalla, -1, 0);  
 
     while(aux==1){  //ciclo para que no se cierre altiro
 
         while(SDL_PollEvent(&evento)){ // con el SDL poll con el que consultamos una lista de eventos que se van almacenando
                     
-            fusion=SDL_CreateRGBSurface(0,800,600,32,0,0,0,0);
+            detras=SDL_CreateRGBSurface(0,800,600,32,0,0,0,0);
+            SDL_BlitSurface(fondo,NULL,detras,NULL);
 
-            if(evento.type==SDL_QUIT) // si presionamos la equis para cerrar la ventana
+
+            if(evento.type==SDL_QUIT) 
             {
-                aux=0; //para terminar el ciclo
+                aux=0; 
                 break;
             }
 
@@ -210,45 +255,59 @@ int main () {
                 switch(evento.key.keysym.scancode) { //esto para acceder a una tabla de codigos qlos que tiene SDL para 
                                                     // reconocer cada tecla 
 
-                    case SDL_SCANCODE_UP: //los scancodes son como codigos internaciones... independiente del teclado  
-                        posImg.y-=60;     //reconocera la tecla....
-                        if(posImg.y<0){  //barrera para que no desaparezca la img
-                            posImg.y=0;
+                    case SDL_SCANCODE_UP:  
+                        
+                        posBarco.y-=60;   
+
+
+                        if(posBarco.y<0){  //barrera para que no desaparezca la img
+                            posBarco.y=0;
                         }
-                        printf("posimg.y=%d\n",posImg.y); //indicador
+
+
                         SDL_RenderClear(render);
                         break;
 
                     case SDL_SCANCODE_DOWN: 
-                        posImg.y+=60;
-                        if(posImg.y>540){ //barrera para que no desaparezca la img
-                            posImg.y=540;
+
+                        posBarco.y+=60;
+
+
+                        if(posBarco.y>540){ //barrera para que no desaparezca la img
+                            posBarco.y=540;
                         }
-                        printf("posimg.y=%d\n",posImg.y); //indicador
+
+
                         SDL_RenderClear(render);
                         break;
 
                     case SDL_SCANCODE_RIGHT: 
-                        posImg.x+=80;
-                        if(posImg.x>720){ //barrera para que no desaparezca la img
-                            posImg.x=720;
+
+                        posBarco.x+=80;
+
+
+                        if(posBarco.x>720){ //barrera para que no desaparezca la img
+                           posBarco.x=720;
                         }
-                        printf("posimg.x=%d\n",posImg.x); //indicador
+
                         SDL_RenderClear(render);
                         break;
 
                     case SDL_SCANCODE_LEFT: 
-                        posImg.x-=80;
-                        if(posImg.x<0){ //barrera para que no desaparezca la img
-                            posImg.x=0;
+
+                        posBarco.x-=80;
+
+
+                        if(posBarco.x<0){ //barrera para que no desaparezca la img
+                            posBarco.x=0;
                         }
-                        printf("posimg.x=%d\n",posImg.x); //indicador
+
                         SDL_RenderClear(render);
                         break; 
                     
                     case SDL_SCANCODE_A:
 
-                        if(flota[indice].existencia==0) // si no esta disponible
+                        /*if(flota[indice].existencia==0) // si no esta disponible
                         {
                             continue;
                         }
@@ -256,91 +315,151 @@ int main () {
                         else
                         {
                             flota[indice].existencia=0; // luego haremos el proceso inverso
-                        }
+                        }*/
 
                         ARRi[cnt]=indice;
 
                         cnt++;
+
                         if(cnt>10){
                             cnt=10;
                         }
 
                         if(cnt<10){
-                            estatic[cnt-1]=posImg;
+                            estatic[cnt-1]=posBarco;
                         }
 
                         if(cnt==10 && aux2==1){
-                            estatic[cnt-1]=posImg;
+                            estatic[cnt-1]=posBarco;
                             aux2=0;
                         }
+
                         printf("cnt=%d\n",cnt);
                         break;
 
                     case SDL_SCANCODE_S:
+
                         cnt--;
+
                         ARRi[cnt]=0;
+
                         aux2=1;
+
                         if(cnt<0){
                             cnt=0;
                         }
+
                         printf("cnt=%d\n",cnt);
                         break;
 
                     case SDL_SCANCODE_Q: //hay que ver luego una forma de que no se muestren los que ya estan puestos
+
                         indice--;
 
                         if(indice<1)
                         {
                             indice=5;
                         }
+
                         break;
 
                     case SDL_SCANCODE_W:
+                        
                         indice++;
 
                         if(indice>5)
                         {
                             indice=1;
                         }
-                        break;               
+
+                        break;   
+
+
+                    case SDL_SCANCODE_R: //tecla para rotar
+
+                        if(rot==1){
+                            rot=2;
+                            printf("rot=%d\n",rot);
+                        }
+                        else{
+                            rot=1;
+                            printf("rot=%d\n",rot);
+                        }
+                        break;           
                 }
             }
 
+
+
             switch(indice)
             {
-                case 1: SDL_BlitScaled(img1,NULL,fusion,&posImg);
+                case 1: if(rot==1){
+                            SDL_BlitSurface(red1H,NULL,detras,&posBarco);
+                        }
+                        if(rot==2){
+                            SDL_BlitSurface(red1V,NULL,detras,&posBarco);
+                        }
+
                         break;
-                case 2: SDL_BlitScaled(img2,NULL,fusion,&posImg);
+
+                case 2: if(rot==1){
+                            SDL_BlitSurface(red2H,NULL,detras,&posBarco);
+                        }
+                        if(rot==2){
+                            SDL_BlitSurface(red2V,NULL,detras,&posBarco);
+                        }
                         break;
-                case 3: SDL_BlitScaled(img3,NULL,fusion,&posImg);
+
+                case 3: if(rot==1){
+                            SDL_BlitSurface(red3H,NULL,detras,&posBarco);
+                        }
+                        if(rot==2){
+                            SDL_BlitSurface(red3V,NULL,detras,&posBarco);
+                        }
                         break;
-                case 4: SDL_BlitScaled(img4,NULL,fusion,&posImg);
+
+                case 4: if(rot==1){
+                            SDL_BlitSurface(red4H,NULL,detras,&posBarco);
+                        }
+                        if(rot==2){
+                            SDL_BlitSurface(red4V,NULL,detras,&posBarco);
+                        }
                         break;
-                case 5: SDL_BlitScaled(img5,NULL,fusion,&posImg);
+                        
+                case 5: if(rot==1){
+                            SDL_BlitSurface(red5H,NULL,detras,&posBarco);
+                        }
+                        if(rot==2){
+                            SDL_BlitSurface(red5V,NULL,detras,&posBarco);
+                        }
                         break;
             }
+
 
 
             for(i=0;i<cnt;i++){
 
                 switch(ARRi[i])
                 {
-                    case 1: SDL_BlitScaled(img1,NULL,fusion,&estatic[i]);
+                    case 1: SDL_BlitSurface(red1H,NULL,detras,&estatic[i]);
                             break;
-                    case 2: SDL_BlitScaled(img2,NULL,fusion,&estatic[i]);
+                    case 2: SDL_BlitSurface(red2H,NULL,detras,&estatic[i]);
                             break;
-                    case 3: SDL_BlitScaled(img3,NULL,fusion,&estatic[i]);
+                    case 3: SDL_BlitSurface(red3H,NULL,detras,&estatic[i]);
                             break;
-                    case 4: SDL_BlitScaled(img4,NULL,fusion,&estatic[i]);
+                    case 4: SDL_BlitSurface(red4H,NULL,detras,&estatic[i]);
                             break;
-                    case 5: SDL_BlitScaled(img5,NULL,fusion,&estatic[i]);
+                    case 5: SDL_BlitSurface(red5H,NULL,detras,&estatic[i]);
                             break;
                 } 
             }
 
-            imgTexture= SDL_CreateTextureFromSurface(render,fusion); 
-            SDL_FreeSurface(fusion);
+
+
+            imgTexture= SDL_CreateTextureFromSurface(render,detras); 
+            SDL_FreeSurface(detras);
             SDL_RenderCopy(render, imgTexture, NULL, NULL);
+            SDL_DestroyTexture(imgTexture);
             SDL_RenderPresent(render);
 
         }
@@ -348,16 +467,41 @@ int main () {
     }
 
     //al salir destruimos todo y cerramos los subsistemas con SDL_Quit
-    SDL_FreeSurface(fusion);
-    SDL_FreeSurface(img1);
-    SDL_FreeSurface(img2);
-    SDL_FreeSurface(img3);
-    SDL_FreeSurface(img4);
-    SDL_FreeSurface(img5);
+    SDL_FreeSurface(detras);
+
+    SDL_FreeSurface(red1H);
+    SDL_FreeSurface(red2H);
+    SDL_FreeSurface(red3H);
+    SDL_FreeSurface(red4H);
+    SDL_FreeSurface(red5H);
+
+    SDL_FreeSurface(red1V);
+    SDL_FreeSurface(red2V);
+    SDL_FreeSurface(red3V);
+    SDL_FreeSurface(red4V);
+    SDL_FreeSurface(red5V);
+
+
+    SDL_FreeSurface(grn1H);
+    SDL_FreeSurface(grn2H);
+    SDL_FreeSurface(grn3H);
+    SDL_FreeSurface(grn4H);
+    SDL_FreeSurface(grn5H);
+
+    SDL_FreeSurface(grn1V);
+    SDL_FreeSurface(grn2V);
+    SDL_FreeSurface(grn3V);
+    SDL_FreeSurface(grn4V);
+    SDL_FreeSurface(grn5V);
+
     SDL_FreeSurface(arreglo);
+
     SDL_DestroyTexture(imgTexture);
+
     SDL_DestroyRenderer(render);
+
     SDL_DestroyWindow(pantalla);
+
     SDL_Quit();
     return 0;
 
