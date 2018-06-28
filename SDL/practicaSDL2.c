@@ -222,17 +222,17 @@ int main () {
     SDL_Event evento;
    
 
-    int i,cnt=0,indice=1,k; //indice: 1.acorazado(4), 2.lancha(2), 3.submarino(3), 4.porta aviones(5), 5.acorazado(3)
+    int i,cnt=0,indice=1; //indice: 1.lancha(2), 2.submarino(3), 3.crucero(3), 4.acorazado(5), 5.portaaviones(5)
     int ARRi[10]={0};
     int aux=1,aux2=1,rot=1,borde=1;
 
     barco flota[5]; //los cinco barcos
 
-    flota[0].orientacion=0; // 0:horizontal, 1:vertical
-    flota[1].orientacion=0;
-    flota[2].orientacion=0;
-    flota[3].orientacion=0;
-    flota[4].orientacion=0;
+    flota[0].orientacion=1; // 1:horizontal, 2:vertical
+    flota[1].orientacion=1;
+    flota[2].orientacion=1;
+    flota[3].orientacion=1;
+    flota[4].orientacion=1;
 
     flota[0].existencia=1;
     flota[1].existencia=1;
@@ -265,11 +265,11 @@ int main () {
     grn5H= IMG_Load("./Data/verdes/portaaviones_h.png");
 
     
-    grn1H= IMG_Load("./Data/verdes/destructor_v.png");
-    grn2H= IMG_Load("./Data/verdes/submarino_v.png");
-    grn3H= IMG_Load("./Data/verdes/crucero_v.png");
-    grn4H= IMG_Load("./Data/verdes/acorazado_v.png"); 
-    grn5H= IMG_Load("./Data/verdes/portaaviones_v.png");
+    grn1V= IMG_Load("./Data/verdes/destructor_v.png");
+    grn2V= IMG_Load("./Data/verdes/submarino_v.png");
+    grn3V= IMG_Load("./Data/verdes/crucero_v.png");
+    grn4V= IMG_Load("./Data/verdes/acorazado_v.png"); 
+    grn5V= IMG_Load("./Data/verdes/portaaviones_v.png");
     
 
 
@@ -383,25 +383,11 @@ int main () {
                         SDL_RenderClear(render);
                         break; 
 
-                        /*if(flota[indice].existencia==0) // si no esta disponible
-                        {
-                            continue;
-                        }
-
-                        else
-                        {
-                            flota[indice].existencia=0; // luego haremos el proceso inverso
-                        }*/
+                    case SDL_SCANCODE_A:
 
                         ARRi[cnt]=indice;
                         flota[indice-1].existencia=0;
 
-                        indice--;
-
-                        if(indice<1)
-                        {
-                            indice=5;
-                        }
 
                         while(flota[indice-1].existencia==0)
                         {
@@ -428,29 +414,8 @@ int main () {
                             aux2=0;
                         }
 
-                        printf("cnt=%d\n",cnt);
-                        break;
 
-
-
-                    case SDL_SCANCODE_A:
-
-                        ARRi[cnt]=indice;
-
-                        cnt++;
-
-                        if(cnt>10){
-                            cnt=10;
-                        }
-
-                        if(cnt<10){
-                            estatic[cnt-1]=posBarco;
-                        }
-
-                        if(cnt==10 && aux2==1){
-                            estatic[cnt-1]=posBarco;
-                            aux2=0;
-                        }
+                        flota[indice-1].orientacion=rot;
 
                         printf("cnt=%d\n",cnt);
                         break;
@@ -459,6 +424,23 @@ int main () {
                     case SDL_SCANCODE_S:
 
                         cnt--;
+
+                        if(indice<4 && flota[indice].existencia==0){
+                            
+                            indice++;
+
+                            if(indice>5){
+                                indice=1;
+                            }
+
+                            flota[indice-1].existencia=1;
+                        }
+
+                        else if (indice==5 && flota[0].existencia==0){
+
+                            indice=1;
+                            flota[0].existencia=1;
+                        }
 
                         ARRi[cnt]=0;
 
@@ -613,15 +595,51 @@ int main () {
 
                 switch(ARRi[i])
                 {
-                    case 1: SDL_BlitSurface(red1H,NULL,detras,&estatic[i]);
+                    case 1: 
+                            
+                            if(flota[i].orientacion==1){
+                                SDL_BlitSurface(red1H,NULL,detras,&estatic[i]);
+                            }
+                            else{
+                                SDL_BlitSurface(red1V,NULL,detras,&estatic[i]);
+                            }
                             break;
-                    case 2: SDL_BlitSurface(red2H,NULL,detras,&estatic[i]);
+                    case 2: 
+                            
+                            if(flota[i].orientacion==1){
+                                SDL_BlitSurface(red2H,NULL,detras,&estatic[i]);
+                            }
+                            else{
+                                SDL_BlitSurface(red2V,NULL,detras,&estatic[i]);
+                            }
                             break;
-                    case 3: SDL_BlitSurface(red3H,NULL,detras,&estatic[i]);
+                    case 3: 
+
+                            if(flota[i].orientacion==1){
+                                SDL_BlitSurface(red3H,NULL,detras,&estatic[i]);
+                            }
+                            else{
+                                SDL_BlitSurface(red3V,NULL,detras,&estatic[i]);
+                            }
                             break;
-                    case 4: SDL_BlitSurface(red4H,NULL,detras,&estatic[i]);
+
+                    case 4: 
+                            if(flota[i].orientacion==1){
+                                SDL_BlitSurface(red4H,NULL,detras,&estatic[i]);
+                            }
+                            else{
+                                SDL_BlitSurface(red4V,NULL,detras,&estatic[i]);
+                            }
                             break;
-                    case 5: SDL_BlitSurface(red5H,NULL,detras,&estatic[i]);
+                    
+                    case 5: 
+
+                            if(flota[i].orientacion==1){
+                                SDL_BlitSurface(red5H,NULL,detras,&estatic[i]);
+                            }
+                            else{
+                                SDL_BlitSurface(red5V,NULL,detras,&estatic[i]);
+                            }
                             break;
                 } 
             }
