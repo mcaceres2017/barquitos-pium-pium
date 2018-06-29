@@ -9,137 +9,102 @@ typedef struct
 } barco;
 
 
-void EscanearMatriz(SDL_Rect *matriz,int *indices, barco *unidad) //pondremos (estatic,ARRI,flota)
+void CrearMatriz(char * matriz, SDL_Rect * cajas,barco * puntero) //pondremos (estatic,ARRI,flota)
 {
-    int i,j,aux,filas,columnas;
-    char tableroDeJuego[10][10];
+    int i,j,k;
+    SDL_Rect scan;
+    scan.x=0;
+    scan.y=0;
+    scan.w=80;
+    scan.h=60;
 
-    for(i=0;i<10;i++) // rellenamos la matriz de puntos
+    int aux[5]={0}; //auxiliar para encontrar barcos
+
+
+
+    //revisando la matriz horizontalmente
+    //scan es del tamaño de UN cuadrado....que nos sirve para encontrar la posicion de los barcos
+
+    for(i=0;i<10;i++) //ciclo filas
     {
-        for(j=0;j<10;j++)
+        scan.x=0;
+        scan.y=i*60;
+
+        for(j=0;j<10;j++)  //ciclo columnas
         {
-            tableroDeJuego[i][j]='.';
-        }
-    }
+            scan.x=j*80;
 
-    for(i=0;i<10;i++)
-    {
-        aux=indices[i];
-        filas=matriz[i].x;
-        columnas=matriz[i].y;
-
-        switch(aux)
-        {
-
-            case 1: 
-                
-                if(unidad[aux].orientacion==0) //horizontal
+            for(k=0;k<5;k++)  //ciclo interseccion
+            {
+                if(SDL_HasIntersection(scan,(cajas+k))==1) //WIP
                 {
-                    for(j=0;j<2;j++)
-                    {
-                        tableroDeJuego[filas/80+j*80][columnas/60]='E';
-                    }
-                }
+                    switch(k):
 
-                else //vertical
-                {
-                    for(j=0;j<2;j++)
-                    {
-                        tableroDeJuego[filas/80][columnas/60 +j*60]='E';
-                    }
-                }
+                        case 0:  //barco de 2
 
-                break;
+                            if(aux[k]==0 && (puntero+k)->orientacion==1)
+                            {
+                                matriz[i][j]=E;
+                                matriz[i][j+1]=E;
+                                j+=2;
+                                aux[k]=1;
+                            }
+
+                            break;
 
 
-            case 2: 
+                        case 1:
 
-                if(unidad[aux].orientacion==0) //horizontal
-                {
-                    for(j=0;j<3;j++)
-                    {
-                        tableroDeJuego[filas/80+j*80][columnas/60]='D';
-                    }
-                }
+                            if(aux[k]==0 && (puntero+k)->orientacion==1)
+                            {
+                                matriz[i][j]=E;
+                                matriz[i][j+1]=E;
+                                j+=2;
+                                aux[k]=1;
+                            }
 
-                else //vertical
-                {
-                    for(j=0;j<3;j++)
-                    {
-                        tableroDeJuego[filas/80][columnas/60 +j*60]='D';
-                    }
-                }
+                            break;
 
-                break;
+                        case 2:
 
+                            if(aux[k]==0 && (puntero+k)->orientacion==1)
+                            {
+                                matriz[i][j]=E;
+                                matriz[i][j+1]=E;
+                                j+=2;
+                                aux[k]=1;
+                            }
 
+                            break;
 
-            case 3:
+                        case 3:
 
-                if(unidad[aux].orientacion==0) //horizontal
-                {
-                    for(j=0;j<3;j++)
-                    {
-                        tableroDeJuego[filas/80+j*80][columnas/60]='C';
-                    }
-                }
+                            if(aux[k]==0 && (puntero+k)->orientacion==1)
+                            {
+                                matriz[i][j]=E;
+                                matriz[i][j+1]=E;
+                                j+=2;
+                                aux[k]=1;
+                            }
 
-                else //vertical
-                {
-                    for(j=0;j<3;j++)
-                    {
-                        tableroDeJuego[filas/80][columnas/60 +j*60]='C';
-                    }
-                }
+                            break;
 
-                break;
+                        case 4:
 
+                            if(aux[k]==0 && (puntero+k)->orientacion==1)
+                            {
+                                matriz[i][j]=E;
+                                matriz[i][j+1]=E;
+                                j+=2;
+                                aux[k]=1;
+                            }
 
-            case 4: 
-                
-                if(unidad[aux].orientacion==0) //horizontal
-                {
-                    for(j=0;j<4;j++)
-                    {
-                        tableroDeJuego[filas/80+j*80][columnas/60]='B';
-                    }
-                }
-
-                else //vertical
-                {
-                    for(j=0;j<4;j++)
-                    {
-                        tableroDeJuego[filas/80][columnas/60 +j*60]='B';
-                    }
-                }
-
-                break;
-
-            
-
-            case 5: 
-
-                if(unidad[aux].orientacion==0) //horizontal
-                {
-                    for(j=0;j<5;j++)
-                    {
-                        tableroDeJuego[filas/80+j*80][columnas/60]='A';
-                    }
-                }
-
-                else //vertical
-                {
-                    for(j=0;j<5;j++)
-                    {
-                        tableroDeJuego[filas/80][columnas/60 +j*60]='A';
-                    }
-                }
-
-                break;
-            
-        }
-    }
-}
+                            break;
+                } //fin del if
+            } //fin de k
+        } //fin de j
+    } //fin de i
+} //fin funcion
 
 void limite(int barco,int* posicion,int borde)
 {
@@ -373,10 +338,22 @@ int main () {
     SDL_Event evento;
    
 
-    int i,cnt=0,indice=1; //indice: 1.lancha(2), 2.submarino(3), 3.crucero(3), 4.acorazado(5), 5.portaaviones(5)
+    int i,j,cnt=0,indice=1; //indice: 1.lancha(2), 2.submarino(3), 3.crucero(3), 4.acorazado(5), 5.portaaviones(5)
     int ARRi[5]={0};
-    int aux=1,aux2=1,rot=1,borde=1;
+    int aux=1,rot=1,borde=1;
     int interseccion;
+    char mat[10][10];
+    char *ptMat=&mat[0][0];
+
+
+    for(i=0;i<10;i++) // rellenamos la matriz de puntos
+    {
+        for(j=0;j<10;j++)
+        {
+            mat[i][j]='.';
+        }
+    }
+
 
     barco flota[5]; //los cinco barcos
 
@@ -553,8 +530,6 @@ int main () {
                         flota[indice-1].orientacion=rot;
                         
 
-                        
-
                         indice++;
                         cnt++;
                         printf("cnt=%d\n",cnt);
@@ -614,52 +589,7 @@ int main () {
                 }
             }
 
-            switch(indice)
-            {
-                case 1: if(rot==1){
-                            SDL_BlitSurface(red1H,NULL,detras,&posBarco);
-                        }
-                        if(rot==2){
-                            SDL_BlitSurface(red1V,NULL,detras,&posBarco);
-                        }
-
-                        break;
-
-                case 2: if(rot==1){
-                            SDL_BlitSurface(red2H,NULL,detras,&posBarco);
-                        }
-                        if(rot==2){
-                            SDL_BlitSurface(red2V,NULL,detras,&posBarco);
-                        }
-                        break;
-
-                case 3: if(rot==1){
-                            SDL_BlitSurface(red3H,NULL,detras,&posBarco);
-                        }
-                        if(rot==2){
-                            SDL_BlitSurface(red3V,NULL,detras,&posBarco);
-                        }
-                        break;
-
-                case 4: if(rot==1){
-                            SDL_BlitSurface(red4H,NULL,detras,&posBarco);
-                        }
-                        if(rot==2){
-                            SDL_BlitSurface(red4V,NULL,detras,&posBarco);
-                        }
-                        break;
-                        
-                case 5: if(rot==1){
-                            SDL_BlitSurface(red5H,NULL,detras,&posBarco);
-                        }
-                        if(rot==2){
-                            SDL_BlitSurface(red5V,NULL,detras,&posBarco);
-                        }
-                        break;
-            }
-
-
-
+            
             for(i=0;i<cnt;i++){
 
                 switch(ARRi[i])
@@ -714,6 +644,58 @@ int main () {
             }
 
 
+            switch(indice)
+            {
+                case 1: if(rot==1){
+                            SDL_BlitSurface(red1H,NULL,detras,&posBarco);
+                        }
+                        if(rot==2){
+                            SDL_BlitSurface(red1V,NULL,detras,&posBarco);
+                        }
+
+                        break;
+
+                case 2: if(rot==1){
+                            SDL_BlitSurface(red2H,NULL,detras,&posBarco);
+                        }
+                        if(rot==2){
+                            SDL_BlitSurface(red2V,NULL,detras,&posBarco);
+                        }
+                        break;
+
+                case 3: if(rot==1){
+                            SDL_BlitSurface(red3H,NULL,detras,&posBarco);
+                        }
+                        if(rot==2){
+                            SDL_BlitSurface(red3V,NULL,detras,&posBarco);
+                        }
+                        break;
+
+                case 4: if(rot==1){
+                            SDL_BlitSurface(red4H,NULL,detras,&posBarco);
+                        }
+                        if(rot==2){
+                            SDL_BlitSurface(red4V,NULL,detras,&posBarco);
+                        }
+                        break;
+                        
+                case 5: if(rot==1){
+                            SDL_BlitSurface(red5H,NULL,detras,&posBarco);
+                        }
+                        if(rot==2){
+                            SDL_BlitSurface(red5V,NULL,detras,&posBarco);
+                        }
+                        break;
+            }
+
+
+
+
+            if(cnt==5){
+
+                break;
+            }
+
 
             imgTexture= SDL_CreateTextureFromSurface(render,detras); 
             SDL_FreeSurface(detras);
@@ -722,6 +704,9 @@ int main () {
             SDL_RenderPresent(render);
 
         }
+
+        CrearMatriz(ptMat,)
+
 
     }
 
