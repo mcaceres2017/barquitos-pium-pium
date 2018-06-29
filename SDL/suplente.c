@@ -216,7 +216,7 @@ int main () {
     SDL_Surface *arreglo=NULL;
     SDL_Texture *imgTexture=NULL; 
     SDL_Renderer *render=NULL;  
-    SDL_Rect estatic[10];
+    SDL_Rect estatic[5];
     SDL_Rect posBarco; 
     posBarco.x=0;
     posBarco.y=0;
@@ -224,7 +224,7 @@ int main () {
    
 
     int i,cnt=0,indice=1; //indice: 1.lancha(2), 2.submarino(3), 3.crucero(3), 4.acorazado(5), 5.portaaviones(5)
-    int ARRi[10]={0};
+    int ARRi[5]={0};
     int aux=1,aux2=1,rot=1,borde=1,aux3;
 
     barco flota[5]; //los cinco barcos
@@ -388,7 +388,7 @@ int main () {
 
                         ARRi[cnt]=indice;
                         flota[indice-1].existencia=0;
-
+                        flota[indice-1].orientacion=rot;
 
                         while(flota[indice-1].existencia==0)
                         {
@@ -416,7 +416,7 @@ int main () {
                         }
 
 
-                        flota[indice-1].orientacion=rot;
+                        
 
                         for(i=0;i<5;i++)
                         {
@@ -619,7 +619,7 @@ int main () {
                 {
                     case 1: 
                             
-                            if(flota[i].orientacion==1){
+                            if(flota[0].orientacion==1){
                                 SDL_BlitSurface(red1H,NULL,detras,&estatic[i]);
                             }
                             else{
@@ -628,7 +628,7 @@ int main () {
                             break;
                     case 2: 
                             
-                            if(flota[i].orientacion==1){
+                            if(flota[1].orientacion==1){
                                 SDL_BlitSurface(red2H,NULL,detras,&estatic[i]);
                             }
                             else{
@@ -637,7 +637,7 @@ int main () {
                             break;
                     case 3: 
 
-                            if(flota[i].orientacion==1){
+                            if(flota[2].orientacion==1){
                                 SDL_BlitSurface(red3H,NULL,detras,&estatic[i]);
                             }
                             else{
@@ -646,7 +646,7 @@ int main () {
                             break;
 
                     case 4: 
-                            if(flota[i].orientacion==1){
+                            if(flota[3].orientacion==1){
                                 SDL_BlitSurface(red4H,NULL,detras,&estatic[i]);
                             }
                             else{
@@ -656,7 +656,7 @@ int main () {
                     
                     case 5: 
 
-                            if(flota[i].orientacion==1){
+                            if(flota[4].orientacion==1){
                                 SDL_BlitSurface(red5H,NULL,detras,&estatic[i]);
                             }
                             else{
