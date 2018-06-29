@@ -173,6 +173,146 @@ void limite(int barco,int* posicion,int borde)
 }
 
 
+
+void caja(SDL_Rect * pos,int indice, int rotacion){
+
+    switch(indice){
+
+        case 1:  //barco de 2
+
+            if(rotacion==1){ //horizontal
+                pos->w=160;
+                pos->h=60;
+            }
+
+            
+            else{
+
+                pos->w=80;
+                pos->h=120;
+
+            }
+
+            printf("caja barco 2 creada\n");
+            break;
+
+        case 2:  //barco de 3
+
+            if(rotacion==1){
+                pos->w=240;
+                pos->h=60;
+            }
+
+            
+            else{
+
+                pos->w=80;
+                pos->h=180;
+
+            }
+
+            printf("caja barco 3 creada\n");
+            break;
+
+
+        case 3:  //barco de 3
+
+            if(rotacion==1){
+                pos->w=240;
+                pos->h=60;
+            }
+
+            
+            else{
+
+                pos->w=80;
+                pos->h=180;
+
+            }
+
+            printf("caja barco 3 creada\n");
+            break;
+
+        case 4:  //barco de 4
+
+            if(rotacion==1){
+                pos->w=320;
+                pos->h=60;
+            }
+
+            
+            else{
+
+                pos->w=80;
+                pos->h=240;
+
+            }
+
+
+            printf("caja barco 4 creada\n");
+            break;
+
+
+        case 5:  //barco de 5
+
+            if(rotacion==1){
+                pos->w=400;
+                pos->h=60;
+            }
+
+            
+            else{
+
+                pos->w=80;
+                pos->h=300;
+
+            }
+
+            printf("caja barco 5 creada\n");
+            break;
+    }
+}
+
+
+
+int colision(SDL_Rect * actual,int indice,SDL_Rect * arreglo){
+
+
+    int i;
+    int a=0;
+
+    for(i=0;i<5;i++){
+        
+        if(i==indice-1){
+            printf("i igual a indice, continuando\n");
+            continue;
+        }
+
+
+        if(((arreglo+i)->w)!=0){ //confirmar que no sea una caja nula
+
+            printf("i=%d\n",i);
+            printf("barco.actual.w=%d\n",actual->w);
+            printf("barco.actual.h=%d\n",actual->h);
+            printf("barco.arreglo+i.w=%d\n",(arreglo+i)->w);
+            printf("barco.arreglo+i.h=%d\n",(arreglo+i)->h);
+
+            a=SDL_HasIntersection(actual,(arreglo+i));
+
+            
+            if(a==1){
+                printf("no se puede colocar ahi\n");
+                break;
+            }
+        }
+    }
+
+
+    return a;
+
+}
+
+
 //a la hora de compilar se pone gcc nombre.c -lSDL2 -lSDL2_image //
 
 
@@ -215,15 +355,28 @@ int main () {
     SDL_Texture *imgTexture=NULL; 
     SDL_Renderer *render=NULL;  
     SDL_Rect estatic[5];
+    estatic[0].w=0;
+    estatic[0].h=0;
+    estatic[1].w=0;
+    estatic[1].h=0;
+    estatic[2].w=0;
+    estatic[2].h=0;
+    estatic[3].w=0;
+    estatic[3].h=0;
+    estatic[4].w=0;
+    estatic[4].h=0;
     SDL_Rect posBarco; 
     posBarco.x=0;
     posBarco.y=0;
+
+    SDL_Rect *puntero=&estatic[0];
     SDL_Event evento;
    
 
     int i,cnt=0,indice=1; //indice: 1.lancha(2), 2.submarino(3), 3.crucero(3), 4.acorazado(5), 5.portaaviones(5)
     int ARRi[5]={0};
     int aux=1,aux2=1,rot=1,borde=1;
+    int interseccion;
 
     barco flota[5]; //los cinco barcos
 
@@ -384,10 +537,23 @@ int main () {
 
                     case SDL_SCANCODE_A:
 
+
+
+                        estatic[cnt]=posBarco;
+                        caja(&estatic[cnt],indice,rot);
+                        interseccion=colision(&estatic[cnt],indice,puntero);
+
+                        if(interseccion==1){
+                            printf("se intersectan las cajas\n");
+                            break;
+                        }
+
                         ARRi[cnt]=indice;
                         flota[indice-1].existencia=0;
                         flota[indice-1].orientacion=rot;
-                        estatic[cnt]=posBarco;
+                        
+
+                        
 
                         indice++;
                         cnt++;
@@ -411,6 +577,11 @@ int main () {
                         ARRi[cnt]=0;
                         flota[indice-1].existencia=1;
                         flota[indice-1].orientacion=1;
+                        estatic[cnt].w=0;
+                        estatic[cnt].h=0;
+
+                        printf("quitando caja.. ancho=%d alto=%d\n",estatic[cnt].w,estatic[cnt].h);
+
 
                        
 
