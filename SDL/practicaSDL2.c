@@ -31,115 +31,143 @@ void EscanearMatriz(SDL_Rect *matriz,int *indices, barco *unidad) //pondremos (e
 
         switch(aux)
         {
-            case 1: if(unidad[aux].orientacion==0) //horizontal
-            {
-                for(j=0;j<5;j++)
-                {
-                    tableroDeJuego[filas/80+j*80][columnas/60]='A';
-                }
-            }
 
-            else //vertical
-            {
-                for(j=0;j<5;j++)
+            case 1: 
+                
+                if(unidad[aux].orientacion==0) //horizontal
                 {
-                    tableroDeJuego[filas/80][columnas/60 +j*60]='A';
+                    for(j=0;j<2;j++)
+                    {
+                        tableroDeJuego[filas/80+j*80][columnas/60]='E';
+                    }
                 }
-            }
 
-            case 2: if(unidad[aux].orientacion==0) //horizontal
-            {
-                for(j=0;j<4;j++)
+                else //vertical
                 {
-                    tableroDeJuego[filas/80+j*80][columnas/60]='B';
+                    for(j=0;j<2;j++)
+                    {
+                        tableroDeJuego[filas/80][columnas/60 +j*60]='E';
+                    }
                 }
-            }
 
-            else //vertical
-            {
-                for(j=0;j<4;j++)
-                {
-                    tableroDeJuego[filas/80][columnas/60 +j*60]='B';
-                }
-            }
+                break;
 
-            case 3: if(unidad[aux].orientacion==0) //horizontal
-            {
-                for(j=0;j<3;j++)
-                {
-                    tableroDeJuego[filas/80+j*80][columnas/60]='C';
-                }
-            }
 
-            else //vertical
-            {
-                for(j=0;j<3;j++)
-                {
-                    tableroDeJuego[filas/80][columnas/60 +j*60]='C';
-                }
-            }
+            case 2: 
 
-            case 4: if(unidad[aux].orientacion==0) //horizontal
-            {
-                for(j=0;j<3;j++)
+                if(unidad[aux].orientacion==0) //horizontal
                 {
-                    tableroDeJuego[filas/80+j*80][columnas/60]='D';
+                    for(j=0;j<3;j++)
+                    {
+                        tableroDeJuego[filas/80+j*80][columnas/60]='D';
+                    }
                 }
-            }
 
-            else //vertical
-            {
-                for(j=0;j<3;j++)
+                else //vertical
                 {
-                    tableroDeJuego[filas/80][columnas/60 +j*60]='D';
+                    for(j=0;j<3;j++)
+                    {
+                        tableroDeJuego[filas/80][columnas/60 +j*60]='D';
+                    }
                 }
-            }
 
-            case 5: if(unidad[aux].orientacion==0) //horizontal
-            {
-                for(j=0;j<2;j++)
-                {
-                    tableroDeJuego[filas/80+j*80][columnas/60]='E';
-                }
-            }
+                break;
 
-            else //vertical
-            {
-                for(j=0;j<2;j++)
+
+
+            case 3:
+
+                if(unidad[aux].orientacion==0) //horizontal
                 {
-                    tableroDeJuego[filas/80][columnas/60 +j*60]='E';
+                    for(j=0;j<3;j++)
+                    {
+                        tableroDeJuego[filas/80+j*80][columnas/60]='C';
+                    }
                 }
-            }
+
+                else //vertical
+                {
+                    for(j=0;j<3;j++)
+                    {
+                        tableroDeJuego[filas/80][columnas/60 +j*60]='C';
+                    }
+                }
+
+                break;
+
+
+            case 4: 
+                
+                if(unidad[aux].orientacion==0) //horizontal
+                {
+                    for(j=0;j<4;j++)
+                    {
+                        tableroDeJuego[filas/80+j*80][columnas/60]='B';
+                    }
+                }
+
+                else //vertical
+                {
+                    for(j=0;j<4;j++)
+                    {
+                        tableroDeJuego[filas/80][columnas/60 +j*60]='B';
+                    }
+                }
+
+                break;
+
+            
+
+            case 5: 
+
+                if(unidad[aux].orientacion==0) //horizontal
+                {
+                    for(j=0;j<5;j++)
+                    {
+                        tableroDeJuego[filas/80+j*80][columnas/60]='A';
+                    }
+                }
+
+                else //vertical
+                {
+                    for(j=0;j<5;j++)
+                    {
+                        tableroDeJuego[filas/80][columnas/60 +j*60]='A';
+                    }
+                }
+
+                break;
+            
         }
     }
 }
 
 void limite(int barco,int* posicion,int borde)
 {
-	switch(barco)
+    switch(barco)
     {
-       	case 1: if(*posicion>borde-4*borde/10){ //barrera para que no desaparezca la img
-                *posicion=borde-4*borde/10;
+        case 1: if(*posicion>borde-2*borde/10){ //barrera para que no desaparezca la img
+                *posicion=borde-2*borde/10;
                 }
                 break;
 
-        case 2: if(*posicion>borde-2*borde/10){ 
-                *posicion=borde-2*borde/10;
+        case 2: if(*posicion>borde-3*borde/10){ 
+                *posicion=borde-3*borde/10;
                 }
                 break;
 
         case 3: if(*posicion>borde-3*borde/10){
                 *posicion=borde-3*borde/10;
                 }
-				break;
+                break;
 
-        case 4: if(*posicion>borde-5*borde/10){
-                *posicion=borde-5*borde/10;
+        case 4: if(*posicion>borde-4*borde/10){
+                *posicion=borde-4*borde/10;
                 }
                 break;
 
-       	case 5: if(*posicion>borde-3*borde/10){
-                *posicion=borde-3*borde/10;
+        case 5: if(*posicion>borde-5*borde/10){
+                *posicion=borde-5*borde/10;
                 }
                 break;
     }
@@ -156,11 +184,11 @@ int main () {
     SDL_Surface *fondo=NULL;
 
 
-    SDL_Surface *red1H=NULL;  
-    SDL_Surface *red2H=NULL;
-    SDL_Surface *red3H=NULL;
-    SDL_Surface *red4H=NULL;
-    SDL_Surface *red5H=NULL;
+    SDL_Surface *red1H=NULL;  //barco de 2 destructor
+    SDL_Surface *red2H=NULL;  //barco de 3 submarino
+    SDL_Surface *red3H=NULL;  //barco de 3 crucero
+    SDL_Surface *red4H=NULL;  //barco de 4 acorazado
+    SDL_Surface *red5H=NULL;  //barco de 5 portaaviones
 
     SDL_Surface *red1V=NULL;  
     SDL_Surface *red2V=NULL;
@@ -216,31 +244,33 @@ int main () {
     fondo= IMG_Load("./Data/fondo.png");
 
 
-    red1H= IMG_Load("./Data/rojos/acorazado_h.png"); 
-    red2H= IMG_Load("./Data/rojos/destructor_h.png");
-    red3H= IMG_Load("./Data/rojos/submarino_h.png");
-    red4H= IMG_Load("./Data/rojos/portaaviones_h.png");
-    red5H= IMG_Load("./Data/rojos/crucero_h.png");
+    red1H= IMG_Load("./Data/rojos/destructor_h.png");
+    red2H= IMG_Load("./Data/rojos/submarino_h.png");
+    red3H= IMG_Load("./Data/rojos/crucero_h.png");
+    red4H= IMG_Load("./Data/rojos/acorazado_h.png"); 
+    red5H= IMG_Load("./Data/rojos/portaaviones_h.png");
 
-    red1V= IMG_Load("./Data/rojos/acorazado_v.png"); 
-    red2V= IMG_Load("./Data/rojos/destructor_v.png");
-    red3V= IMG_Load("./Data/rojos/submarino_v.png");
-    red4V= IMG_Load("./Data/rojos/portaaviones_v.png");
-    red5V= IMG_Load("./Data/rojos/crucero_v.png");
+  
+    red1V= IMG_Load("./Data/rojos/destructor_v.png");
+    red2V= IMG_Load("./Data/rojos/submarino_v.png");
+    red3V= IMG_Load("./Data/rojos/crucero_v.png");
+    red4V= IMG_Load("./Data/rojos/acorazado_v.png"); 
+    red5V= IMG_Load("./Data/rojos/portaaviones_v.png");
+    
+    
+    grn1H= IMG_Load("./Data/verdes/destructor_h.png");
+    grn2H= IMG_Load("./Data/verdes/submarino_h.png");
+    grn3H= IMG_Load("./Data/verdes/crucero_h.png");
+    grn4H= IMG_Load("./Data/verdes/acorazado_h.png"); 
+    grn5H= IMG_Load("./Data/verdes/portaaviones_h.png");
 
-
-    grn1H= IMG_Load("./Data/verdes/acorazado_h.png"); 
-    grn2H= IMG_Load("./Data/verdes/destructor_h.png");
-    grn3H= IMG_Load("./Data/verdes/submarino_h.png");
-    grn4H= IMG_Load("./Data/verdes/portaaviones_h.png");
-    grn5H= IMG_Load("./Data/verdes/crucero_h.png");
-
-
-    grn1H= IMG_Load("./Data/verdes/acorazado_v.png"); 
-    grn2H= IMG_Load("./Data/verdes/destructor_v.png");
-    grn3H= IMG_Load("./Data/verdes/submarino_v.png");
-    grn4H= IMG_Load("./Data/verdes/portaaviones_v.png");
-    grn5H= IMG_Load("./Data/verdes/crucero_v.png");
+    
+    grn1H= IMG_Load("./Data/verdes/destructor_v.png");
+    grn2H= IMG_Load("./Data/verdes/submarino_v.png");
+    grn3H= IMG_Load("./Data/verdes/crucero_v.png");
+    grn4H= IMG_Load("./Data/verdes/acorazado_v.png"); 
+    grn5H= IMG_Load("./Data/verdes/portaaviones_v.png");
+    
 
 
     if(SDL_Init(SDL_INIT_VIDEO) < 0) { // activacion y comprobacion de video
@@ -296,7 +326,7 @@ int main () {
                             posBarco.y=0;
                         }
 
-
+                        printf("posBarco.y=%d\n",posBarco.y);
                         SDL_RenderClear(render);
                         break;
 
@@ -306,17 +336,17 @@ int main () {
 
                         if(rot==1)//si esta horizontal
                         {
-                        	if(posBarco.y>540){ //barrera para que no desaparezca la img
-                            	posBarco.y=540;
-                        	}
+                            if(posBarco.y>540){ //barrera para que no desaparezca la img
+                                posBarco.y=540;
+                            }
                         }
 
                         else //si esta vertical
                         {
-                        	limite(indice,&posBarco.y,600);
+                            limite(indice,&posBarco.y,600);
                         }
 
-
+                        printf("posBarco.y=%d\n",posBarco.y);
                         SDL_RenderClear(render);
                         break;
 
@@ -326,16 +356,17 @@ int main () {
 
                         if(rot==2)//si esta vertical
                         {
-                        	if(posBarco.x>720){ //barrera para que no desaparezca la img
-                           		posBarco.x=720;
-                           	}
+                            if(posBarco.x>720){ //barrera para que no desaparezca la img
+                                posBarco.x=720;
+                            }
                         }
 
                         else // si esta horizontal
                         {
-                        	limite(indice,&posBarco.x,800);
+                            limite(indice,&posBarco.x,800);
                         }
 
+                        printf("posBarco.x=%d\n",posBarco.x);
                         SDL_RenderClear(render);
                         break;
 
@@ -348,6 +379,7 @@ int main () {
                             posBarco.x=0;
                         }
 
+                        printf("posBarco.x=%d\n",posBarco.x);
                         SDL_RenderClear(render);
                         break; 
 
@@ -365,6 +397,26 @@ int main () {
                         ARRi[cnt]=indice;
                         flota[indice-1].existencia=0;
 
+<<<<<<< HEAD
+=======
+                        indice--;
+
+                        if(indice<1)
+                        {
+                            indice=5;
+                        }
+
+                        while(flota[indice-1].existencia==0)
+                        {
+                            indice--;
+
+                            if(indice<1)
+                            {
+                                indice=5;
+                            }
+                        }
+
+>>>>>>> 42cd616b5520b8d1810bd4612f594f3e1e74abbc
                         cnt++;
 
                         if(cnt>5){
@@ -382,6 +434,31 @@ int main () {
 
                         printf("cnt=%d\n",cnt);
                         break;
+
+
+
+                    case SDL_SCANCODE_A:
+
+                        ARRi[cnt]=indice;
+
+                        cnt++;
+
+                        if(cnt>10){
+                            cnt=10;
+                        }
+
+                        if(cnt<10){
+                            estatic[cnt-1]=posBarco;
+                        }
+
+                        if(cnt==10 && aux2==1){
+                            estatic[cnt-1]=posBarco;
+                            aux2=0;
+                        }
+
+                        printf("cnt=%d\n",cnt);
+                        break;
+                        
 
                     case SDL_SCANCODE_S:
 
@@ -404,27 +481,27 @@ int main () {
 
                         if(indice<1)
                         {
-                        	indice=5;
+                            indice=5;
                         }
 
                         while(flota[indice-1].existencia==0)
                         {
-                        	indice--;
+                            indice--;
 
-                        	if(indice<1)
-                        	{
-                        		indice=5;
-                        	}
+                            if(indice<1)
+                            {
+                                indice=5;
+                            }
                         }
 
                         if(rot==1)
                         {
-                        	limite(indice,&posBarco.x,800);
+                            limite(indice,&posBarco.x,800);
                         }
 
                         else
                         {
-                        	limite(indice,&posBarco.y,600);
+                            limite(indice,&posBarco.y,600);
                         }
 
                         printf("%d\n",indice);
@@ -442,22 +519,22 @@ int main () {
 
                         while(flota[indice-1].existencia==0)
                         {
-                        	indice++;
+                            indice++;
 
-                        	if(indice>5)
-                        	{
-                            	indice=1;
-                        	}
+                            if(indice>5)
+                            {
+                                indice=1;
+                            }
                         }
 
                         if(rot==1)
                         {
-                        	limite(indice,&posBarco.x,800);
+                            limite(indice,&posBarco.x,800);
                         }
 
                         else
                         {
-                        	limite(indice,&posBarco.y,600);
+                            limite(indice,&posBarco.y,600);
                         }
 
                         printf("%d\n",indice);
@@ -478,12 +555,12 @@ int main () {
 
                         if(rot==1)
                         {
-                        	limite(indice,&posBarco.x,800);
+                            limite(indice,&posBarco.x,800);
                         }
 
                         else
                         {
-                        	limite(indice,&posBarco.y,600);
+                            limite(indice,&posBarco.y,600);
                         }
 
                         break;           

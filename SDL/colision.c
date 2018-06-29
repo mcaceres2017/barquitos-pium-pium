@@ -162,6 +162,7 @@ int main () {
             imgTexture= SDL_CreateTextureFromSurface(render,fusion); 
             SDL_FreeSurface(fusion);
             SDL_RenderCopy(render, imgTexture, NULL, NULL);
+            SDL_DestroyTexture(imgTexture);
             SDL_RenderPresent(render);
 
         }
