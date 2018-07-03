@@ -45,21 +45,16 @@ void CrearMatriz(char * matriz, SDL_Rect * cajas,barco * puntero) //pondremos (e
 
             for(k=0;k<5;k++)  //ciclo interseccion
             {
-                if(SDL_HasIntersection(scan1,(cajas+k))==1 || SDL_HasIntersection(scan2,(cajas+k))==1) //WIP
+                if(SDL_HasIntersection(&scan1,(cajas+k))==1) //WIP
                 {
-                    switch(k):
+                    switch(k){
 
                         case 0:  //barco de 2
 
                             if(aux[k]==0 && (puntero+k)->orientacion==1)
                             {
-                                matriz[(i*10)+j]='E';
-                                matriz[(i*10)+j+1]='E';
-                                aux[k]=1;
-                            }
-
-                            if(aux[k]==0 && (puntero+k)->orientacion==2)
-                            {
+                                printf("save barco 1 h\n");
+                                printf("i=%d j=%d\n",i,j);
                                 matriz[(i*10)+j]='E';
                                 matriz[(i*10)+j+1]='E';
                                 aux[k]=1;
@@ -72,14 +67,8 @@ void CrearMatriz(char * matriz, SDL_Rect * cajas,barco * puntero) //pondremos (e
 
                             if(aux[k]==0 && (puntero+k)->orientacion==1)
                             {
-                                matriz[(i*10)+j]='D';
-                                matriz[(i*10)+j+1]='D';
-                                matriz[(i*10)+j+2]='D';
-                                aux[k]=1;
-                            }
-
-                            if(aux[k]==0 && (puntero+k)->orientacion==2)
-                            {
+                                printf("save barco 2 h\n");
+                                printf("i=%d j=%d\n",i,j);
                                 matriz[(i*10)+j]='D';
                                 matriz[(i*10)+j+1]='D';
                                 matriz[(i*10)+j+2]='D';
@@ -92,14 +81,8 @@ void CrearMatriz(char * matriz, SDL_Rect * cajas,barco * puntero) //pondremos (e
 
                             if(aux[k]==0 && (puntero+k)->orientacion==1)
                             {
-                                matriz[(i*10)+j]='C';
-                                matriz[(i*10)+j+1]='C';
-                                matriz[(i*10)+j+2]='C';
-                                aux[k]=1;
-                            }
-
-                            if(aux[k]==0 && (puntero+k)->orientacion==2)
-                            {
+                                printf("save barco 3 h\n");
+                                printf("i=%d j=%d\n",i,j);
                                 matriz[(i*10)+j]='C';
                                 matriz[(i*10)+j+1]='C';
                                 matriz[(i*10)+j+2]='C';
@@ -112,15 +95,8 @@ void CrearMatriz(char * matriz, SDL_Rect * cajas,barco * puntero) //pondremos (e
 
                             if(aux[k]==0 && (puntero+k)->orientacion==1)
                             {
-                                matriz[(i*10)+j]='B';
-                                matriz[(i*10)+j+1]='B';
-                                matriz[(i*10)+j+2]='B';
-                                matriz[(i*10)+j+3]='B';
-                                aux[k]=1;
-                            }
-
-                            if(aux[k]==0 && (puntero+k)->orientacion==2)
-                            {
+                                printf("save barco 4 h\n");
+                                printf("i=%d j=%d\n",i,j);
                                 matriz[(i*10)+j]='B';
                                 matriz[(i*10)+j+1]='B';
                                 matriz[(i*10)+j+2]='B';
@@ -134,16 +110,8 @@ void CrearMatriz(char * matriz, SDL_Rect * cajas,barco * puntero) //pondremos (e
 
                             if(aux[k]==0 && (puntero+k)->orientacion==1)
                             {
-                                matriz[(i*10)+j]='A';
-                                matriz[(i*10)+j+1]='A';
-                                matriz[(i*10)+j+2]='A';
-                                matriz[(i*10)+j+3]='A';
-                                matriz[(i*10)+j+4]='A';
-                                aux[k]=1;
-                            }
-
-                            if(aux[k]==0 && (puntero+k)->orientacion==2)
-                            {
+                                printf("save barco 5 h\n");
+                                printf("i=%d j=%d\n",i,j);
                                 matriz[(i*10)+j]='A';
                                 matriz[(i*10)+j+1]='A';
                                 matriz[(i*10)+j+2]='A';
@@ -153,7 +121,87 @@ void CrearMatriz(char * matriz, SDL_Rect * cajas,barco * puntero) //pondremos (e
                             }
 
                             break;
+                    } //fin del switch
                 } //fin del if
+
+
+                if(SDL_HasIntersection(&scan2,(cajas+k))==1){
+
+                    switch(k){
+
+                        case 0:
+
+                            if(aux[k]==0 && (puntero+k)->orientacion==2)
+                            {
+                                printf("save barco 1 v\n");
+                                printf("i=%d j=%d\n",i,j);
+                                matriz[(j*10)+i]='E';
+                                matriz[(j*10)+10+i]='E';
+                                aux[k]=1;
+                            }
+
+                            break;
+
+                        case 1:
+
+                            if(aux[k]==0 && (puntero+k)->orientacion==2)
+                            {
+                                printf("save barco 2 v\n");
+                                printf("i=%d j=%d\n",i,j);
+                                matriz[(j*10)+i]='D';
+                                matriz[(j*10)+10+i]='D';
+                                matriz[(j*10)+20+i]='D';
+                                aux[k]=1;
+                            }
+
+                            break;
+
+                        case 2:
+
+                            if(aux[k]==0 && (puntero+k)->orientacion==2)
+                            {
+                                printf("save barco 3 v\n");
+                                printf("i=%d j=%d\n",i,j);
+                                matriz[(j*10)+i]='C';
+                                matriz[(j*10)+10+i]='C';
+                                matriz[(j*10)+20+i]='C';
+                                aux[k]=1;
+                            }
+
+                            break;
+
+                        case 3:
+
+                            if(aux[k]==0 && (puntero+k)->orientacion==2)
+                            {
+                                printf("save barco 4 v\n");
+                                printf("i=%d j=%d\n",i,j);
+                                matriz[(j*10)+i]='B';
+                                matriz[(j*10)+10+i]='B';
+                                matriz[(j*10)+20+i]='B';
+                                matriz[(j*10)+30+i]='B';
+                                aux[k]=1;
+                            }
+
+                            break;
+
+                        case 4:
+
+                            if(aux[k]==0 && (puntero+k)->orientacion==2)
+                            {
+                                printf("save barco 5 v\n");
+                                printf("i=%d j=%d\n",i,j);
+                                matriz[(j*10)+i]='A';
+                                matriz[(j*10)+10+i]='A';
+                                matriz[(j*10)+20+i]='A';
+                                matriz[(j*10)+30+i]='A';
+                                matriz[(j*10)+40+i]='A';
+                                aux[k]=1;
+                            }
+
+                            break;
+                    } //fin del switch vertical
+                } //fin del if vertical
             } //fin de k
         } //fin de j
     } //fin de i
@@ -199,61 +247,63 @@ void caja(SDL_Rect * pos,int indice, int rotacion){
         case 1:  //barco de 2
 
             if(rotacion==1){ //horizontal
+
                 pos->w=160;
                 pos->h=60;
             }
 
             
             else{
-
+                
                 pos->w=80;
                 pos->h=120;
 
             }
 
-            printf("caja barco 2 creada\n");
             break;
 
         case 2:  //barco de 3
 
             if(rotacion==1){
+                
                 pos->w=240;
                 pos->h=60;
             }
 
             
             else{
-
+                
                 pos->w=80;
                 pos->h=180;
 
             }
 
-            printf("caja barco 3 creada\n");
             break;
 
 
         case 3:  //barco de 3
 
             if(rotacion==1){
+                
                 pos->w=240;
                 pos->h=60;
             }
 
             
             else{
-
+                
                 pos->w=80;
                 pos->h=180;
 
             }
 
-            printf("caja barco 3 creada\n");
+
             break;
 
         case 4:  //barco de 4
 
             if(rotacion==1){
+                
                 pos->w=320;
                 pos->h=60;
             }
@@ -266,14 +316,13 @@ void caja(SDL_Rect * pos,int indice, int rotacion){
 
             }
 
-
-            printf("caja barco 4 creada\n");
             break;
 
 
         case 5:  //barco de 5
 
             if(rotacion==1){
+                
                 pos->w=400;
                 pos->h=60;
             }
@@ -286,7 +335,6 @@ void caja(SDL_Rect * pos,int indice, int rotacion){
 
             }
 
-            printf("caja barco 5 creada\n");
             break;
     }
 }
@@ -298,6 +346,8 @@ int colision(SDL_Rect * actual,int indice,SDL_Rect * arreglo){
 
     int i;
     int a=0;
+
+
 
     for(i=0;i<5;i++){
         
@@ -312,14 +362,15 @@ int colision(SDL_Rect * actual,int indice,SDL_Rect * arreglo){
             printf("i=%d\n",i);
             printf("barco.actual.w=%d\n",actual->w);
             printf("barco.actual.h=%d\n",actual->h);
-            printf("barco.arreglo+i.w=%d\n",(arreglo+i)->w);
-            printf("barco.arreglo+i.h=%d\n",(arreglo+i)->h);
+            printf("barco.arreglo+%d.w=%d\n",i,(arreglo+i)->w);
+            printf("barco.arreglo+%d.h=%d\n",i,(arreglo+i)->h);
 
             a=SDL_HasIntersection(actual,(arreglo+i));
 
             
             if(a==1){
                 printf("no se puede colocar ahi\n");
+                printf("choca con barco %d\n",i+1);
                 break;
             }
         }
@@ -483,7 +534,8 @@ int main () {
     while(aux==1){  //ciclo para que no se cierre altiro
 
         while(SDL_PollEvent(&evento)){ // con el SDL poll con el que consultamos una lista de eventos que se van almacenando
-                    
+            
+
             detras=SDL_CreateRGBSurface(0,800,600,32,0,0,0,0);
             SDL_BlitSurface(fondo,NULL,detras,NULL);
 
@@ -508,7 +560,6 @@ int main () {
                             posBarco.y=0;
                         }
 
-                        printf("posBarco.y=%d\n",posBarco.y);
                         SDL_RenderClear(render);
                         break;
 
@@ -528,7 +579,6 @@ int main () {
                             limite(indice,&posBarco.y,600);
                         }
 
-                        printf("posBarco.y=%d\n",posBarco.y);
                         SDL_RenderClear(render);
                         break;
 
@@ -548,7 +598,6 @@ int main () {
                             limite(indice,&posBarco.x,800);
                         }
 
-                        printf("posBarco.x=%d\n",posBarco.x);
                         SDL_RenderClear(render);
                         break;
 
@@ -561,28 +610,29 @@ int main () {
                             posBarco.x=0;
                         }
 
-                        printf("posBarco.x=%d\n",posBarco.x);
                         SDL_RenderClear(render);
                         break; 
 
                     case SDL_SCANCODE_A:
 
-
-
-                        estatic[cnt]=posBarco;
+                        estatic[cnt].x=posBarco.x;
+                        estatic[cnt].y=posBarco.y;
+                        printf("creando caja\n");
                         caja(&estatic[cnt],indice,rot);
+                        printf("caja %d creada w=%d h=%d\n",indice,estatic[0].w,estatic[0].h);
                         interseccion=colision(&estatic[cnt],indice,puntero);
 
                         if(interseccion==1){
                             printf("se intersectan las cajas\n");
+                            interseccion=0;
                             break;
                         }
 
                         ARRi[cnt]=indice;
                         flota[indice-1].existencia=0;
                         flota[indice-1].orientacion=rot;
-                        
-
+                        printf("confirmacion antes de salir de A\n");
+                        printf("caja %d w=%d h=%d\n",indice,estatic[0].w,estatic[0].h);
                         indice++;
                         cnt++;
                         printf("cnt=%d\n",cnt);
@@ -605,13 +655,10 @@ int main () {
                         ARRi[cnt]=0;
                         flota[indice-1].existencia=1;
                         flota[indice-1].orientacion=1;
+                        estatic[cnt].x=0;
+                        estatic[cnt].y=0;
                         estatic[cnt].w=0;
                         estatic[cnt].h=0;
-
-                        printf("quitando caja.. ancho=%d alto=%d\n",estatic[cnt].w,estatic[cnt].h);
-
-
-                       
 
                         printf("cnt=%d\n",cnt);
                         break;
@@ -638,12 +685,12 @@ int main () {
                             limite(indice,&posBarco.y,600);
                         }
 
-                        break;           
-                }
+                        break;         
+                } 
             }
 
-            
             for(i=0;i<cnt;i++){
+
 
                 switch(ARRi[i])
                 {
@@ -651,36 +698,62 @@ int main () {
                             
                             if(flota[i].orientacion==1){
                                 SDL_BlitSurface(red1H,NULL,detras,&estatic[i]);
+                                estatic[i].w=160;
+                                estatic[i].h=60;
+                                /*BlitSurface ajusta la caja 2 a las dimensiones originales de la imagen
+                                y BlitScaled ajusta la imagen a las dimensiones de la caja 2.... eso si
+                                teniendo cuidado de que a la imagen le sobre la menor cantida de 
+                                espacio transparente posible..... como ocupamos el blitsurface y al 
+                                terminar este blit las medidas W y H de la caja 2 cambiaban... tuvimos
+                                que poner esos "reajustes" como parche curita por mientras...el resto
+                                de las cosas funciona bien..... ahora como ya tenemos el escaneado de la
+                                matriz faltaria crear el segundo while con otra piscina de eventos para
+                                lo que serian los disparos hasta que alguien gane*/
                             }
                             else{
                                 SDL_BlitSurface(red1V,NULL,detras,&estatic[i]);
+                                estatic[i].w=80;
+                                estatic[i].h=120;
                             }
+
                             break;
                     case 2: 
                             
                             if(flota[i].orientacion==1){
                                 SDL_BlitSurface(red2H,NULL,detras,&estatic[i]);
+                                estatic[i].w=240;
+                                estatic[i].h=60;
                             }
                             else{
                                 SDL_BlitSurface(red2V,NULL,detras,&estatic[i]);
+                                estatic[i].w=80;
+                                estatic[i].h=180;
                             }
                             break;
                     case 3: 
 
                             if(flota[i].orientacion==1){
                                 SDL_BlitSurface(red3H,NULL,detras,&estatic[i]);
+                                estatic[i].w=240;
+                                estatic[i].h=60;
                             }
                             else{
                                 SDL_BlitSurface(red3V,NULL,detras,&estatic[i]);
+                                estatic[i].w=80;
+                                estatic[i].h=180;
                             }
                             break;
 
                     case 4: 
                             if(flota[i].orientacion==1){
                                 SDL_BlitSurface(red4H,NULL,detras,&estatic[i]);
+                                estatic[i].w=320;
+                                estatic[i].h=60;
                             }
                             else{
                                 SDL_BlitSurface(red4V,NULL,detras,&estatic[i]);
+                                estatic[i].w=80;
+                                estatic[i].h=240;
                             }
                             break;
                     
@@ -688,9 +761,13 @@ int main () {
 
                             if(flota[i].orientacion==1){
                                 SDL_BlitSurface(red5H,NULL,detras,&estatic[i]);
+                                estatic[i].w=400;
+                                estatic[i].h=60;
                             }
                             else{
                                 SDL_BlitSurface(red5V,NULL,detras,&estatic[i]);
+                                estatic[i].w=80;
+                                estatic[i].h=300;
                             }
                             break;
                 } 
@@ -743,24 +820,32 @@ int main () {
 
 
 
-
-            if(cnt==5){
-
-                break;
-            }
-
-
             imgTexture= SDL_CreateTextureFromSurface(render,detras); 
             SDL_FreeSurface(detras);
             SDL_RenderCopy(render, imgTexture, NULL, NULL);
             SDL_DestroyTexture(imgTexture);
             SDL_RenderPresent(render);
 
+            if(cnt==5){
+
+                aux=0;
+                break;
+            }  //posiblemente con esta liberacion tire una violacion
+
         }
+    }
 
-        CrearMatriz(ptMat,)
 
 
+    CrearMatriz(ptMat,puntero,&flota[0]);
+
+    for(i=0;i<10;i++) // comprobacion de la matriz
+    {
+        for(j=0;j<10;j++)
+        {
+            printf("%c",mat[i][j]);
+        }
+        printf("\n");
     }
 
     //al salir destruimos todo y cerramos los subsistemas con SDL_Quit
