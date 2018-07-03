@@ -12,11 +12,16 @@ typedef struct
 void CrearMatriz(char * matriz, SDL_Rect * cajas,barco * puntero) //pondremos (estatic,ARRI,flota)
 {
     int i,j,k;
-    SDL_Rect scan;
-    scan.x=0;
-    scan.y=0;
-    scan.w=80;
-    scan.h=60;
+    SDL_Rect scan1; //escaner filas
+    scan1.x=0;
+    scan1.y=0;
+    scan1.w=80;
+    scan1.h=60;
+    SDL_Rect scan2;  //escaner columnas
+    scan2.x=0;
+    scan2.y=0;
+    scan2.w=80;
+    scan2.h=60;
 
     int aux[5]={0}; //auxiliar para encontrar barcos
 
@@ -27,16 +32,20 @@ void CrearMatriz(char * matriz, SDL_Rect * cajas,barco * puntero) //pondremos (e
 
     for(i=0;i<10;i++) //ciclo filas
     {
-        scan.x=0;
-        scan.y=i*60;
+        scan1.x=0;
+        scan1.y=i*60;
+
+        scan2.y=0;
+        scan2.x=i*80;
 
         for(j=0;j<10;j++)  //ciclo columnas
         {
-            scan.x=j*80;
+            scan1.x=j*80;
+            scan2.y=j*60;
 
             for(k=0;k<5;k++)  //ciclo interseccion
             {
-                if(SDL_HasIntersection(scan,(cajas+k))==1) //WIP
+                if(SDL_HasIntersection(scan1,(cajas+k))==1 || SDL_HasIntersection(scan2,(cajas+k))==1) //WIP
                 {
                     switch(k):
 
@@ -44,58 +53,102 @@ void CrearMatriz(char * matriz, SDL_Rect * cajas,barco * puntero) //pondremos (e
 
                             if(aux[k]==0 && (puntero+k)->orientacion==1)
                             {
-                                matriz[i][j]=E;
-                                matriz[i][j+1]=E;
-                                j+=2;
+                                matriz[(i*10)+j]='E';
+                                matriz[(i*10)+j+1]='E';
+                                aux[k]=1;
+                            }
+
+                            if(aux[k]==0 && (puntero+k)->orientacion==2)
+                            {
+                                matriz[(i*10)+j]='E';
+                                matriz[(i*10)+j+1]='E';
                                 aux[k]=1;
                             }
 
                             break;
 
 
-                        case 1:
+                        case 1: //barco de 3
 
                             if(aux[k]==0 && (puntero+k)->orientacion==1)
                             {
-                                matriz[i][j]=E;
-                                matriz[i][j+1]=E;
-                                j+=2;
+                                matriz[(i*10)+j]='D';
+                                matriz[(i*10)+j+1]='D';
+                                matriz[(i*10)+j+2]='D';
+                                aux[k]=1;
+                            }
+
+                            if(aux[k]==0 && (puntero+k)->orientacion==2)
+                            {
+                                matriz[(i*10)+j]='D';
+                                matriz[(i*10)+j+1]='D';
+                                matriz[(i*10)+j+2]='D';
                                 aux[k]=1;
                             }
 
                             break;
 
-                        case 2:
+                        case 2: //barco de 3
 
                             if(aux[k]==0 && (puntero+k)->orientacion==1)
                             {
-                                matriz[i][j]=E;
-                                matriz[i][j+1]=E;
-                                j+=2;
+                                matriz[(i*10)+j]='C';
+                                matriz[(i*10)+j+1]='C';
+                                matriz[(i*10)+j+2]='C';
+                                aux[k]=1;
+                            }
+
+                            if(aux[k]==0 && (puntero+k)->orientacion==2)
+                            {
+                                matriz[(i*10)+j]='C';
+                                matriz[(i*10)+j+1]='C';
+                                matriz[(i*10)+j+2]='C';
                                 aux[k]=1;
                             }
 
                             break;
 
-                        case 3:
+                        case 3: //barco de 4
 
                             if(aux[k]==0 && (puntero+k)->orientacion==1)
                             {
-                                matriz[i][j]=E;
-                                matriz[i][j+1]=E;
-                                j+=2;
+                                matriz[(i*10)+j]='B';
+                                matriz[(i*10)+j+1]='B';
+                                matriz[(i*10)+j+2]='B';
+                                matriz[(i*10)+j+3]='B';
+                                aux[k]=1;
+                            }
+
+                            if(aux[k]==0 && (puntero+k)->orientacion==2)
+                            {
+                                matriz[(i*10)+j]='B';
+                                matriz[(i*10)+j+1]='B';
+                                matriz[(i*10)+j+2]='B';
+                                matriz[(i*10)+j+3]='B';
                                 aux[k]=1;
                             }
 
                             break;
 
-                        case 4:
+                        case 4: //barco de 5
 
                             if(aux[k]==0 && (puntero+k)->orientacion==1)
                             {
-                                matriz[i][j]=E;
-                                matriz[i][j+1]=E;
-                                j+=2;
+                                matriz[(i*10)+j]='A';
+                                matriz[(i*10)+j+1]='A';
+                                matriz[(i*10)+j+2]='A';
+                                matriz[(i*10)+j+3]='A';
+                                matriz[(i*10)+j+4]='A';
+                                aux[k]=1;
+                            }
+
+                            if(aux[k]==0 && (puntero+k)->orientacion==2)
+                            {
+                                matriz[(i*10)+j]='A';
+                                matriz[(i*10)+j+1]='A';
+                                matriz[(i*10)+j+2]='A';
+                                matriz[(i*10)+j+3]='A';
+                                matriz[(i*10)+j+4]='A';
                                 aux[k]=1;
                             }
 
