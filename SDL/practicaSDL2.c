@@ -381,45 +381,10 @@ int colision(SDL_Rect * actual,int indice,SDL_Rect * arreglo){
 
 }
 
-
-//a la hora de compilar se pone gcc nombre.c -lSDL2 -lSDL2_image //
-
-
-int main () {
-
-
-    SDL_Window *pantalla=NULL;
+void PonerBarcos(char *matriz, SDL_Window *pantalla,SDL_Surface *barco1H,SDL_Surface *barco2H,SDL_Surface *barco3H,SDL_Surface *barco4H,SDL_Surface *barco5H,SDL_Surface *barco1V,SDL_Surface *barco2V,SDL_Surface *barco3V,SDL_Surface *barco4V,SDL_Surface *barco5V)
+{
+     SDL_Surface *detras=NULL;
     SDL_Surface *fondo=NULL;
-
-
-    SDL_Surface *red1H=NULL;  //barco de 2 destructor
-    SDL_Surface *red2H=NULL;  //barco de 3 submarino
-    SDL_Surface *red3H=NULL;  //barco de 3 crucero
-    SDL_Surface *red4H=NULL;  //barco de 4 acorazado
-    SDL_Surface *red5H=NULL;  //barco de 5 portaaviones
-
-    SDL_Surface *red1V=NULL;  
-    SDL_Surface *red2V=NULL;
-    SDL_Surface *red3V=NULL;
-    SDL_Surface *red4V=NULL;
-    SDL_Surface *red5V=NULL;
-
-
-    SDL_Surface *grn1H=NULL;
-    SDL_Surface *grn2H=NULL;
-    SDL_Surface *grn3H=NULL;
-    SDL_Surface *grn4H=NULL;
-    SDL_Surface *grn5H=NULL;
-
-
-    SDL_Surface *grn1V=NULL;
-    SDL_Surface *grn2V=NULL;
-    SDL_Surface *grn3V=NULL;
-    SDL_Surface *grn4V=NULL;
-    SDL_Surface *grn5V=NULL;
-
-
-    SDL_Surface *detras=NULL;
     SDL_Surface *arreglo=NULL;
     SDL_Texture *imgTexture=NULL; 
     SDL_Renderer *render=NULL;  
@@ -446,18 +411,6 @@ int main () {
     int ARRi[5]={0};
     int aux=1,rot=1,borde=1;
     int interseccion;
-    char mat[10][10];
-    char *ptMat=&mat[0][0];
-
-
-    for(i=0;i<10;i++) // rellenamos la matriz de puntos
-    {
-        for(j=0;j<10;j++)
-        {
-            mat[i][j]='.';
-        }
-    }
-
 
     barco flota[5]; //los cinco barcos
 
@@ -475,58 +428,6 @@ int main () {
 
 
     fondo= IMG_Load("./Data/fondo.png");
-
-
-    red1H= IMG_Load("./Data/rojos/destructor_h.png");
-    red2H= IMG_Load("./Data/rojos/submarino_h.png");
-    red3H= IMG_Load("./Data/rojos/crucero_h.png");
-    red4H= IMG_Load("./Data/rojos/acorazado_h.png"); 
-    red5H= IMG_Load("./Data/rojos/portaaviones_h.png");
-
-  
-    red1V= IMG_Load("./Data/rojos/destructor_v.png");
-    red2V= IMG_Load("./Data/rojos/submarino_v.png");
-    red3V= IMG_Load("./Data/rojos/crucero_v.png");
-    red4V= IMG_Load("./Data/rojos/acorazado_v.png"); 
-    red5V= IMG_Load("./Data/rojos/portaaviones_v.png");
-    
-    
-    grn1H= IMG_Load("./Data/verdes/destructor_h.png");
-    grn2H= IMG_Load("./Data/verdes/submarino_h.png");
-    grn3H= IMG_Load("./Data/verdes/crucero_h.png");
-    grn4H= IMG_Load("./Data/verdes/acorazado_h.png"); 
-    grn5H= IMG_Load("./Data/verdes/portaaviones_h.png");
-
-    
-    grn1V= IMG_Load("./Data/verdes/destructor_v.png");
-    grn2V= IMG_Load("./Data/verdes/submarino_v.png");
-    grn3V= IMG_Load("./Data/verdes/crucero_v.png");
-    grn4V= IMG_Load("./Data/verdes/acorazado_v.png"); 
-    grn5V= IMG_Load("./Data/verdes/portaaviones_v.png");
-    
-
-
-    if(SDL_Init(SDL_INIT_VIDEO) < 0) { // activacion y comprobacion de video
-                                       // el subsistema de video tambien activa el subsistema de eventos
-
-        fprintf(stderr,"No se pudo iniciar SDL video: %s\n", SDL_GetError());
-        exit(1);
-    }
-
-
-    pantalla = SDL_CreateWindow ("barquitos 2000 remastered",
-                                  SDL_WINDOWPOS_UNDEFINED,
-                                  SDL_WINDOWPOS_UNDEFINED,
-                                  800,
-                                  600,
-                                  SDL_WINDOW_RESIZABLE);
-
-
-
-    if(pantalla == NULL) {   //comprobamos que la ventana se crea correctamente  
-        fprintf(stderr, "No se pudo crear la ventana: %s", SDL_GetError());
-    }
-
 
 
     render= SDL_CreateRenderer(pantalla, -1, 0);  
@@ -697,7 +598,7 @@ int main () {
                     case 1: 
                             
                             if(flota[i].orientacion==1){
-                                SDL_BlitSurface(red1H,NULL,detras,&estatic[i]);
+                                SDL_BlitSurface(barco1H,NULL,detras,&estatic[i]);
                                 estatic[i].w=160;
                                 estatic[i].h=60;
                                 /*BlitSurface ajusta la caja 2 a las dimensiones originales de la imagen
@@ -711,7 +612,7 @@ int main () {
                                 lo que serian los disparos hasta que alguien gane*/
                             }
                             else{
-                                SDL_BlitSurface(red1V,NULL,detras,&estatic[i]);
+                                SDL_BlitSurface(barco1V,NULL,detras,&estatic[i]);
                                 estatic[i].w=80;
                                 estatic[i].h=120;
                             }
@@ -720,12 +621,12 @@ int main () {
                     case 2: 
                             
                             if(flota[i].orientacion==1){
-                                SDL_BlitSurface(red2H,NULL,detras,&estatic[i]);
+                                SDL_BlitSurface(barco2H,NULL,detras,&estatic[i]);
                                 estatic[i].w=240;
                                 estatic[i].h=60;
                             }
                             else{
-                                SDL_BlitSurface(red2V,NULL,detras,&estatic[i]);
+                                SDL_BlitSurface(barco2V,NULL,detras,&estatic[i]);
                                 estatic[i].w=80;
                                 estatic[i].h=180;
                             }
@@ -733,12 +634,12 @@ int main () {
                     case 3: 
 
                             if(flota[i].orientacion==1){
-                                SDL_BlitSurface(red3H,NULL,detras,&estatic[i]);
+                                SDL_BlitSurface(barco3H,NULL,detras,&estatic[i]);
                                 estatic[i].w=240;
                                 estatic[i].h=60;
                             }
                             else{
-                                SDL_BlitSurface(red3V,NULL,detras,&estatic[i]);
+                                SDL_BlitSurface(barco3V,NULL,detras,&estatic[i]);
                                 estatic[i].w=80;
                                 estatic[i].h=180;
                             }
@@ -746,12 +647,12 @@ int main () {
 
                     case 4: 
                             if(flota[i].orientacion==1){
-                                SDL_BlitSurface(red4H,NULL,detras,&estatic[i]);
+                                SDL_BlitSurface(barco4H,NULL,detras,&estatic[i]);
                                 estatic[i].w=320;
                                 estatic[i].h=60;
                             }
                             else{
-                                SDL_BlitSurface(red4V,NULL,detras,&estatic[i]);
+                                SDL_BlitSurface(barco4V,NULL,detras,&estatic[i]);
                                 estatic[i].w=80;
                                 estatic[i].h=240;
                             }
@@ -760,12 +661,12 @@ int main () {
                     case 5: 
 
                             if(flota[i].orientacion==1){
-                                SDL_BlitSurface(red5H,NULL,detras,&estatic[i]);
+                                SDL_BlitSurface(barco5H,NULL,detras,&estatic[i]);
                                 estatic[i].w=400;
                                 estatic[i].h=60;
                             }
                             else{
-                                SDL_BlitSurface(red5V,NULL,detras,&estatic[i]);
+                                SDL_BlitSurface(barco5V,NULL,detras,&estatic[i]);
                                 estatic[i].w=80;
                                 estatic[i].h=300;
                             }
@@ -777,43 +678,43 @@ int main () {
             switch(indice)
             {
                 case 1: if(rot==1){
-                            SDL_BlitSurface(red1H,NULL,detras,&posBarco);
+                            SDL_BlitSurface(barco1H,NULL,detras,&posBarco);
                         }
                         if(rot==2){
-                            SDL_BlitSurface(red1V,NULL,detras,&posBarco);
+                            SDL_BlitSurface(barco1V,NULL,detras,&posBarco);
                         }
 
                         break;
 
                 case 2: if(rot==1){
-                            SDL_BlitSurface(red2H,NULL,detras,&posBarco);
+                            SDL_BlitSurface(barco2H,NULL,detras,&posBarco);
                         }
                         if(rot==2){
-                            SDL_BlitSurface(red2V,NULL,detras,&posBarco);
+                            SDL_BlitSurface(barco2V,NULL,detras,&posBarco);
                         }
                         break;
 
                 case 3: if(rot==1){
-                            SDL_BlitSurface(red3H,NULL,detras,&posBarco);
+                            SDL_BlitSurface(barco3H,NULL,detras,&posBarco);
                         }
                         if(rot==2){
-                            SDL_BlitSurface(red3V,NULL,detras,&posBarco);
+                            SDL_BlitSurface(barco3V,NULL,detras,&posBarco);
                         }
                         break;
 
                 case 4: if(rot==1){
-                            SDL_BlitSurface(red4H,NULL,detras,&posBarco);
+                            SDL_BlitSurface(barco4H,NULL,detras,&posBarco);
                         }
                         if(rot==2){
-                            SDL_BlitSurface(red4V,NULL,detras,&posBarco);
+                            SDL_BlitSurface(barco4V,NULL,detras,&posBarco);
                         }
                         break;
                         
                 case 5: if(rot==1){
-                            SDL_BlitSurface(red5H,NULL,detras,&posBarco);
+                            SDL_BlitSurface(barco5H,NULL,detras,&posBarco);
                         }
                         if(rot==2){
-                            SDL_BlitSurface(red5V,NULL,detras,&posBarco);
+                            SDL_BlitSurface(barco5V,NULL,detras,&posBarco);
                         }
                         break;
             }
@@ -837,50 +738,162 @@ int main () {
 
 
 
-    CrearMatriz(ptMat,puntero,&flota[0]);
-
-    for(i=0;i<10;i++) // comprobacion de la matriz
-    {
-        for(j=0;j<10;j++)
-        {
-            printf("%c",mat[i][j]);
-        }
-        printf("\n");
-    }
+    CrearMatriz(matriz,puntero,&flota[0]);
 
     //al salir destruimos todo y cerramos los subsistemas con SDL_Quit
     SDL_FreeSurface(detras);
 
-    SDL_FreeSurface(red1H);
-    SDL_FreeSurface(red2H);
-    SDL_FreeSurface(red3H);
-    SDL_FreeSurface(red4H);
-    SDL_FreeSurface(red5H);
+    SDL_FreeSurface(barco1H);
+    SDL_FreeSurface(barco2H);
+    SDL_FreeSurface(barco3H);
+    SDL_FreeSurface(barco4H);
+    SDL_FreeSurface(barco5H);
 
-    SDL_FreeSurface(red1V);
-    SDL_FreeSurface(red2V);
-    SDL_FreeSurface(red3V);
-    SDL_FreeSurface(red4V);
-    SDL_FreeSurface(red5V);
-
-
-    SDL_FreeSurface(grn1H);
-    SDL_FreeSurface(grn2H);
-    SDL_FreeSurface(grn3H);
-    SDL_FreeSurface(grn4H);
-    SDL_FreeSurface(grn5H);
-
-    SDL_FreeSurface(grn1V);
-    SDL_FreeSurface(grn2V);
-    SDL_FreeSurface(grn3V);
-    SDL_FreeSurface(grn4V);
-    SDL_FreeSurface(grn5V);
+    SDL_FreeSurface(barco1V);
+    SDL_FreeSurface(barco2V);
+    SDL_FreeSurface(barco3V);
+    SDL_FreeSurface(barco4V);
+    SDL_FreeSurface(barco5V);
 
     SDL_FreeSurface(arreglo);
 
     SDL_DestroyTexture(imgTexture);
 
     SDL_DestroyRenderer(render);
+
+}
+
+//a la hora de compilar se pone gcc nombre.c -lSDL2 -lSDL2_image //
+
+
+int main () {
+
+
+    SDL_Window *pantalla=NULL;
+
+
+    SDL_Surface *red1H=NULL;  //barco de 2 destructor
+    SDL_Surface *red2H=NULL;  //barco de 3 submarino
+    SDL_Surface *red3H=NULL;  //barco de 3 crucero
+    SDL_Surface *red4H=NULL;  //barco de 4 acorazado
+    SDL_Surface *red5H=NULL;  //barco de 5 portaaviones
+
+    SDL_Surface *red1V=NULL;  
+    SDL_Surface *red2V=NULL;
+    SDL_Surface *red3V=NULL;
+    SDL_Surface *red4V=NULL;
+    SDL_Surface *red5V=NULL;
+
+
+    SDL_Surface *grn1H=NULL;
+    SDL_Surface *grn2H=NULL;
+    SDL_Surface *grn3H=NULL;
+    SDL_Surface *grn4H=NULL;
+    SDL_Surface *grn5H=NULL;
+
+
+    SDL_Surface *grn1V=NULL;
+    SDL_Surface *grn2V=NULL;
+    SDL_Surface *grn3V=NULL;
+    SDL_Surface *grn4V=NULL;
+    SDL_Surface *grn5V=NULL;
+
+    red1H= IMG_Load("./Data/rojos/destructor_h.png");
+    red2H= IMG_Load("./Data/rojos/submarino_h.png");
+    red3H= IMG_Load("./Data/rojos/crucero_h.png");
+    red4H= IMG_Load("./Data/rojos/acorazado_h.png"); 
+    red5H= IMG_Load("./Data/rojos/portaaviones_h.png");
+
+  
+    red1V= IMG_Load("./Data/rojos/destructor_v.png");
+    red2V= IMG_Load("./Data/rojos/submarino_v.png");
+    red3V= IMG_Load("./Data/rojos/crucero_v.png");
+    red4V= IMG_Load("./Data/rojos/acorazado_v.png"); 
+    red5V= IMG_Load("./Data/rojos/portaaviones_v.png");
+    
+    
+    grn1H= IMG_Load("./Data/verdes/destructor_h.png");
+    grn2H= IMG_Load("./Data/verdes/submarino_h.png");
+    grn3H= IMG_Load("./Data/verdes/crucero_h.png");
+    grn4H= IMG_Load("./Data/verdes/acorazado_h.png"); 
+    grn5H= IMG_Load("./Data/verdes/portaaviones_h.png");
+
+    
+    grn1V= IMG_Load("./Data/verdes/destructor_v.png");
+    grn2V= IMG_Load("./Data/verdes/submarino_v.png");
+    grn3V= IMG_Load("./Data/verdes/crucero_v.png");
+    grn4V= IMG_Load("./Data/verdes/acorazado_v.png"); 
+    grn5V= IMG_Load("./Data/verdes/portaaviones_v.png");
+
+    char mat1[10][10];
+    char *ptMat1=&mat1[0][0];
+    int i,j;
+
+
+    for(i=0;i<10;i++) // rellenamos la matriz de puntos
+    {
+        for(j=0;j<10;j++)
+        {
+            mat1[i][j]='.';
+        }
+    }
+
+    char mat2[10][10];
+    char *ptMat2=&mat2[0][0];
+
+
+    for(i=0;i<10;i++) // rellenamos la matriz de puntos
+    {
+        for(j=0;j<10;j++)
+        {
+            mat2[i][j]='.';
+        }
+    }
+
+    if(SDL_Init(SDL_INIT_VIDEO) < 0) { // activacion y comprobacion de video
+                                       // el subsistema de video tambien activa el subsistema de eventos
+
+        fprintf(stderr,"No se pudo iniciar SDL video: %s\n", SDL_GetError());
+        exit(1);
+    }
+
+
+    pantalla = SDL_CreateWindow ("barquitos 2000 remastered",
+                                  SDL_WINDOWPOS_UNDEFINED,
+                                  SDL_WINDOWPOS_UNDEFINED,
+                                  800,
+                                  600,
+                                  SDL_WINDOW_RESIZABLE);
+
+
+
+    if(pantalla == NULL) {   //comprobamos que la ventana se crea correctamente  
+        fprintf(stderr, "No se pudo crear la ventana: %s", SDL_GetError());
+    }
+
+    PonerBarcos(ptMat1,pantalla,red1H,red2H,red3H,red4H,red5H,red1V,red2V,red3V,red4V,red5V);
+
+    for(i=0;i<10;i++) // rellenamos la matriz de puntos
+    {
+        for(j=0;j<10;j++)
+        {
+            printf("%c",mat1[i][j]);
+        }
+
+        printf("\n");
+    }
+
+    PonerBarcos(ptMat2,pantalla,grn1H,grn2H,grn3H,grn4H,grn5H,grn1V,grn2V,grn3V,grn4V,grn5V);
+
+    for(i=0;i<10;i++) // rellenamos la matriz de puntos
+    {
+        for(j=0;j<10;j++)
+        {
+            printf("%c",mat2[i][j]);
+        }
+
+        printf("\n");
+    }
 
     SDL_DestroyWindow(pantalla);
 
