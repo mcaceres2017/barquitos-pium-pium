@@ -383,7 +383,7 @@ int colision(SDL_Rect * actual,int indice,SDL_Rect * arreglo){
 
 void PonerBarcos(char *matriz, SDL_Window *pantalla,SDL_Surface *barco1H,SDL_Surface *barco2H,SDL_Surface *barco3H,SDL_Surface *barco4H,SDL_Surface *barco5H,SDL_Surface *barco1V,SDL_Surface *barco2V,SDL_Surface *barco3V,SDL_Surface *barco4V,SDL_Surface *barco5V)
 {
-     SDL_Surface *detras=NULL;
+    SDL_Surface *detras=NULL;
     SDL_Surface *fondo=NULL;
     SDL_Surface *arreglo=NULL;
     SDL_Texture *imgTexture=NULL; 
@@ -537,6 +537,7 @@ void PonerBarcos(char *matriz, SDL_Window *pantalla,SDL_Surface *barco1H,SDL_Sur
                         indice++;
                         cnt++;
                         printf("cnt=%d\n",cnt);
+                        limite(indice,&posBarco.x,800);
                         break;
                         
 
@@ -825,6 +826,8 @@ int main () {
     grn4V= IMG_Load("./Data/verdes/acorazado_v.png"); 
     grn5V= IMG_Load("./Data/verdes/portaaviones_v.png");
 
+    SDL_Surface tula[5];
+
     char mat1[10][10];
     char *ptMat1=&mat1[0][0];
     int i,j;
@@ -872,6 +875,7 @@ int main () {
     }
 
     PonerBarcos(ptMat1,pantalla,red1H,red2H,red3H,red4H,red5H,red1V,red2V,red3V,red4V,red5V);
+
 
     for(i=0;i<10;i++) // rellenamos la matriz de puntos
     {
