@@ -627,6 +627,225 @@ void ponerBarcos(SDL_Surface** H, SDL_Surface** V, SDL_Renderer* render,
 }
 
 
+int disparoValido(char* mat, int* vidasEnemigo, int* hundidos, SDL_Rect disparo){
+
+    int x=0;
+    int y=0;
+    x=(disparo.x/80);
+    y=(disparo.y/60);
+    int retorno=0; // 0.tiro invalido 1.tiro correcto o al agua
+
+    if(mat[(y*10)+x]=='O' || mat[(y*10)+x]=='X'){
+        printf("tiro invalido, de nuevo\n");
+    }
+
+    if(mat[(y*10)+x]=='A'){
+        vidasEnemigo[0]-=1;
+        printf("A restantes %d\n",vidasEnemigo[0]);
+        mat[(y*10)+x]='O';
+        retorno=1;
+
+        if(vidasEnemigo[0]==0){
+            *hundidos+=1;
+        }
+    }
+
+    if(mat[(y*10)+x]=='B'){
+        vidasEnemigo[1]-=1;
+        printf("B restantes %d\n",vidasEnemigo[1]);
+        mat[(y*10)+x]='O';
+        retorno=1;
+
+        if(vidasEnemigo[1]==0){
+            *hundidos+=1;
+        }
+    }
+
+    if(mat[(y*10)+x]=='C'){
+        vidasEnemigo[2]-=1;
+        printf("C restantes %d\n",vidasEnemigo[2]);
+        mat[(y*10)+x]='O';
+        retorno=1;
+
+        if(vidasEnemigo[2]==0){
+            *hundidos+=1;
+        }
+    }
+
+    if(mat[(y*10)+x]=='D'){
+        vidasEnemigo[3]-=1;
+        printf("D restantes %d\n",vidasEnemigo[3]);
+        mat[(y*10)+x]='O';
+        retorno=1;
+
+        if(vidasEnemigo[3]==0){
+            *hundidos+=1;
+        }
+    }
+
+
+    if(mat[(y*10)+x]=='E'){
+        vidasEnemigo[4]-=1;
+        printf("E restantes %d\n",vidasEnemigo[4]);
+        mat[(y*10)+x]='O';
+        retorno=1;
+
+
+        if(vidasEnemigo[4]==0){
+            *hundidos+=1;
+        }
+    }
+
+    if(mat[(y*10)+x]=='.'){
+        mat[(y*10)+x]='X';
+        retorno=1;
+    }
+
+    
+
+    return retorno;
+
+
+}
+
+
+void juego(char* mat1, char* mat2, SDL_Renderer* render){
+
+
+    int jugador=1; //se parte como el J1
+    int vivosJ1[5]={5,4,3,3,2}; //las "vidas", representando el tamaño del barco
+    int vivosJ2[5]={5,4,3,3,2};
+    int J1hundio=0; //barcos que ha hundido el J1
+    int J2hundio=0; //barcos que ha hundido el J2
+    int cnt1=0,cnt2=0;
+    int i,validez,posx=0,posy=0;
+    SDL_Surface* detras;
+    SDL_Surface* fondoJuego;
+    SDL_Surface* correcto;
+    SDL_Surface* fallido;
+    SDL_Surface* marcador;
+    SDL_Texture* textura;
+    SDL_Event evento;
+
+    SDL_Rect posActual; //para mover el marcador, cursor o como le llamen
+    posActual.x=0;
+    posActual.y=0;
+
+    SDL_Rect disparosJ1[100]; //estos son para ir guardando la posicion de los disparos para mostrar
+    SDL_Rect disparosJ2[100]; //las equis o circulos... en el peor de las casos el wn puede haberle
+                              //disparado a todas las jodidas casillas.
+
+    fondoJuego= IMG_Load("./Data/juego/fondo_juego.png");
+    correcto= IMG_Load("./Data/juego/correcto.png");
+    fallido= IMG_Load("./Data/juego/error.png");
+    marcador= IMG_Load("./Data/juego/marcador.png");
+
+    while(J1hundio<5 && J2hundio<5)
+    {
+        while(SDL_PollEvent(&evento))
+        {
+            detras=SDL_CreateRGBSurface(0,800,600,32,0,0,0,0);
+            SDL_BlitSurface(fondoJuego,NULL,detras,NULL);
+
+            if(evento.type==SDL_QUIT) 
+            { 
+                exit(0);
+            }
+
+            if(evento.type==SDL_KEYDOWN){ 
+                switch(evento.key.keysym.scancode) { 
+
+                    case SDL_SCANCODE_UP:  
+                        
+                        posActual.y-=60;   
+
+                        if(posActual.y<0){  
+                            posActual.y=0;
+                        }
+
+                        SDL_RenderClear(render);
+                        break;
+
+                    case SDL_SCANCODE_DOWN: 
+
+                        posActual.y+=60;
+
+                        if(posActual.y>540){  
+                            posActual.y=540;
+                        }
+
+
+                        SDL_RenderClear(render);
+                        break;
+
+                    case SDL_SCANCODE_RIGHT: 
+
+                        posActual.x+=80;
+
+                        if(posActual.x>720){
+                            posActual.x=720;
+                        }
+    
+
+                        SDL_RenderClear(render);
+                        break;
+
+                    case SDL_SCANCODE_LEFT: 
+
+                        posActual.x-=80;
+
+
+                        if(posActual.x<0){
+                            posActual.x=0;
+                        }
+
+                        SDL_RenderClear(render);
+                        break;
+
+                    case SDL_SCANCODE_A:
+
+                        validez=disparoValido(mat2,&vivosJ2[0],&J1hundio,posActual);
+                        printf("validez=%d\n",validez);
+                        if(validez==1){
+                            
+                            disparosJ1[cnt1]=posActual;
+                            cnt1++;
+                        }
+                        else{
+                            printf("apunta bien mono qlo\n");
+                        }
+                        printf("J1hundidos=%d\n",J1hundio);
+
+                        break;
+                }//fin de switch
+            }//fin de if
+
+            for(i=0;i<cnt1;i++){
+
+                posx=(disparosJ1[i].x/80);
+                posy=(disparosJ1[i].y/60);
+                if(mat2[(posy*10)+posx]=='O'){
+                    SDL_BlitSurface(correcto,NULL,detras,&disparosJ1[i]);
+                }
+                if(mat2[posy*10+posx]=='X'){
+                    SDL_BlitSurface(fallido,NULL,detras,&disparosJ1[i]);
+                }
+                
+            }
+
+
+
+            SDL_BlitSurface(marcador,NULL,detras,&posActual);
+            textura= SDL_CreateTextureFromSurface(render,detras); 
+            SDL_FreeSurface(detras);
+            SDL_RenderCopy(render, textura, NULL, NULL);
+            SDL_DestroyTexture(textura);
+            SDL_RenderPresent(render);
+        }//fin while eventos
+    }//fin while "vidas"
+} //fin funcion
+
+
 int main () {
 
 
@@ -697,9 +916,6 @@ int main () {
     render= SDL_CreateRenderer(pantalla, -1, 0);
 
 
-    //esta wea recibe lo justo y necesario para funcionar... no
-    //cree las cajas y la flota dentro de esta funcion porque tambien las necesita
-    //crear matriz para trabajar. si no se hubieran borrado al terminar ponerBarcos.
     ponerBarcos(&redH[0],&redV[0],render,&cajas[0],&flota[0]);
 
     //luego de crear la matriz del jugador 1 liberamos las imagenes rojas
@@ -764,6 +980,13 @@ int main () {
         }
         printf("\n");
     }
+
+
+    //comenzar el juego----
+
+    juego(&mat1[0][0],&mat2[0][0],render);
+
+    printf("fin del juego y wea\n");
 
     SDL_DestroyRenderer(render);
     SDL_DestroyWindow(pantalla);
