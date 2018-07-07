@@ -709,19 +709,23 @@ int disparoValido(char* mat, int* vidasEnemigo, int* hundidos, SDL_Rect disparo)
 }
 
 
-void juego(char* mat1, char* mat2, SDL_Renderer* tablero1, SDL_Renderer* tablero2){
+void juego(char* mat1, char* mat2, SDL_Renderer* render){
 
+
+
+
+    //SE justifica el uso de variables auxiliares si solo seran dos jugadores?
 
     int jugador=1; //se parte como el J1
     int vivosJ1[5]={5,4,3,3,2}; //las "vidas", representando el tamaño del barco
     int vivosJ2[5]={5,4,3,3,2};
-    int vivosObjetivo[5];//las vidas sustituto
-    int J1hundio=0; //barcos que ha hundido el J1
-    int J2hundio=0; //barcos que ha hundido el J2
-    int hundioObjetivo;
+    int vivosEnemigo[5];// auxiliar para copiar las "vidas" del J1 o del J2
+    int J1hundidos=0; //barcos que ha hundido el J1
+    int J2hundidos=0; //barcos que ha hundido el J2
+    int jugadorHundidos; //auxiliar para los barcos que ha hundido el J1 o el J2
     int cnt1=0,cnt2=0;
     int i,validez,posx=0,posy=0;
-    char* matObjetivo;
+    char* matObjetivo=NULL;  //auxiliar para la matriz enemiga
     SDL_Surface* detras;
     SDL_Surface* fondoJuego;
     SDL_Surface* correcto;
@@ -729,7 +733,6 @@ void juego(char* mat1, char* mat2, SDL_Renderer* tablero1, SDL_Renderer* tablero
     SDL_Surface* marcador;
     SDL_Texture* textura;
     SDL_Event evento;
-    SDL_Renderer* renderUsado;
 
     SDL_Rect posActual; //para mover el marcador, cursor o como le llamen
     posActual.x=0;
@@ -744,19 +747,18 @@ void juego(char* mat1, char* mat2, SDL_Renderer* tablero1, SDL_Renderer* tablero
     fallido= IMG_Load("./Data/juego/error.png");
     marcador= IMG_Load("./Data/juego/marcador.png");
 
-    while(J1hundio<5 && J2hundio<5)
+    while(J1hundidos<5 && J2hundidos<5)
     {
         validez=0;
 
         if(jugador==1)
         {
             matObjetivo=mat2;
-            renderUsado=tablero1;
-            hundioObjetivo=J1hundio;
+            jugadorHundidos=J1hundidos;
 
             for(i=0;i<5;i++)
             {
-                vivosObjetivo[i]=vivosJ2[i];
+                vivosEnemigo[i]=vivosJ2[i];
             }
 
         }
@@ -764,12 +766,11 @@ void juego(char* mat1, char* mat2, SDL_Renderer* tablero1, SDL_Renderer* tablero
         else
         {
             matObjetivo=mat1;
-            renderUsado=tablero2;
-            hundioObjetivo=J2hundio;
+            jugadorHundidos=J2hundidos;
 
             for(i=0;i<5;i++)
             {
-                vivosObjetivo[i]=vivosJ1[i];
+                vivosEnemigo[i]=vivosJ1[i];
             }
         }
 
@@ -794,7 +795,7 @@ void juego(char* mat1, char* mat2, SDL_Renderer* tablero1, SDL_Renderer* tablero
                             posActual.y=0;
                         }
 
-                        SDL_RenderClear(renderUsado);
+                        SDL_RenderClear(render);
                         break;
 
                     case SDL_SCANCODE_DOWN: 
@@ -806,7 +807,7 @@ void juego(char* mat1, char* mat2, SDL_Renderer* tablero1, SDL_Renderer* tablero
                         }
 
 
-                        SDL_RenderClear(renderUsado);
+                        SDL_RenderClear(render);
                         break;
 
                     case SDL_SCANCODE_RIGHT: 
@@ -818,7 +819,7 @@ void juego(char* mat1, char* mat2, SDL_Renderer* tablero1, SDL_Renderer* tablero
                         }
     
 
-                        SDL_RenderClear(renderUsado);
+                        SDL_RenderClear(render);
                         break;
 
                     case SDL_SCANCODE_LEFT: 
@@ -830,12 +831,12 @@ void juego(char* mat1, char* mat2, SDL_Renderer* tablero1, SDL_Renderer* tablero
                             posActual.x=0;
                         }
 
-                        SDL_RenderClear(renderUsado);
+                        SDL_RenderClear(render);
                         break;
 
                     case SDL_SCANCODE_A:
 
-                        validez=disparoValido(matObjetivo,&vivosObjetivo[0],&hundioObjetivo,posActual);
+                        validez=disparoValido(matObjetivo,&vivosEnemigo[0],&jugadorHundidos,posActual);
                         printf("validez=%d\n",validez);
                         if(validez==1 || validez==2){
 
@@ -853,54 +854,70 @@ void juego(char* mat1, char* mat2, SDL_Renderer* tablero1, SDL_Renderer* tablero
                         }
 
                         else{
-                            printf("apunta bien mono qlo\n");
+                            printf("apunta bien\n");
                         }
-                        printf("J1hundidos=%d\n",J1hundio);
-
                         break;
                 }//fin de switch
             }//fin de if
 
-            for(i=0;i<cnt1;i++){
 
-                posx=(disparosJ1[i].x/80);
-                posy=(disparosJ1[i].y/60);
-                if(matObjetivo[(posy*10)+posx]=='O'){
-                    SDL_BlitSurface(correcto,NULL,detras,&disparosJ1[i]);
-                }
+            if(jugador==1){
 
-                if(matObjetivo[posy*10+posx]=='X'){
-                    SDL_BlitSurface(fallido,NULL,detras,&disparosJ1[i]);
-                }
+                for(i=0;i<cnt1;i++){
+
+                    posx=(disparosJ1[i].x/80);
+                    posy=(disparosJ1[i].y/60);
+                    if(matObjetivo[(posy*10)+posx]=='O'){
+                        SDL_BlitSurface(correcto,NULL,detras,&disparosJ1[i]);
+                    }
+
+                    if(matObjetivo[posy*10+posx]=='X'){
+                        SDL_BlitSurface(fallido,NULL,detras,&disparosJ1[i]);
+                    }
                 
+                }  
             }
 
+            else{
 
+                for(i=0;i<cnt2;i++){
 
+                    posx=(disparosJ2[i].x/80);
+                    posy=(disparosJ2[i].y/60);
+                    if(matObjetivo[(posy*10)+posx]=='O'){
+                        SDL_BlitSurface(correcto,NULL,detras,&disparosJ2[i]);
+                    }
+
+                    if(matObjetivo[posy*10+posx]=='X'){
+                        SDL_BlitSurface(fallido,NULL,detras,&disparosJ2[i]);
+                    }
+                
+                }
+
+            }
+            
             SDL_BlitSurface(marcador,NULL,detras,&posActual);
-            textura= SDL_CreateTextureFromSurface(renderUsado,detras); 
+            textura= SDL_CreateTextureFromSurface(render,detras); 
             SDL_FreeSurface(detras);
-            SDL_RenderCopy(renderUsado, textura, NULL, NULL);
+            SDL_RenderCopy(render, textura, NULL, NULL);
             SDL_DestroyTexture(textura);
-            SDL_RenderPresent(renderUsado);
+            SDL_RenderPresent(render);
 
             if(jugador==1)
             {
-                tablero1=renderUsado;
-                J1hundio=hundioObjetivo;
+                J1hundidos=jugadorHundidos;
                 for(i=0;i<5;i++)
                 {
-                    vivosJ2[i]=vivosObjetivo[i];
+                    vivosJ2[i]=vivosEnemigo[i];
                 }
             }
 
             if(jugador==2)
             {
-                tablero2=renderUsado;
-                J2hundio=hundioObjetivo;
+                J2hundidos=jugadorHundidos;
                 for(i=0;i<5;i++)
                 {
-                    vivosJ1[i]=vivosObjetivo[i];
+                    vivosJ1[i]=vivosEnemigo[i];
                 }
             }
 
@@ -908,9 +925,9 @@ void juego(char* mat1, char* mat2, SDL_Renderer* tablero1, SDL_Renderer* tablero
 
 
         if(validez==2)
-        {
-            SDL_Delay(1000);
-
+        {   
+            
+            //Falta agregar Delay
             if(jugador==1)
             {
                 jugador=2;
@@ -936,15 +953,13 @@ int main () {
     SDL_Surface  *redV[5]={NULL};
     SDL_Surface  *grnH[5]={NULL}; 
     SDL_Surface  *grnV[5]={NULL};
-    SDL_Renderer *render=NULL;
-    SDL_Renderer *jugador1=NULL;
-    SDL_Renderer *jugador2=NULL;  
+    SDL_Renderer *render=NULL;  
     SDL_Rect cajas[5];
     barco flota[5];
     char mat1[10][10];
     char mat2[10][10];
 
-    int i,j,jugarDeNuevo;
+    int i,j,jugarDeNuevo=1;
 
     SDL_Init(SDL_INIT_VIDEO);
 
@@ -1067,19 +1082,15 @@ int main () {
 
         //comenzar el juego----
 
-        jugador1= render;
-        jugador2= render;
 
-        juego(&mat1[0][0],&mat2[0][0],jugador1,jugador2);
+        juego(&mat1[0][0],&mat2[0][0],render);
 
-        printf("fin del juego y wea\n");
+        printf("fin del juego\n");
 
         printf("¿jugar de nuevo?\n");
         scanf("%d",&jugarDeNuevo);
 
         SDL_DestroyRenderer(render);
-        SDL_DestroyRenderer(jugador1);
-        SDL_DestroyRenderer(jugador2);
 
     }while(jugarDeNuevo==1);
 
