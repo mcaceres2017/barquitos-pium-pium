@@ -12,9 +12,10 @@ typedef struct
 
 
 
-int menuPrincipal(SDL_Renderer *render, TTF_Font* fuente)
+int menuPrincipal(SDL_Renderer *render)
 {
-
+    //creando variables y cargando cosas
+    TTF_Font* fuente= TTF_OpenFont("./Data/fuente/pokemon.ttf",30);
     SDL_Color colorLetra={255,255,255};
     SDL_Surface* fondo= IMG_Load("./Data/menu.png");; //rgb 0 255 240
     SDL_Surface* puntero= IMG_Load("./Data/puntero.png");
@@ -26,7 +27,6 @@ int menuPrincipal(SDL_Renderer *render, TTF_Font* fuente)
     SDL_Rect posPuntero={185,360,0,0};
     SDL_Rect posMSN1={245,360,0,0};
     SDL_Rect posMSN2={245,420,0,0};
-
     int aux=1;
 
     while (aux==1)
@@ -35,22 +35,26 @@ int menuPrincipal(SDL_Renderer *render, TTF_Font* fuente)
         {
 
 
-
+            //bliteado
             vacio=SDL_CreateRGBSurface(0,800,600,32,0,0,0,0);
             SDL_BlitSurface(fondo,NULL,vacio,NULL);
             SDL_BlitSurface(msn1,NULL,vacio,&posMSN1);
             SDL_BlitSurface(msn2,NULL,vacio,&posMSN2);
 
+
+            //evento de salida
             if(evento.type==SDL_QUIT) 
             { 
                 exit(0);
             }
 
+
+            //manejo del teclado
             if(evento.type==SDL_KEYDOWN)
             { 
                 switch(evento.key.keysym.scancode) 
                 { 
-
+                    //movimiento
                     case SDL_SCANCODE_UP:
 
                         posPuntero.y-=60;
@@ -72,6 +76,8 @@ int menuPrincipal(SDL_Renderer *render, TTF_Font* fuente)
                         }
                         break;
 
+
+                    //confirmar opcion
                     case SDL_SCANCODE_A:
 
                         SDL_FreeSurface(fondo);
@@ -79,6 +85,7 @@ int menuPrincipal(SDL_Renderer *render, TTF_Font* fuente)
                         SDL_FreeSurface(vacio);
                         SDL_FreeSurface(msn1);
                         SDL_FreeSurface(msn2);
+                        TTF_CloseFont(fuente);
                         
                         if(posPuntero.y==360)
                         {
@@ -92,6 +99,8 @@ int menuPrincipal(SDL_Renderer *render, TTF_Font* fuente)
                 }
             } 
 
+
+            //presentacion en pantalla
             SDL_BlitSurface(puntero,NULL,vacio,&posPuntero);
             textura= SDL_CreateTextureFromSurface(render,vacio);
             SDL_FreeSurface(vacio);
@@ -106,10 +115,8 @@ int menuPrincipal(SDL_Renderer *render, TTF_Font* fuente)
 
 void caja(SDL_Rect * pos,int indice, int rotacion)
 {
-
     switch(indice)
     {
-
         case 1:  //barco de 2
 
             if(rotacion==1)
@@ -123,7 +130,6 @@ void caja(SDL_Rect * pos,int indice, int rotacion)
             {
                 pos->w=80;
                 pos->h=120;
-
             }
 
             break;
@@ -208,25 +214,14 @@ void caja(SDL_Rect * pos,int indice, int rotacion)
 void CrearMatriz(char * matriz, SDL_Rect * cajas,barco * puntero) //pondremos (estatic,ARRI,flota)
 {
     int i,j,k;
-    SDL_Rect scan1; //escaner filas
-    scan1.x=0;
-    scan1.y=0;
-    scan1.w=80;
-    scan1.h=60;
-    SDL_Rect scan2;  //escaner columnas
-    scan2.x=0;
-    scan2.y=0;
-    scan2.w=80;
-    scan2.h=60;
-
+    SDL_Rect scan1={0,0,80,60}; //escaner filas
+    SDL_Rect scan2={0,0,80,60};  //escaner columnas
     int aux[5]={0}; //auxiliar para encontrar barcos
-
-
 
     //revisando la matriz horizontalmente
     //scan es del tamaño de UN cuadrado....que nos sirve para encontrar la posicion de los barcos
 
-    for(i=0;i<10;i++) //ciclo filas
+    for(i=0;i<10;i++) //ciclo scan1 filas /scan2 columnas
     {
         scan1.x=0;
         scan1.y=i*60;
@@ -234,15 +229,16 @@ void CrearMatriz(char * matriz, SDL_Rect * cajas,barco * puntero) //pondremos (e
         scan2.y=0;
         scan2.x=i*80;
 
-        for(j=0;j<10;j++)  //ciclo columnas
+        for(j=0;j<10;j++)  //ciclo scan1 columnas/ scan2 filas
         {
             scan1.x=j*80;
             scan2.y=j*60;
 
             for(k=0;k<5;k++)  //ciclo interseccion
             {
-                if(SDL_HasIntersection(&scan1,(cajas+k))==1) //WIP
-                {
+                if(SDL_HasIntersection(&scan1,(cajas+k))==1) //intersecciones con scan1
+                {   
+                    //guardado de posicion de barcos en matriz
                     switch(k)
                     {
                         case 0:  //barco de 2
@@ -306,12 +302,13 @@ void CrearMatriz(char * matriz, SDL_Rect * cajas,barco * puntero) //pondremos (e
                             }
 
                             break;
-                    } //fin del switch
-                } //fin del if
+                    } //fin del switch horizontal
+                } //fin del if horizontal
 
 
-                if(SDL_HasIntersection(&scan2,(cajas+k))==1)
+                if(SDL_HasIntersection(&scan2,(cajas+k))==1) //interseccion con scan2
                 {
+                    //guardado de posicion de barcos en matriz
                     switch(k)
                     {
                         case 0:
@@ -384,9 +381,8 @@ void CrearMatriz(char * matriz, SDL_Rect * cajas,barco * puntero) //pondremos (e
 
 
 int colision(SDL_Rect* actual, int indice, SDL_Rect* cajas)
-{
-
-
+{   
+    //funcion para confirmar que la posicion de un barco sea valida
     int i;
     int a=0;
 
@@ -411,10 +407,10 @@ int colision(SDL_Rect* actual, int indice, SDL_Rect* cajas)
 }
 
 
-
-
 void limite(int barco,int* posicion,int borde)
-{
+{   
+    //funcion que se encarga de que los barcos queden dentro de los margenes
+    //de la pantalla
     switch(barco)
     {
         case 1: 
@@ -460,50 +456,96 @@ void limite(int barco,int* posicion,int borde)
 }
 
 
+void mensaje (SDL_Surface* cuadro, int tamano,int x, int y, const char* cadena){
+
+    //funcion para crear los mensajes
+    TTF_Font* fuente= TTF_OpenFont("./Data/fuente/pokemon.ttf",tamano);
+    SDL_Color colorLetra={255,255,15};
+    SDL_Surface* texto= TTF_RenderText_Blended_Wrapped(fuente,cadena,colorLetra,650);
+    SDL_Rect posTexto={x,y,0,0};
+    SDL_BlitSurface(texto,NULL,cuadro,&posTexto);
+    SDL_FreeSurface(texto);
+    TTF_CloseFont(fuente);
+}
 
 
-int ponerBarcos(SDL_Surface** H, SDL_Surface** V, SDL_Renderer* render, 
-                 SDL_Rect* cajas, barco* flota,TTF_Font* fuente){
 
+int ponerBarcos(int jugador,SDL_Surface** H, SDL_Surface** V, 
+                SDL_Renderer* render, SDL_Rect* cajas, barco* flota){
 
+    //creado de variables
     SDL_Surface* detras;
-    SDL_Surface* fondo=NULL;
-    fondo = IMG_Load("./Data/fondo.png");
+    SDL_Surface* fondo= IMG_Load("./Data/fondo.png");
+    SDL_Surface* cuadro= IMG_Load("./Data/cuadro.png");
+    SDL_Surface* puntero= IMG_Load("./Data/puntero.png");
     SDL_Event evento;
     SDL_Texture *textura=NULL;
     SDL_Rect posActual;
     posActual.x=0;
     posActual.y=0;
-
-    SDL_Color colorLetra={255,0,255};
-    SDL_Surface* confirmacion= TTF_RenderText_Blended_Wrapped(fuente,"Es correcta esta formacion?",
-                                                              colorLetra,650);
-
-    SDL_Rect posTexto={245,420,0,0};
+    SDL_Rect posCuadro={0,470,0,0};
+    SDL_Rect posPuntero={185,530,0,0};
 
     int aux=1,indice=1,rot=1;
-    int interseccion,i,j;
+    int interseccion,i;
     int retorno=0;
 
 
     while(aux==1)
-    {  
+    {
         while(SDL_PollEvent(&evento) && evento.type!=SDL_MOUSEMOTION)
         {
             detras=SDL_CreateRGBSurface(0,800,600,32,0,0,0,0);
             SDL_BlitSurface(fondo,NULL,detras,NULL);
 
+            //mensaje que se da una sola vez
+            if(jugador==1)
+            {
+                jugador=0;
+                msndado=1;
+                SDL_SetSurfaceAlphaMod(cuadro,220);
+                SDL_BlitSurface(cuadro,NULL,detras,&posCuadro);
+                mensaje(detras,30,50,490,"Jugador 1, posicione sus barcos");
+                textura= SDL_CreateTextureFromSurface(render,detras); 
+                SDL_FreeSurface(detras);
+                SDL_RenderCopy(render, textura, NULL, NULL);
+                SDL_DestroyTexture(textura);
+                SDL_RenderPresent(render);
+                SDL_Delay (800);
+                continue;
+            }
 
+            //mensaje que se da una sola vez
+            if(jugador==2)
+            {
+                jugador=0;
+                msndado=1;
+                SDL_SetSurfaceAlphaMod(cuadro,220);
+                SDL_BlitSurface(cuadro,NULL,detras,&posCuadro);
+                mensaje(detras,30,50,490,"Jugador 2, posicione sus barcos");
+                textura= SDL_CreateTextureFromSurface(render,detras); 
+                SDL_FreeSurface(detras);
+                SDL_RenderCopy(render, textura, NULL, NULL);
+                SDL_DestroyTexture(textura);
+                SDL_RenderPresent(render);
+                SDL_Delay (800);
+                continue;
+            }
+
+            
+
+            //evento de salida
             if(evento.type==SDL_QUIT) 
             { 
                 exit(0);
             }
 
-
-            if(evento.type==SDL_KEYDOWN)
-            { 
+            //manejo del teclado para poner barcos
+            if(evento.type==SDL_KEYDOWN && indice<6)
+            {   
                 switch(evento.key.keysym.scancode) 
-                { 
+                {   
+                    //movimiento
                     case SDL_SCANCODE_UP:  
                         
                         posActual.y-=60;   
@@ -556,7 +598,7 @@ int ponerBarcos(SDL_Surface** H, SDL_Surface** V, SDL_Renderer* render,
                         SDL_RenderClear(render);
                         break;
 
-                    case SDL_SCANCODE_LEFT: 
+                    case SDL_SCANCODE_LEFT:
 
                         posActual.x-=80;
 
@@ -568,6 +610,7 @@ int ponerBarcos(SDL_Surface** H, SDL_Surface** V, SDL_Renderer* render,
                         SDL_RenderClear(render);
                         break; 
 
+                    //tecla para posicionar un barco
                     case SDL_SCANCODE_A:
 
                         cajas[indice-1]=posActual;
@@ -592,9 +635,15 @@ int ponerBarcos(SDL_Surface** H, SDL_Surface** V, SDL_Renderer* render,
                         {
                             limite(indice,&posActual.y,600);
                         }
+
+                        if(indice==6) //para "limpiar" la variable y que de tiempo a confirmar
+                        {
+                            evento.type=0;
+                        }
                         break;
                         
 
+                    //tecla para quitar un barco
                     case SDL_SCANCODE_S:
 
                         indice--;
@@ -613,7 +662,8 @@ int ponerBarcos(SDL_Surface** H, SDL_Surface** V, SDL_Renderer* render,
                         break;
 
 
-                    case SDL_SCANCODE_R: //tecla para rotar
+                    //tecla para rotar
+                    case SDL_SCANCODE_R:
 
                         if(rot==1)
                         {
@@ -638,6 +688,7 @@ int ponerBarcos(SDL_Surface** H, SDL_Surface** V, SDL_Renderer* render,
                 } 
             }
 
+            //bliteo de los barcos ya posicionados a pantalla
             for(i=0;i<indice-1;i++)
             {
 
@@ -712,7 +763,7 @@ int ponerBarcos(SDL_Surface** H, SDL_Surface** V, SDL_Renderer* render,
                 } 
             }
 
-
+            //bliteo del barco movil a pantalla
             switch(indice)
             {
                 case 1: 
@@ -779,25 +830,72 @@ int ponerBarcos(SDL_Surface** H, SDL_Surface** V, SDL_Renderer* render,
                     break;
             }
 
+
+            //confirmacion de formacion
             if(indice==6)
-            {
-                SDL_BlitSurface(confirmacion,NULL,detras,&posTexto);
-            }  
+            {   
+                SDL_BlitSurface(cuadro,NULL,detras,&posCuadro);
+                mensaje(detras,30,50,490,"Es correcta esta formacion?");
+                mensaje(detras,30,250,530,"Si");
+                mensaje(detras,30,500,530,"No");
+
+                //manejo del teclado para decir si o no
+                if(evento.type==SDL_KEYDOWN)
+                {
+                    switch(evento.key.keysym.scancode) 
+                    { 
+                        //movimiento
+                        case SDL_SCANCODE_RIGHT:
+
+                            posPuntero.x+=250;
+                            if(posPuntero.x>435)
+                            {
+                                posPuntero.x=185;
+                            }
+                            SDL_RenderClear(render);
+                            break;
+
+                        case SDL_SCANCODE_LEFT:
+
+                            posPuntero.x-=250;
+                            if(posPuntero.x<185)
+                            {
+                                posPuntero.x=435;
+                            }
+
+                            SDL_RenderClear(render);
+                            break;
+
+                        //tecla para confirmar
+                        case SDL_SCANCODE_A:
+
+                            SDL_FreeSurface(cuadro);
+                            SDL_FreeSurface(fondo);
+                            SDL_FreeSurface(puntero);
+                            SDL_FreeSurface(detras);
+
+                            if(posPuntero.x==185)
+                            {
+                                return 1;
+                            }
+
+                            if(posPuntero.x==435)
+                            {
+                                return 0;
+                            }
+                    }
+                } 
+                SDL_BlitSurface(puntero,NULL,detras,&posPuntero);
+            }
 
 
+
+            //presentacion en pantalla
             textura= SDL_CreateTextureFromSurface(render,detras); 
             SDL_FreeSurface(detras);
             SDL_RenderCopy(render, textura, NULL, NULL);
             SDL_DestroyTexture(textura);
             SDL_RenderPresent(render);
-
-            if(indice==6)
-            {
-                scanf("%d",&retorno);
-                SDL_FreeSurface(fondo);
-                SDL_FreeSurface(confirmacion);
-                return retorno;
-            }
 
         }
     }
@@ -806,14 +904,13 @@ int ponerBarcos(SDL_Surface** H, SDL_Surface** V, SDL_Renderer* render,
 
 int disparoValido(char* mat, int* vidasEnemigo, int* hundidos, SDL_Rect disparo)
 {
-
+    //funcion que se encarga de revisar hacia donde se apunto en la matriz
+    //que guarda la informacion de el jugador contrario
     int x=0;
     int y=0;
     x=(disparo.x/80);
     y=(disparo.y/60);
     int retorno=0; // 0.tiro invalido 1.tiro correcto 2.tiro al agua
-
-    printf("casilla=%d habia=%c\n",(y*10)+x,mat[(y*10)+x]);
 
     if(mat[(y*10)+x]=='O' || mat[(y*10)+x]=='X')
     {
@@ -897,9 +994,10 @@ int disparoValido(char* mat, int* vidasEnemigo, int* hundidos, SDL_Rect disparo)
 }
 
 
-void juego(char* mat1, char* mat2, SDL_Renderer* render,TTF_Font* fuente)
+int juego(char* mat1, char* mat2, SDL_Renderer* render)
 {
-
+    //creando variables y cargando cosas
+    int comienzo=1;
     int jugador=1; //se parte como el J1
     int vivosJ1[5]={5,4,3,3,2}; //las "vidas", representando el tamaño del barco
     int vivosJ2[5]={5,4,3,3,2};
@@ -907,50 +1005,72 @@ void juego(char* mat1, char* mat2, SDL_Renderer* render,TTF_Font* fuente)
     int J2hundidos=0; //barcos que ha hundido el J2
     int cnt1=0,cnt2=0;
     int i,validez,posx=0,posy=0;
-    SDL_Surface* detras;
-    SDL_Surface* fondoJuego;
-    SDL_Surface* correcto;
-    SDL_Surface* fallido;
-    SDL_Surface* marcador;
-    SDL_Texture* textura;
+    SDL_Surface* detras=NULL;
+    SDL_Surface* fondoJuego=NULL;
+    SDL_Surface* correcto=NULL;
+    SDL_Surface* fallido=NULL;
+    SDL_Surface* marcador=NULL;
+    SDL_Surface* cuadro=NULL;
+    SDL_Surface* puntero=NULL;
+    SDL_Texture* textura=NULL;
     SDL_Event evento;
-    SDL_Color colorLetra={255,0,255};
-    SDL_Surface  *repeticion=TTF_RenderText_Blended_Wrapped(fuente,"desea jugar de nuevo?",colorLetra,650);
-    SDL_Rect posTexto={245,420,0,0};
 
     SDL_Rect posActual; //para mover el marcador, cursor o como le llamen
     posActual.x=0;
     posActual.y=0;
 
-    SDL_Rect disparosJ1[100]; //estos son para ir TTF_Font* fuenteguardando la posicion de los disparos para mostrar
-    SDL_Rect disparosJ2[100]; //las equis o circulos... en el peor de las casos el wn puede haberle
-                              //disparado a todas las jodidas casillas.
+    SDL_Rect disparosJ1[100]; //estos son para ir guardando la posicion de los disparos
+    SDL_Rect disparosJ2[100]; 
+    SDL_Rect posCuadro={0,470,0,0}; 
+    SDL_Rect posPuntero={185,530,0,0};
 
     fondoJuego= IMG_Load("./Data/juego/fondo_juego.png");
     correcto= IMG_Load("./Data/juego/correcto.png");
     fallido= IMG_Load("./Data/juego/error.png");
     marcador= IMG_Load("./Data/juego/marcador.png");
+    cuadro= IMG_Load("./Data/cuadro.png");
+    puntero= IMG_Load("./Data/puntero.png");
 
-    while(J1hundidos<5 && J2hundidos<5)
+    while(J1hundidos<5 || J2hundidos<5)
     {
-        validez=0;
-
         while(SDL_PollEvent(&evento) && evento.type!=SDL_MOUSEMOTION)
-        {
+        {   
+            validez=3; //tuve que cambiar el valor de validez para que no se quedara pegado en el mensaje
+                       // de validez==0
+
             detras=SDL_CreateRGBSurface(0,800,600,32,0,0,0,0);
             SDL_BlitSurface(fondoJuego,NULL,detras,NULL);
 
 
+            //mensaje que se da una sola vez
+            if(comienzo==1)
+            {
+                comienzo=0;
+                SDL_SetSurfaceAlphaMod(cuadro,220);
+                SDL_BlitSurface(cuadro,NULL,detras,&posCuadro);
+                mensaje(detras,30,50,490,"ES HORA DE DE DE DE DE DEL DUELO!, comienza el J1");
+                textura= SDL_CreateTextureFromSurface(render,detras); 
+                SDL_FreeSurface(detras);
+                SDL_RenderCopy(render, textura, NULL, NULL);
+                SDL_DestroyTexture(textura);
+                SDL_RenderPresent(render);
+                SDL_Delay (800);
+                continue;
+            }
+
+            //evento de salida
             if(evento.type==SDL_QUIT) 
             { 
                 exit(0);
             }
 
-            if(evento.type==SDL_KEYDOWN)
+            //todo lo que es el manejo del teclado
+            if(evento.type==SDL_KEYDOWN && J1hundidos<5 && J2hundidos<5)
             { 
                 switch(evento.key.keysym.scancode) 
                 { 
 
+                    //movimiento
                     case SDL_SCANCODE_UP:  
                         
                         posActual.y-=60;   
@@ -1002,6 +1122,7 @@ void juego(char* mat1, char* mat2, SDL_Renderer* render,TTF_Font* fuente)
                         SDL_RenderClear(render);
                         break;
 
+                    //tecla para disparar
                     case SDL_SCANCODE_A:
 
                         if(jugador==1)
@@ -1013,7 +1134,7 @@ void juego(char* mat1, char* mat2, SDL_Renderer* render,TTF_Font* fuente)
                             validez=disparoValido(mat1,&vivosJ1[0],&J2hundidos,posActual);
                         }
 
-                        printf("validez=%d\n",validez);
+                        //si fue disparo al agua o a un barco, se guarda su posicion
                         if(validez==1 || validez==2)
                         {
                             if(jugador==1)
@@ -1029,15 +1150,16 @@ void juego(char* mat1, char* mat2, SDL_Renderer* render,TTF_Font* fuente)
                             }
                         }
 
-                        else
+                        if(J1hundidos==5 || J2hundidos==5)
                         {
-                            printf("apunta bien\n");
+                            evento.type=0;
                         }
+
                         break;
                 }//fin de switch
             }//fin de if
 
-
+            //copiado de circulos y equis a pantalla
             if(jugador==1)
             {
                 for(i=0;i<cnt1;i++)
@@ -1076,63 +1198,140 @@ void juego(char* mat1, char* mat2, SDL_Renderer* render,TTF_Font* fuente)
                     }
                 }
             }
+
+
+            //apartado de mensajes
+            if(validez==0 && J1hundidos<5 && J2hundidos<5)
+            {
+                SDL_BlitSurface(cuadro,NULL,detras,&posCuadro);
+                mensaje(detras,30,50,490,"Tiro invalido, apunta bien");
+            }
+            if(validez==1 && J1hundidos<5 && J2hundidos<5)
+            {
+                SDL_BlitSurface(cuadro,NULL,detras,&posCuadro);
+                mensaje(detras,30,50,490,"Acertaste, te toca de nuevo");
+            }
+            if(validez==2 && J1hundidos<5 && J2hundidos<5)
+            {
+                SDL_BlitSurface(cuadro,NULL,detras,&posCuadro);
+                mensaje(detras,30,50,490,"Fallaste, cambio de jugador");
+            }
+
+
+            //confirmacion de jugar de nuevo
+            if(J1hundidos==5 || J2hundidos==5)
+            {
+                SDL_BlitSurface(cuadro,NULL,detras,&posCuadro);
+                if(J1hundidos==5)mensaje(detras,30,50,490,"J1 ganaste!!!. ¿Jugar de nuevo?");
+                if(J2hundidos==5)mensaje(detras,30,50,490,"J2 ganaste!!!. ¿Jugar de nuevo?");
+                mensaje(detras,30,250,530,"Si");
+                mensaje(detras,30,500,530,"No");
+
+                if(evento.type==SDL_KEYDOWN)
+                {
+                    switch(evento.key.keysym.scancode) 
+                    { 
+                        //movimiento
+                        case SDL_SCANCODE_RIGHT:
+
+                            posPuntero.x+=250;
+                            if(posPuntero.x>435)
+                            {
+                                posPuntero.x=185;
+                            }
+                            SDL_RenderClear(render);
+                            break;
+
+                        case SDL_SCANCODE_LEFT:
+
+                            posPuntero.x-=250;
+                            if(posPuntero.x<185)
+                            {
+                                posPuntero.x=435;
+                            }
+
+                            SDL_RenderClear(render);
+                            break;
+
+                        //tecla para confirmar
+                        case SDL_SCANCODE_A:
+
+                            SDL_FreeSurface(fondoJuego);
+                            SDL_FreeSurface(detras);
+                            SDL_FreeSurface(correcto);
+                            SDL_FreeSurface(fallido);
+                            SDL_FreeSurface(marcador);
+                            SDL_FreeSurface(cuadro);
+                            SDL_FreeSurface(puntero);
+
+                            if(posPuntero.x==185)
+                            {
+                                return 1;
+                            }
+
+                            if(posPuntero.x==435)
+                            {
+                                return 0;
+                            }
+                    }
+                } 
+                SDL_BlitSurface(puntero,NULL,detras,&posPuntero);
+            }
             
+
+            //presentacion en pantalla
             SDL_BlitSurface(marcador,NULL,detras,&posActual);
             textura= SDL_CreateTextureFromSurface(render,detras); 
             SDL_FreeSurface(detras);
             SDL_RenderCopy(render, textura, NULL, NULL);
             SDL_DestroyTexture(textura);
             SDL_RenderPresent(render);
+
+            //Delay para que se alcance a leer
+            if(validez==0 || validez==1 || validez==2)
+            {
+                SDL_Delay(500);
+            }
+
+
+            //cambio de jugador
+            if(validez==2)
+            {   
+                if(jugador==1)
+                {
+                    jugador=2;
+                }
+
+                else if(jugador==2)
+                {
+                    jugador=1;
+                }
+            }
         }//fin while eventos
-
-        if(validez==2)
-        {   
-            
-            //Falta agregar Delay
-            if(jugador==1)
-            {
-                jugador=2;
-                printf("cambio a 2\n");
-            }
-
-            else if(jugador==2)
-            {
-                jugador=1;
-                printf("cambio a 1\n");
-            }
-        }
     }//fin while "vidas"
-
-    detras=SDL_CreateRGBSurface(0,800,600,32,0,0,0,0);
-    SDL_BlitSurface(repeticion,NULL,detras,&posTexto);
-    textura= SDL_CreateTextureFromSurface(render,detras); 
-            SDL_FreeSurface(detras);
-            SDL_RenderCopy(render, textura, NULL, NULL);
-            SDL_DestroyTexture(textura);
-            SDL_RenderPresent(render);
 } //fin funcion
 
 
 int main () 
 {
-
+    //inicio de subsistemas
     SDL_Init(SDL_INIT_VIDEO);
     TTF_Init();
 
+    //creacion de variables
     barco flota[5];
     SDL_Rect cajas[5];
-    TTF_Font* fuente= TTF_OpenFont("./Data/fuente/pokemon.ttf",30);
     SDL_Window   *pantalla=NULL;
     SDL_Renderer *render=NULL; 
     SDL_Surface  *redH[5]={NULL}; 
     SDL_Surface  *redV[5]={NULL};
     SDL_Surface  *grnH[5]={NULL}; 
     SDL_Surface  *grnV[5]={NULL};
-    SDL_Texture *texto=NULL;
 
     char mat1[10][10];
     char mat2[10][10];
-    int i,j,deNuevo;
+    int i,j;
+    int ingresado,JDN=1;
 
 
     pantalla = SDL_CreateWindow ("barquitos 2000 remastered",
@@ -1146,15 +1345,16 @@ int main ()
 
     render= SDL_CreateRenderer(pantalla, -1, 0);
 
-    int ingresado=menuPrincipal(render,fuente);
+
+    //llamado a menu principal
+    ingresado=menuPrincipal(render);
 
 
+    //inicio del juego
     if(ingresado==1)
     {
-        do
-        {
-
-            SDL_Delay(50);
+        do //este se encarga de confirmar si se quiere jugar de nuevo
+        {   
             ingresado=0;
 
             for(i=0;i<10;i++)
@@ -1165,8 +1365,8 @@ int main ()
                     mat2[i][j]='.';
                 }
             }
+            
             //carga de imagenes
-
             redH[0]= IMG_Load("./Data/rojos/destructor_h.png");    //barco de 2 destructor
             redH[1]= IMG_Load("./Data/rojos/submarino_h.png");     //barco de 3 submarino
             redH[2]= IMG_Load("./Data/rojos/crucero_h.png");       //barco de 3 crucero
@@ -1189,9 +1389,9 @@ int main ()
             grnV[4]= IMG_Load("./Data/verdes/portaaviones_v.png");
 
 
+            //posicionando los barcos del J1
             do
             {
-        
                 for(i=0;i<5;i++) //iniciamos cajas en tamaño cero y barcos en horizontal y disponibilidad 1
                 { 
                     cajas[i].w=0;
@@ -1200,8 +1400,11 @@ int main ()
                     flota[i].disponible=1;
                 }
 
-                ingresado=ponerBarcos(&redH[0],&redV[0],render,&cajas[0],&flota[0],fuente);
+                ingresado=ponerBarcos(1,&redH[0],&redV[0],render,&cajas[0],&flota[0]);
             }while(ingresado!=1);
+
+            ingresado=0;
+
             //luego de crear la matriz del jugador 1 liberamos las imagenes rojas
             SDL_FreeSurface(redH[0]);
             SDL_FreeSurface(redH[1]);
@@ -1215,15 +1418,11 @@ int main ()
             SDL_FreeSurface(redV[3]);
             SDL_FreeSurface(redV[4]);
 
-
+            //creando la matriz del J1
             CrearMatriz(&mat1[0][0],&cajas[0],&flota[0]);
 
-
-            //reseteamos cajas y flotas para poner los barcos verdes...ahora la matriz guarda la informacion
-
-            do
-            {
-
+            //posicionando los barcos del J1
+            do{
                 for(i=0;i<5;i++)
                 { 
                     cajas[i].w=0;
@@ -1232,11 +1431,12 @@ int main ()
                     flota[i].disponible=1;
                 }
 
-                ingresado=ponerBarcos(&grnH[0],&grnV[0],render,&cajas[0],&flota[0],fuente);
+                ingresado=ponerBarcos(2,&grnH[0],&grnV[0],render,&cajas[0],&flota[0]); 
             }while(ingresado!=1);
+        
 
 
-            //liberamos las imagenes verdes... si ya no las vamos a ocupar
+            //liberamos las imagenes verdes
             SDL_FreeSurface(grnH[0]);
             SDL_FreeSurface(grnH[1]);
             SDL_FreeSurface(grnH[2]);
@@ -1249,16 +1449,17 @@ int main ()
             SDL_FreeSurface(grnV[3]);
             SDL_FreeSurface(grnV[4]);
 
+            //creando la matriz del J1
             CrearMatriz(&mat2[0][0],&cajas[0],&flota[0]);
-            juego(&mat1[0][0],&mat2[0][0],render,fuente);
-            printf("fin del juego\n");
-            scanf("%d",&deNuevo);
-        }while(deNuevo==1);
+
+            //llamado a juego, los disparos, el pium pium
+            JDN=juego(&mat1[0][0],&mat2[0][0],render);
+
+        }while(JDN==1); //como dije, se encarga de confirmar si se quiere jugar de nuevo
 
     }
     
-
-    TTF_CloseFont(fuente);
+    //liberado y cierre de subsistemas
     SDL_DestroyRenderer(render);
     SDL_DestroyWindow(pantalla);
     TTF_Quit();
