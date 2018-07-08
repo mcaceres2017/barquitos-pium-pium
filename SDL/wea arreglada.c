@@ -12,12 +12,9 @@ typedef struct
 
 
 
-void menuPrincipal(SDL_Renderer *render, TTF_Font* fuente){
+int menuPrincipal(SDL_Renderer *render, TTF_Font* fuente)
+{
 
-
-
-
-    /*falta crear que al elegir SALIR o INICIAR PARTIDA pase algo*/
     SDL_Color colorLetra={255,255,255};
     SDL_Surface* fondo= IMG_Load("./Data/menu.png");; //rgb 0 255 240
     SDL_Surface* puntero= IMG_Load("./Data/puntero.png");
@@ -32,8 +29,11 @@ void menuPrincipal(SDL_Renderer *render, TTF_Font* fuente){
 
     int aux=1;
 
-    while (aux==1){
-        while(SDL_PollEvent(&evento)){
+    while (aux==1)
+    {
+        while(SDL_PollEvent(&evento) && evento.type!=SDL_MOUSEMOTION)
+        {
+
 
 
             vacio=SDL_CreateRGBSurface(0,800,600,32,0,0,0,0);
@@ -46,15 +46,17 @@ void menuPrincipal(SDL_Renderer *render, TTF_Font* fuente){
                 exit(0);
             }
 
-            if(evento.type==SDL_KEYDOWN){ 
-                switch(evento.key.keysym.scancode) { 
+            if(evento.type==SDL_KEYDOWN)
+            { 
+                switch(evento.key.keysym.scancode) 
+                { 
 
                     case SDL_SCANCODE_UP:
 
                         posPuntero.y-=60;
 
-                        if(posPuntero.y<360){
-
+                        if(posPuntero.y<360)
+                        {
                             posPuntero.y=420;
                         }
                         break;
@@ -64,9 +66,27 @@ void menuPrincipal(SDL_Renderer *render, TTF_Font* fuente){
 
                         posPuntero.y+=60;
 
-                        if(posPuntero.y>420){
-
+                        if(posPuntero.y>420)
+                        {
                             posPuntero.y=360;
+                        }
+                        break;
+
+                    case SDL_SCANCODE_A:
+
+                        SDL_FreeSurface(fondo);
+                        SDL_FreeSurface(puntero);
+                        SDL_FreeSurface(vacio);
+                        SDL_FreeSurface(msn1);
+                        SDL_FreeSurface(msn2);
+                        
+                        if(posPuntero.y==360)
+                        {
+                            return 1;
+                        }
+                        if(posPuntero.y==420)
+                        {
+                            return 0;
                         }
                         break;
                 }
@@ -80,27 +100,27 @@ void menuPrincipal(SDL_Renderer *render, TTF_Font* fuente){
             SDL_RenderPresent(render);
         }
     }
-
-
-
-
 }
 
-void caja(SDL_Rect * pos,int indice, int rotacion){
 
-    switch(indice){
+
+void caja(SDL_Rect * pos,int indice, int rotacion)
+{
+
+    switch(indice)
+    {
 
         case 1:  //barco de 2
 
-            if(rotacion==1){ 
-
+            if(rotacion==1)
+            { 
                 pos->w=160;
                 pos->h=60;
             }
 
             
-            else{
-                
+            else
+            {
                 pos->w=80;
                 pos->h=120;
 
@@ -110,18 +130,17 @@ void caja(SDL_Rect * pos,int indice, int rotacion){
 
         case 2:  //barco de 3
 
-            if(rotacion==1){
-                
+            if(rotacion==1)
+            { 
                 pos->w=240;
                 pos->h=60;
             }
 
             
-            else{
-                
+            else
+            { 
                 pos->w=80;
                 pos->h=180;
-
             }
 
             break;
@@ -129,18 +148,17 @@ void caja(SDL_Rect * pos,int indice, int rotacion){
 
         case 3:  //barco de 3
 
-            if(rotacion==1){
-                
+            if(rotacion==1)
+            { 
                 pos->w=240;
                 pos->h=60;
             }
 
             
-            else{
-                
+            else
+            {
                 pos->w=80;
                 pos->h=180;
-
             }
 
 
@@ -148,18 +166,17 @@ void caja(SDL_Rect * pos,int indice, int rotacion){
 
         case 4:  //barco de 4
 
-            if(rotacion==1){
-                
+            if(rotacion==1)
+            {  
                 pos->w=320;
                 pos->h=60;
             }
 
             
-            else{
-
+            else
+            {
                 pos->w=80;
                 pos->h=240;
-
             }
 
             break;
@@ -167,18 +184,17 @@ void caja(SDL_Rect * pos,int indice, int rotacion){
 
         case 5:  //barco de 5
 
-            if(rotacion==1){
-                
+            if(rotacion==1)
+            {
                 pos->w=400;
                 pos->h=60;
             }
 
             
-            else{
-
+            else
+            {
                 pos->w=80;
                 pos->h=300;
-
             }
 
             break;
@@ -227,8 +243,8 @@ void CrearMatriz(char * matriz, SDL_Rect * cajas,barco * puntero) //pondremos (e
             {
                 if(SDL_HasIntersection(&scan1,(cajas+k))==1) //WIP
                 {
-                    switch(k){
-
+                    switch(k)
+                    {
                         case 0:  //barco de 2
 
                             if(aux[k]==0 && (puntero+k)->orientacion==1)
@@ -239,7 +255,6 @@ void CrearMatriz(char * matriz, SDL_Rect * cajas,barco * puntero) //pondremos (e
                             }
 
                             break;
-
 
                         case 1: //barco de 3
 
@@ -295,10 +310,10 @@ void CrearMatriz(char * matriz, SDL_Rect * cajas,barco * puntero) //pondremos (e
                 } //fin del if
 
 
-                if(SDL_HasIntersection(&scan2,(cajas+k))==1){
-
-                    switch(k){
-
+                if(SDL_HasIntersection(&scan2,(cajas+k))==1)
+                {
+                    switch(k)
+                    {
                         case 0:
 
                             if(aux[k]==0 && (puntero+k)->orientacion==2)
@@ -368,23 +383,25 @@ void CrearMatriz(char * matriz, SDL_Rect * cajas,barco * puntero) //pondremos (e
 } //fin funcion
 
 
-int colision(SDL_Rect* actual, int indice, SDL_Rect* cajas){
+int colision(SDL_Rect* actual, int indice, SDL_Rect* cajas)
+{
 
 
     int i;
     int a=0;
 
-    for(i=0;i<5;i++){
-        
-        if(i==indice-1){
+    for(i=0;i<5;i++)
+    {
+        if(i==indice-1)
+        {
             continue;
         }
 
-        if(((cajas+i)->w)!=0){ //confirmar que no sea una caja nula
-
+        if(((cajas+i)->w)!=0)  //confirmar que no sea una caja nula
+        { 
             a=SDL_HasIntersection(actual,(cajas+i));
-            
-            if(a==1){
+            if(a==1)
+            {
                 break;
             }
         }
@@ -400,58 +417,79 @@ void limite(int barco,int* posicion,int borde)
 {
     switch(barco)
     {
-        case 1: if(*posicion>borde-2*borde/10){
+        case 1: 
+            
+            if(*posicion>borde-2*borde/10)
+            {
                 *posicion=borde-2*borde/10;
-                }
-                break;
+            }
+            break;
 
-        case 2: if(*posicion>borde-3*borde/10){ 
+        case 2: 
+            
+            if(*posicion>borde-3*borde/10)
+            { 
                 *posicion=borde-3*borde/10;
-                }
-                break;
+            }
+            break;
 
-        case 3: if(*posicion>borde-3*borde/10){
+        case 3: 
+
+            if(*posicion>borde-3*borde/10)
+            {
                 *posicion=borde-3*borde/10;
-                }
-                break;
+            }
+            break;
 
-        case 4: if(*posicion>borde-4*borde/10){
+        case 4: 
+            
+            if(*posicion>borde-4*borde/10)
+            {
                 *posicion=borde-4*borde/10;
-                }
-                break;
+            }
+            break;
 
-        case 5: if(*posicion>borde-5*borde/10){
+        case 5: 
+            
+            if(*posicion>borde-5*borde/10)
+            {
                 *posicion=borde-5*borde/10;
-                }
-                break;
+            }
+            break;
     }
 }
 
 
 
 
-void ponerBarcos(SDL_Surface** H, SDL_Surface** V, SDL_Renderer* render, 
-                 SDL_Rect* cajas, barco* flota){
+int ponerBarcos(SDL_Surface** H, SDL_Surface** V, SDL_Renderer* render, 
+                 SDL_Rect* cajas, barco* flota,TTF_Font* fuente){
 
 
     SDL_Surface* detras;
-    SDL_Surface  *fondo=NULL;
-    fondo  = IMG_Load("./Data/fondo.png");
+    SDL_Surface* fondo=NULL;
+    fondo = IMG_Load("./Data/fondo.png");
     SDL_Event evento;
     SDL_Texture *textura=NULL;
     SDL_Rect posActual;
     posActual.x=0;
     posActual.y=0;
 
+    SDL_Color colorLetra={255,0,255};
+    SDL_Surface* confirmacion= TTF_RenderText_Blended_Wrapped(fuente,"Es correcta esta formacion?",
+                                                              colorLetra,650);
+
+    SDL_Rect posTexto={245,420,0,0};
+
     int aux=1,indice=1,rot=1;
     int interseccion,i,j;
+    int retorno=0;
 
 
-    while(aux==1){  
-
-        while(SDL_PollEvent(&evento)){
-            
-
+    while(aux==1)
+    {  
+        while(SDL_PollEvent(&evento) && evento.type!=SDL_MOUSEMOTION)
+        {
             detras=SDL_CreateRGBSurface(0,800,600,32,0,0,0,0);
             SDL_BlitSurface(fondo,NULL,detras,NULL);
 
@@ -462,14 +500,16 @@ void ponerBarcos(SDL_Surface** H, SDL_Surface** V, SDL_Renderer* render,
             }
 
 
-            if(evento.type==SDL_KEYDOWN){ 
-                switch(evento.key.keysym.scancode) { 
-
+            if(evento.type==SDL_KEYDOWN)
+            { 
+                switch(evento.key.keysym.scancode) 
+                { 
                     case SDL_SCANCODE_UP:  
                         
                         posActual.y-=60;   
 
-                        if(posActual.y<0){  //barrera para que no desaparezca la img
+                        if(posActual.y<0) //barrera para que no desaparezca la img
+                        {  
                             posActual.y=0;
                         }
 
@@ -482,7 +522,8 @@ void ponerBarcos(SDL_Surface** H, SDL_Surface** V, SDL_Renderer* render,
 
                         if(rot==1)//si esta horizontal
                         {
-                            if(posActual.y>540){ //barrera para que no desaparezca la img
+                            if(posActual.y>540)
+                            { 
                                 posActual.y=540;
                             }
                         }
@@ -501,7 +542,8 @@ void ponerBarcos(SDL_Surface** H, SDL_Surface** V, SDL_Renderer* render,
 
                         if(rot==2)
                         {
-                            if(posActual.x>720){ //barrera para que no desaparezca la img
+                            if(posActual.x>720)
+                            { 
                                 posActual.x=720;
                             }
                         }
@@ -518,8 +560,8 @@ void ponerBarcos(SDL_Surface** H, SDL_Surface** V, SDL_Renderer* render,
 
                         posActual.x-=80;
 
-
-                        if(posActual.x<0){
+                        if(posActual.x<0)
+                        {
                             posActual.x=0;
                         }
 
@@ -532,7 +574,8 @@ void ponerBarcos(SDL_Surface** H, SDL_Surface** V, SDL_Renderer* render,
                         caja(&cajas[indice-1],indice,rot);
                         interseccion=colision(&cajas[indice-1],indice,&cajas[0]);
 
-                        if(interseccion==1){
+                        if(interseccion==1)
+                        {
                             interseccion=0;
                             break;
                         }
@@ -541,10 +584,12 @@ void ponerBarcos(SDL_Surface** H, SDL_Surface** V, SDL_Renderer* render,
                         flota[indice-1].orientacion=rot;
                         indice++;
                         //para que aparezca el siguiente barco dentro de los limites de la pantalla
-                        if(rot==1){
+                        if(rot==1)
+                        {
                             limite(indice,&posActual.x,800);
                         }
-                        else{
+                        else
+                        {
                             limite(indice,&posActual.y,600);
                         }
                         break;
@@ -554,7 +599,8 @@ void ponerBarcos(SDL_Surface** H, SDL_Surface** V, SDL_Renderer* render,
 
                         indice--;
 
-                        if(indice<1){
+                        if(indice<1)
+                        {
                             indice=1;
                         }
 
@@ -569,10 +615,12 @@ void ponerBarcos(SDL_Surface** H, SDL_Surface** V, SDL_Renderer* render,
 
                     case SDL_SCANCODE_R: //tecla para rotar
 
-                        if(rot==1){
+                        if(rot==1)
+                        {
                             rot=2;
                         }
-                        else{
+                        else
+                        {
                             rot=1;
                         }
 
@@ -590,104 +638,151 @@ void ponerBarcos(SDL_Surface** H, SDL_Surface** V, SDL_Renderer* render,
                 } 
             }
 
-            for(i=0;i<indice-1;i++){
+            for(i=0;i<indice-1;i++)
+            {
 
                 switch(i)
                 {
                     case 0: 
-                            
-                            if(flota[i].orientacion==1){
-                                SDL_BlitScaled(H[i],NULL,detras,&cajas[i]);
-                            }
-                            else{
-                                SDL_BlitScaled(V[i],NULL,detras,&cajas[i]);
-                            }
+                        
+                        if(flota[i].orientacion==1)
+                        {
+                            SDL_BlitScaled(H[i],NULL,detras,&cajas[i]);
+                        }
+                        else
+                        {
+                            SDL_BlitScaled(V[i],NULL,detras,&cajas[i]);
+                        }
 
-                            break;
+                        break;
+
                     case 1: 
-                            
-                            if(flota[i].orientacion==1){
-                                SDL_BlitScaled(H[i],NULL,detras,&cajas[i]);
-                            }
-                            else{
-                                SDL_BlitScaled(V[i],NULL,detras,&cajas[i]);
-                            }
-                            break;
-                    case 2: 
 
-                            if(flota[i].orientacion==1){
-                                SDL_BlitScaled(H[i],NULL,detras,&cajas[i]);
-                            }
-                            else{
-                                SDL_BlitScaled(V[i],NULL,detras,&cajas[i]);
-                            }
-                            break;
+                        if(flota[i].orientacion==1)
+                        {
+                            SDL_BlitScaled(H[i],NULL,detras,&cajas[i]);
+                        }
+                        else
+                        {
+                            SDL_BlitScaled(V[i],NULL,detras,&cajas[i]);
+                        }
+                
+                        break;
+
+                    case 2: 
+                        
+                        if(flota[i].orientacion==1)
+                        {
+                            SDL_BlitScaled(H[i],NULL,detras,&cajas[i]);
+                        }
+                        else
+                        {
+                            SDL_BlitScaled(V[i],NULL,detras,&cajas[i]);
+                        }
+                        
+                        break;
 
                     case 3: 
-                            if(flota[i].orientacion==1){
-                                SDL_BlitScaled(H[i],NULL,detras,&cajas[i]);
-                            }
-                            else{
-                                SDL_BlitScaled(V[i],NULL,detras,&cajas[i]);
-                            }
-                            break;
+
+                        if(flota[i].orientacion==1)
+                        {
+                            SDL_BlitScaled(H[i],NULL,detras,&cajas[i]);
+                        }
+                       
+                        else
+                        {
+                            SDL_BlitScaled(V[i],NULL,detras,&cajas[i]);
+                        }
+
+                        break;
                     
                     case 4: 
+                        
+                        if(flota[i].orientacion==1)
+                        {
+                            SDL_BlitScaled(H[i],NULL,detras,&cajas[i]);
+                        }
 
-                            if(flota[i].orientacion==1){
-                                SDL_BlitScaled(H[i],NULL,detras,&cajas[i]);
-                            }
-                            else{
-                                SDL_BlitScaled(V[i],NULL,detras,&cajas[i]);
-                            }
-                            break;
+                        else
+                        {
+                            SDL_BlitScaled(V[i],NULL,detras,&cajas[i]);
+                        }
+
+                        break;
                 } 
             }
 
 
             switch(indice)
             {
-                case 1: if(rot==1){
-                            SDL_BlitSurface(H[0],NULL,detras,&posActual);
-                        }
-                        if(rot==2){
-                            SDL_BlitSurface(V[0],NULL,detras,&posActual);
-                        }
+                case 1: 
 
-                        break;
+                    if(rot==1)
+                    {
+                        SDL_BlitSurface(H[0],NULL,detras,&posActual);
+                    }
+                    if(rot==2)
+                    {
+                        SDL_BlitSurface(V[0],NULL,detras,&posActual);
+                    }
 
-                case 2: if(rot==1){
-                            SDL_BlitSurface(H[1],NULL,detras,&posActual);
-                        }
-                        if(rot==2){
-                            SDL_BlitSurface(V[1],NULL,detras,&posActual);
-                        }
-                        break;
+                    break;
 
-                case 3: if(rot==1){
-                            SDL_BlitSurface(H[2],NULL,detras,&posActual);
-                        }
-                        if(rot==2){
-                            SDL_BlitSurface(V[2],NULL,detras,&posActual);
-                        }
-                        break;
+                case 2: 
 
-                case 4: if(rot==1){
-                            SDL_BlitSurface(H[3],NULL,detras,&posActual);
-                        }
-                        if(rot==2){
-                            SDL_BlitSurface(V[3],NULL,detras,&posActual);
-                        }
-                        break;
+                    if(rot==1)
+                    {
+                        SDL_BlitSurface(H[1],NULL,detras,&posActual);
+                    }
+                    if(rot==2)
+                    {
+                        SDL_BlitSurface(V[1],NULL,detras,&posActual);
+                    }
+                    break;
+
+                case 3: 
+
+                    if(rot==1)
+                    {
+                        SDL_BlitSurface(H[2],NULL,detras,&posActual);
+                    }
+
+                    if(rot==2)
+                    {
+                        SDL_BlitSurface(V[2],NULL,detras,&posActual);
+                    }
+
+                    break;
+
+                case 4: 
+
+                    if(rot==1)
+                    {
+                        SDL_BlitSurface(H[3],NULL,detras,&posActual);
+                    }
+                    if(rot==2)
+                    {
+                        SDL_BlitSurface(V[3],NULL,detras,&posActual);
+                    }
+                    break;
                         
-                case 5: if(rot==1){
-                            SDL_BlitSurface(H[4],NULL,detras,&posActual);
-                        }
-                        if(rot==2){
-                            SDL_BlitSurface(V[4],NULL,detras,&posActual);
-                        }
-                        break;
+                case 5: 
+
+                    if(rot==1)
+                    {
+                        SDL_BlitSurface(H[4],NULL,detras,&posActual);
+                    }
+                    if(rot==2)
+                    {
+                        SDL_BlitSurface(V[4],NULL,detras,&posActual);
+                    }
+                    break;
             }
+
+            if(indice==6)
+            {
+                SDL_BlitSurface(confirmacion,NULL,detras,&posTexto);
+            }  
 
 
             textura= SDL_CreateTextureFromSurface(render,detras); 
@@ -696,21 +791,21 @@ void ponerBarcos(SDL_Surface** H, SDL_Surface** V, SDL_Renderer* render,
             SDL_DestroyTexture(textura);
             SDL_RenderPresent(render);
 
-            if(indice==6){
-
-                aux=0;
+            if(indice==6)
+            {
+                scanf("%d",&retorno);
                 SDL_FreeSurface(fondo);
-                break;
-            }  
+                SDL_FreeSurface(confirmacion);
+                return retorno;
+            }
 
         }
     }
-
-
 }
 
 
-int disparoValido(char* mat, int* vidasEnemigo, int* hundidos, SDL_Rect disparo){
+int disparoValido(char* mat, int* vidasEnemigo, int* hundidos, SDL_Rect disparo)
+{
 
     int x=0;
     int y=0;
@@ -718,97 +813,100 @@ int disparoValido(char* mat, int* vidasEnemigo, int* hundidos, SDL_Rect disparo)
     y=(disparo.y/60);
     int retorno=0; // 0.tiro invalido 1.tiro correcto 2.tiro al agua
 
-    if(mat[(y*10)+x]=='O' || mat[(y*10)+x]=='X'){
+    printf("casilla=%d habia=%c\n",(y*10)+x,mat[(y*10)+x]);
+
+    if(mat[(y*10)+x]=='O' || mat[(y*10)+x]=='X')
+    {
         printf("tiro invalido, de nuevo\n");
     }
 
-    if(mat[(y*10)+x]=='A'){
+    if(mat[(y*10)+x]=='A')
+    {
         vidasEnemigo[0]-=1;
         printf("A restantes %d\n",vidasEnemigo[0]);
         mat[(y*10)+x]='O';
         retorno=1;
 
-        if(vidasEnemigo[0]==0){
+        if(vidasEnemigo[0]==0)
+        {
             *hundidos+=1;
         }
     }
 
-    if(mat[(y*10)+x]=='B'){
+    if(mat[(y*10)+x]=='B')
+    {
         vidasEnemigo[1]-=1;
         printf("B restantes %d\n",vidasEnemigo[1]);
         mat[(y*10)+x]='O';
         retorno=1;
 
-        if(vidasEnemigo[1]==0){
+        if(vidasEnemigo[1]==0)
+        {
             *hundidos+=1;
         }
     }
 
-    if(mat[(y*10)+x]=='C'){
+    if(mat[(y*10)+x]=='C')
+    {
         vidasEnemigo[2]-=1;
         printf("C restantes %d\n",vidasEnemigo[2]);
         mat[(y*10)+x]='O';
         retorno=1;
 
-        if(vidasEnemigo[2]==0){
+        if(vidasEnemigo[2]==0)
+        {
             *hundidos+=1;
         }
     }
 
-    if(mat[(y*10)+x]=='D'){
+    if(mat[(y*10)+x]=='D')
+    {
         vidasEnemigo[3]-=1;
         printf("D restantes %d\n",vidasEnemigo[3]);
         mat[(y*10)+x]='O';
         retorno=1;
 
-        if(vidasEnemigo[3]==0){
+        if(vidasEnemigo[3]==0)
+        {
             *hundidos+=1;
         }
     }
 
 
-    if(mat[(y*10)+x]=='E'){
+    if(mat[(y*10)+x]=='E')
+    {
         vidasEnemigo[4]-=1;
         printf("E restantes %d\n",vidasEnemigo[4]);
         mat[(y*10)+x]='O';
         retorno=1;
 
 
-        if(vidasEnemigo[4]==0){
+        if(vidasEnemigo[4]==0)
+        {
             *hundidos+=1;
         }
     }
 
-    if(mat[(y*10)+x]=='.'){
+    if(mat[(y*10)+x]=='.')
+    {
         mat[(y*10)+x]='X';
         retorno=2;
     }
 
-    
-
     return retorno;
-
-
 }
 
 
-void juego(char* mat1, char* mat2, SDL_Renderer* render){
-
-
-
-
-    //SE justifica el uso de variables auxiliares si solo seran dos jugadores?
+void juego(char* mat1, char* mat2, SDL_Renderer* render)
+{
 
     int jugador=1; //se parte como el J1
     int vivosJ1[5]={5,4,3,3,2}; //las "vidas", representando el tamaño del barco
     int vivosJ2[5]={5,4,3,3,2};
-    int vivosEnemigo[5];// auxiliar para copiar las "vidas" del J1 o del J2
     int J1hundidos=0; //barcos que ha hundido el J1
     int J2hundidos=0; //barcos que ha hundido el J2
-    int jugadorHundidos; //auxiliar para los barcos que ha hundido el J1 o el J2
     int cnt1=0,cnt2=0;
     int i,validez,posx=0,posy=0;
-    char* matObjetivo=NULL;  //auxiliar para la matriz enemiga
     SDL_Surface* detras;
     SDL_Surface* fondoJuego;
     SDL_Surface* correcto;
@@ -834,47 +932,28 @@ void juego(char* mat1, char* mat2, SDL_Renderer* render){
     {
         validez=0;
 
-        if(jugador==1)
-        {
-            matObjetivo=mat2;
-            jugadorHundidos=J1hundidos;
-
-            for(i=0;i<5;i++)
-            {
-                vivosEnemigo[i]=vivosJ2[i];
-            }
-
-        }
-
-        else
-        {
-            matObjetivo=mat1;
-            jugadorHundidos=J2hundidos;
-
-            for(i=0;i<5;i++)
-            {
-                vivosEnemigo[i]=vivosJ1[i];
-            }
-        }
-
-        while(SDL_PollEvent(&evento))
+        while(SDL_PollEvent(&evento) && evento.type!=SDL_MOUSEMOTION)
         {
             detras=SDL_CreateRGBSurface(0,800,600,32,0,0,0,0);
             SDL_BlitSurface(fondoJuego,NULL,detras,NULL);
+
 
             if(evento.type==SDL_QUIT) 
             { 
                 exit(0);
             }
 
-            if(evento.type==SDL_KEYDOWN){ 
-                switch(evento.key.keysym.scancode) { 
+            if(evento.type==SDL_KEYDOWN)
+            { 
+                switch(evento.key.keysym.scancode) 
+                { 
 
                     case SDL_SCANCODE_UP:  
                         
                         posActual.y-=60;   
 
-                        if(posActual.y<0){  
+                        if(posActual.y<0)
+                        {  
                             posActual.y=0;
                         }
 
@@ -885,7 +964,8 @@ void juego(char* mat1, char* mat2, SDL_Renderer* render){
 
                         posActual.y+=60;
 
-                        if(posActual.y>540){  
+                        if(posActual.y>540)
+                        {  
                             posActual.y=540;
                         }
 
@@ -897,7 +977,8 @@ void juego(char* mat1, char* mat2, SDL_Renderer* render){
 
                         posActual.x+=80;
 
-                        if(posActual.x>720){
+                        if(posActual.x>720)
+                        {
                             posActual.x=720;
                         }
     
@@ -910,7 +991,8 @@ void juego(char* mat1, char* mat2, SDL_Renderer* render){
                         posActual.x-=80;
 
 
-                        if(posActual.x<0){
+                        if(posActual.x<0)
+                        {
                             posActual.x=0;
                         }
 
@@ -919,10 +1001,18 @@ void juego(char* mat1, char* mat2, SDL_Renderer* render){
 
                     case SDL_SCANCODE_A:
 
-                        validez=disparoValido(matObjetivo,&vivosEnemigo[0],&jugadorHundidos,posActual);
-                        printf("validez=%d\n",validez);
-                        if(validez==1 || validez==2){
+                        if(jugador==1)
+                        {
+                            validez=disparoValido(mat2,&vivosJ2[0],&J1hundidos,posActual);
+                        }
+                        if(jugador==2)
+                        {
+                            validez=disparoValido(mat1,&vivosJ1[0],&J2hundidos,posActual);
+                        }
 
+                        printf("validez=%d\n",validez);
+                        if(validez==1 || validez==2)
+                        {
                             if(jugador==1)
                             {
                                 disparosJ1[cnt1]=posActual;
@@ -936,7 +1026,8 @@ void juego(char* mat1, char* mat2, SDL_Renderer* render){
                             }
                         }
 
-                        else{
+                        else
+                        {
                             printf("apunta bien\n");
                         }
                         break;
@@ -944,39 +1035,43 @@ void juego(char* mat1, char* mat2, SDL_Renderer* render){
             }//fin de if
 
 
-            if(jugador==1){
-
-                for(i=0;i<cnt1;i++){
+            if(jugador==1)
+            {
+                for(i=0;i<cnt1;i++)
+                {
 
                     posx=(disparosJ1[i].x/80);
                     posy=(disparosJ1[i].y/60);
-                    if(matObjetivo[(posy*10)+posx]=='O'){
+                    if(mat2[(posy*10)+posx]=='O')
+                    {
                         SDL_BlitSurface(correcto,NULL,detras,&disparosJ1[i]);
                     }
 
-                    if(matObjetivo[posy*10+posx]=='X'){
+                    if(mat2[posy*10+posx]=='X')
+                    {
                         SDL_BlitSurface(fallido,NULL,detras,&disparosJ1[i]);
                     }
                 
                 }  
             }
 
-            else{
+            else
+            {
 
-                for(i=0;i<cnt2;i++){
-
+                for(i=0;i<cnt2;i++)
+                {
                     posx=(disparosJ2[i].x/80);
                     posy=(disparosJ2[i].y/60);
-                    if(matObjetivo[(posy*10)+posx]=='O'){
+                    if(mat1[(posy*10)+posx]=='O')
+                    {
                         SDL_BlitSurface(correcto,NULL,detras,&disparosJ2[i]);
                     }
 
-                    if(matObjetivo[posy*10+posx]=='X'){
+                    if(mat1[posy*10+posx]=='X')
+                    {
                         SDL_BlitSurface(fallido,NULL,detras,&disparosJ2[i]);
                     }
-                
                 }
-
             }
             
             SDL_BlitSurface(marcador,NULL,detras,&posActual);
@@ -985,27 +1080,7 @@ void juego(char* mat1, char* mat2, SDL_Renderer* render){
             SDL_RenderCopy(render, textura, NULL, NULL);
             SDL_DestroyTexture(textura);
             SDL_RenderPresent(render);
-
-            if(jugador==1)
-            {
-                J1hundidos=jugadorHundidos;
-                for(i=0;i<5;i++)
-                {
-                    vivosJ2[i]=vivosEnemigo[i];
-                }
-            }
-
-            if(jugador==2)
-            {
-                J2hundidos=jugadorHundidos;
-                for(i=0;i<5;i++)
-                {
-                    vivosJ1[i]=vivosEnemigo[i];
-                }
-            }
-
         }//fin while eventos
-
 
         if(validez==2)
         {   
@@ -1017,23 +1092,21 @@ void juego(char* mat1, char* mat2, SDL_Renderer* render){
                 printf("cambio a 2\n");
             }
 
-            else
+            else if(jugador==2)
             {
                 jugador=1;
                 printf("cambio a 1\n");
             }
         }
-
     }//fin while "vidas"
 } //fin funcion
 
 
-int main () {
-
+int main () 
+{
 
     SDL_Init(SDL_INIT_VIDEO);
     TTF_Init();
-
 
     barco flota[5];
     SDL_Rect cajas[5];
@@ -1045,10 +1118,9 @@ int main () {
     SDL_Surface  *grnH[5]={NULL}; 
     SDL_Surface  *grnV[5]={NULL};
 
-
     char mat1[10][10];
     char mat2[10][10];
-    int i;
+    int i,j;
 
 
     pantalla = SDL_CreateWindow ("barquitos 2000 remastered",
@@ -1062,97 +1134,110 @@ int main () {
 
     render= SDL_CreateRenderer(pantalla, -1, 0);
 
-    menuPrincipal(render,fuente);
-
-    //EL PROGRAMA SE QUEDA ATORADO EN MENUPRINCIPAL PORQUE NO LE PUSE QUE HAGA ALGO
+    int ingresado=menuPrincipal(render,fuente);
 
 
+    if(ingresado==1)
+    {
 
-    //carga de imagenes
+        SDL_Delay(50);
+        ingresado=0;
 
-    redH[0]= IMG_Load("./Data/rojos/destructor_h.png");    //barco de 2 destructor
-    redH[1]= IMG_Load("./Data/rojos/submarino_h.png");     //barco de 3 submarino
-    redH[2]= IMG_Load("./Data/rojos/crucero_h.png");       //barco de 3 crucero
-    redH[3]= IMG_Load("./Data/rojos/acorazado_h.png");     //barco de 4 acorazado
-    redH[4]= IMG_Load("./Data/rojos/portaaviones_h.png");  //barco de 5 portaaviones
-    redV[0]= IMG_Load("./Data/rojos/destructor_v.png");
-    redV[1]= IMG_Load("./Data/rojos/submarino_v.png");
-    redV[2]= IMG_Load("./Data/rojos/crucero_v.png");
-    redV[3]= IMG_Load("./Data/rojos/acorazado_v.png"); 
-    redV[4]= IMG_Load("./Data/rojos/portaaviones_v.png");
-    grnH[0]= IMG_Load("./Data/verdes/destructor_h.png");
-    grnH[1]= IMG_Load("./Data/verdes/submarino_h.png");
-    grnH[2]= IMG_Load("./Data/verdes/crucero_h.png");
-    grnH[3]= IMG_Load("./Data/verdes/acorazado_h.png"); 
-    grnH[4]= IMG_Load("./Data/verdes/portaaviones_h.png");
-    grnV[0]= IMG_Load("./Data/verdes/destructor_v.png");
-    grnV[1]= IMG_Load("./Data/verdes/submarino_v.png");
-    grnV[2]= IMG_Load("./Data/verdes/crucero_v.png");
-    grnV[3]= IMG_Load("./Data/verdes/acorazado_v.png"); 
-    grnV[4]= IMG_Load("./Data/verdes/portaaviones_v.png");
+        for(i=0;i<10;i++)
+        {
+            for(j=0;j<10;j++)
+            {
+                mat1[i][j]='.';
+                mat2[i][j]='.';
+            }
+        }
+        //carga de imagenes
 
-
-
-    for(i=0;i<5;i++){ //iniciamos cajas en tamaño cero y barcos en horizontal y disponibilidad 1
-        cajas[i].w=0;
-        cajas[i].h=0;
-        flota[i].orientacion=1;
-        flota[i].disponible=1;
-    }
-
-    ponerBarcos(&redH[0],&redV[0],render,&cajas[0],&flota[0]);
-
-    //luego de crear la matriz del jugador 1 liberamos las imagenes rojas
-    SDL_FreeSurface(redH[0]);
-    SDL_FreeSurface(redH[1]);
-    SDL_FreeSurface(redH[2]);
-    SDL_FreeSurface(redH[3]);
-    SDL_FreeSurface(redH[4]);
-
-    SDL_FreeSurface(redV[0]);
-    SDL_FreeSurface(redV[1]);
-    SDL_FreeSurface(redV[2]);
-    SDL_FreeSurface(redV[3]);
-    SDL_FreeSurface(redV[4]);
+        redH[0]= IMG_Load("./Data/rojos/destructor_h.png");    //barco de 2 destructor
+        redH[1]= IMG_Load("./Data/rojos/submarino_h.png");     //barco de 3 submarino
+        redH[2]= IMG_Load("./Data/rojos/crucero_h.png");       //barco de 3 crucero
+        redH[3]= IMG_Load("./Data/rojos/acorazado_h.png");     //barco de 4 acorazado
+        redH[4]= IMG_Load("./Data/rojos/portaaviones_h.png");  //barco de 5 portaaviones
+        redV[0]= IMG_Load("./Data/rojos/destructor_v.png");
+        redV[1]= IMG_Load("./Data/rojos/submarino_v.png");
+        redV[2]= IMG_Load("./Data/rojos/crucero_v.png");
+        redV[3]= IMG_Load("./Data/rojos/acorazado_v.png"); 
+        redV[4]= IMG_Load("./Data/rojos/portaaviones_v.png");
+        grnH[0]= IMG_Load("./Data/verdes/destructor_h.png");
+        grnH[1]= IMG_Load("./Data/verdes/submarino_h.png");
+        grnH[2]= IMG_Load("./Data/verdes/crucero_h.png");
+        grnH[3]= IMG_Load("./Data/verdes/acorazado_h.png"); 
+        grnH[4]= IMG_Load("./Data/verdes/portaaviones_h.png");
+        grnV[0]= IMG_Load("./Data/verdes/destructor_v.png");
+        grnV[1]= IMG_Load("./Data/verdes/submarino_v.png");
+        grnV[2]= IMG_Load("./Data/verdes/crucero_v.png");
+        grnV[3]= IMG_Load("./Data/verdes/acorazado_v.png"); 
+        grnV[4]= IMG_Load("./Data/verdes/portaaviones_v.png");
 
 
-    CrearMatriz(&mat1[0][0],&cajas[0],&flota[0]);
-
-
-    //reseteamos cajas y flotas para poner los barcos verdes...ahora la matriz guarda la informacion
-    for(i=0;i<5;i++){ 
-        cajas[i].w=0;
-        cajas[i].h=0;
-        flota[i].orientacion=1;
-        flota[i].disponible=1;
-    }
-
-
-    ponerBarcos(&grnH[0],&grnV[0],render,&cajas[0],&flota[0]);
-
-
-    //liberamos las imagenes verdes... si ya no las vamos a ocupar
-    SDL_FreeSurface(grnH[0]);
-    SDL_FreeSurface(grnH[1]);
-    SDL_FreeSurface(grnH[2]);
-    SDL_FreeSurface(grnH[3]);
-    SDL_FreeSurface(grnH[4]);
-
-    SDL_FreeSurface(grnV[0]);
-    SDL_FreeSurface(grnV[1]);
-    SDL_FreeSurface(grnV[2]);
-    SDL_FreeSurface(grnV[3]);
-    SDL_FreeSurface(grnV[4]);
-
-    CrearMatriz(&mat2[0][0],&cajas[0],&flota[0]);
+        do
+        {
         
-    juego(&mat1[0][0],&mat2[0][0],render);
+            for(i=0;i<5;i++) //iniciamos cajas en tamaño cero y barcos en horizontal y disponibilidad 1
+            { 
+                cajas[i].w=0;
+                cajas[i].h=0;
+                flota[i].orientacion=1;
+                flota[i].disponible=1;
+            }
+
+            ingresado=ponerBarcos(&redH[0],&redV[0],render,&cajas[0],&flota[0],fuente);
+        }while(ingresado!=1);
+        //luego de crear la matriz del jugador 1 liberamos las imagenes rojas
+        SDL_FreeSurface(redH[0]);
+        SDL_FreeSurface(redH[1]);
+        SDL_FreeSurface(redH[2]);
+        SDL_FreeSurface(redH[3]);
+        SDL_FreeSurface(redH[4]);
+
+        SDL_FreeSurface(redV[0]);
+        SDL_FreeSurface(redV[1]);
+        SDL_FreeSurface(redV[2]);
+        SDL_FreeSurface(redV[3]);
+        SDL_FreeSurface(redV[4]);
 
 
-    printf("fin del juego\n");
+        CrearMatriz(&mat1[0][0],&cajas[0],&flota[0]);
 
 
+        //reseteamos cajas y flotas para poner los barcos verdes...ahora la matriz guarda la informacion
+        for(i=0;i<5;i++)
+        { 
+            cajas[i].w=0;
+            cajas[i].h=0;
+            flota[i].orientacion=1;
+            flota[i].disponible=1;
+        }
+
+
+        ponerBarcos(&grnH[0],&grnV[0],render,&cajas[0],&flota[0],fuente);
+
+
+        //liberamos las imagenes verdes... si ya no las vamos a ocupar
+        SDL_FreeSurface(grnH[0]);
+        SDL_FreeSurface(grnH[1]);
+        SDL_FreeSurface(grnH[2]);
+        SDL_FreeSurface(grnH[3]);
+        SDL_FreeSurface(grnH[4]);
+
+        SDL_FreeSurface(grnV[0]);
+        SDL_FreeSurface(grnV[1]);
+        SDL_FreeSurface(grnV[2]);
+        SDL_FreeSurface(grnV[3]);
+        SDL_FreeSurface(grnV[4]);
+
+        CrearMatriz(&mat2[0][0],&cajas[0],&flota[0]);
+        juego(&mat1[0][0],&mat2[0][0],render);
+        printf("fin del juego\n");
+
+    }
     
+
     TTF_CloseFont(fuente);
     SDL_DestroyRenderer(render);
     SDL_DestroyWindow(pantalla);
