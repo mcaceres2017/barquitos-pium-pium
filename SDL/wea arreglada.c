@@ -897,7 +897,7 @@ int disparoValido(char* mat, int* vidasEnemigo, int* hundidos, SDL_Rect disparo)
 }
 
 
-void juego(char* mat1, char* mat2, SDL_Renderer* render)
+void juego(char* mat1, char* mat2, SDL_Renderer* render,TTF_Font* fuente)
 {
 
     int jugador=1; //se parte como el J1
@@ -914,12 +914,15 @@ void juego(char* mat1, char* mat2, SDL_Renderer* render)
     SDL_Surface* marcador;
     SDL_Texture* textura;
     SDL_Event evento;
+    SDL_Color colorLetra={255,0,255};
+    SDL_Surface  *repeticion=TTF_RenderText_Blended_Wrapped(fuente,"desea jugar de nuevo?",colorLetra,650);
+    SDL_Rect posTexto={245,420,0,0};
 
     SDL_Rect posActual; //para mover el marcador, cursor o como le llamen
     posActual.x=0;
     posActual.y=0;
 
-    SDL_Rect disparosJ1[100]; //estos son para ir guardando la posicion de los disparos para mostrar
+    SDL_Rect disparosJ1[100]; //estos son para ir TTF_Font* fuenteguardando la posicion de los disparos para mostrar
     SDL_Rect disparosJ2[100]; //las equis o circulos... en el peor de las casos el wn puede haberle
                               //disparado a todas las jodidas casillas.
 
@@ -1099,6 +1102,14 @@ void juego(char* mat1, char* mat2, SDL_Renderer* render)
             }
         }
     }//fin while "vidas"
+
+    detras=SDL_CreateRGBSurface(0,800,600,32,0,0,0,0);
+    SDL_BlitSurface(repeticion,NULL,detras,&posTexto);
+    textura= SDL_CreateTextureFromSurface(render,detras); 
+            SDL_FreeSurface(detras);
+            SDL_RenderCopy(render, textura, NULL, NULL);
+            SDL_DestroyTexture(textura);
+            SDL_RenderPresent(render);
 } //fin funcion
 
 
@@ -1117,10 +1128,11 @@ int main ()
     SDL_Surface  *redV[5]={NULL};
     SDL_Surface  *grnH[5]={NULL}; 
     SDL_Surface  *grnV[5]={NULL};
+    SDL_Texture *texto=NULL;
 
     char mat1[10][10];
     char mat2[10][10];
-    int i,j;
+    int i,j,deNuevo;
 
 
     pantalla = SDL_CreateWindow ("barquitos 2000 remastered",
@@ -1139,101 +1151,109 @@ int main ()
 
     if(ingresado==1)
     {
-
-        SDL_Delay(50);
-        ingresado=0;
-
-        for(i=0;i<10;i++)
-        {
-            for(j=0;j<10;j++)
-            {
-                mat1[i][j]='.';
-                mat2[i][j]='.';
-            }
-        }
-        //carga de imagenes
-
-        redH[0]= IMG_Load("./Data/rojos/destructor_h.png");    //barco de 2 destructor
-        redH[1]= IMG_Load("./Data/rojos/submarino_h.png");     //barco de 3 submarino
-        redH[2]= IMG_Load("./Data/rojos/crucero_h.png");       //barco de 3 crucero
-        redH[3]= IMG_Load("./Data/rojos/acorazado_h.png");     //barco de 4 acorazado
-        redH[4]= IMG_Load("./Data/rojos/portaaviones_h.png");  //barco de 5 portaaviones
-        redV[0]= IMG_Load("./Data/rojos/destructor_v.png");
-        redV[1]= IMG_Load("./Data/rojos/submarino_v.png");
-        redV[2]= IMG_Load("./Data/rojos/crucero_v.png");
-        redV[3]= IMG_Load("./Data/rojos/acorazado_v.png"); 
-        redV[4]= IMG_Load("./Data/rojos/portaaviones_v.png");
-        grnH[0]= IMG_Load("./Data/verdes/destructor_h.png");
-        grnH[1]= IMG_Load("./Data/verdes/submarino_h.png");
-        grnH[2]= IMG_Load("./Data/verdes/crucero_h.png");
-        grnH[3]= IMG_Load("./Data/verdes/acorazado_h.png"); 
-        grnH[4]= IMG_Load("./Data/verdes/portaaviones_h.png");
-        grnV[0]= IMG_Load("./Data/verdes/destructor_v.png");
-        grnV[1]= IMG_Load("./Data/verdes/submarino_v.png");
-        grnV[2]= IMG_Load("./Data/verdes/crucero_v.png");
-        grnV[3]= IMG_Load("./Data/verdes/acorazado_v.png"); 
-        grnV[4]= IMG_Load("./Data/verdes/portaaviones_v.png");
-
-
         do
         {
-        
-            for(i=0;i<5;i++) //iniciamos cajas en tamaño cero y barcos en horizontal y disponibilidad 1
-            { 
-                cajas[i].w=0;
-                cajas[i].h=0;
-                flota[i].orientacion=1;
-                flota[i].disponible=1;
+
+            SDL_Delay(50);
+            ingresado=0;
+
+            for(i=0;i<10;i++)
+            {
+                for(j=0;j<10;j++)
+                {
+                    mat1[i][j]='.';
+                    mat2[i][j]='.';
+                }
             }
+            //carga de imagenes
 
-            ingresado=ponerBarcos(&redH[0],&redV[0],render,&cajas[0],&flota[0],fuente);
-        }while(ingresado!=1);
-        //luego de crear la matriz del jugador 1 liberamos las imagenes rojas
-        SDL_FreeSurface(redH[0]);
-        SDL_FreeSurface(redH[1]);
-        SDL_FreeSurface(redH[2]);
-        SDL_FreeSurface(redH[3]);
-        SDL_FreeSurface(redH[4]);
-
-        SDL_FreeSurface(redV[0]);
-        SDL_FreeSurface(redV[1]);
-        SDL_FreeSurface(redV[2]);
-        SDL_FreeSurface(redV[3]);
-        SDL_FreeSurface(redV[4]);
-
-
-        CrearMatriz(&mat1[0][0],&cajas[0],&flota[0]);
-
-
-        //reseteamos cajas y flotas para poner los barcos verdes...ahora la matriz guarda la informacion
-        for(i=0;i<5;i++)
-        { 
-            cajas[i].w=0;
-            cajas[i].h=0;
-            flota[i].orientacion=1;
-            flota[i].disponible=1;
-        }
+            redH[0]= IMG_Load("./Data/rojos/destructor_h.png");    //barco de 2 destructor
+            redH[1]= IMG_Load("./Data/rojos/submarino_h.png");     //barco de 3 submarino
+            redH[2]= IMG_Load("./Data/rojos/crucero_h.png");       //barco de 3 crucero
+            redH[3]= IMG_Load("./Data/rojos/acorazado_h.png");     //barco de 4 acorazado
+            redH[4]= IMG_Load("./Data/rojos/portaaviones_h.png");  //barco de 5 portaaviones
+            redV[0]= IMG_Load("./Data/rojos/destructor_v.png");
+            redV[1]= IMG_Load("./Data/rojos/submarino_v.png");
+            redV[2]= IMG_Load("./Data/rojos/crucero_v.png");
+            redV[3]= IMG_Load("./Data/rojos/acorazado_v.png"); 
+            redV[4]= IMG_Load("./Data/rojos/portaaviones_v.png");
+            grnH[0]= IMG_Load("./Data/verdes/destructor_h.png");
+            grnH[1]= IMG_Load("./Data/verdes/submarino_h.png");
+            grnH[2]= IMG_Load("./Data/verdes/crucero_h.png");
+            grnH[3]= IMG_Load("./Data/verdes/acorazado_h.png"); 
+            grnH[4]= IMG_Load("./Data/verdes/portaaviones_h.png");
+            grnV[0]= IMG_Load("./Data/verdes/destructor_v.png");
+            grnV[1]= IMG_Load("./Data/verdes/submarino_v.png");
+            grnV[2]= IMG_Load("./Data/verdes/crucero_v.png");
+            grnV[3]= IMG_Load("./Data/verdes/acorazado_v.png"); 
+            grnV[4]= IMG_Load("./Data/verdes/portaaviones_v.png");
 
 
-        ponerBarcos(&grnH[0],&grnV[0],render,&cajas[0],&flota[0],fuente);
+            do
+            {
+        
+                for(i=0;i<5;i++) //iniciamos cajas en tamaño cero y barcos en horizontal y disponibilidad 1
+                { 
+                    cajas[i].w=0;
+                    cajas[i].h=0;
+                    flota[i].orientacion=1;
+                    flota[i].disponible=1;
+                }
+
+                ingresado=ponerBarcos(&redH[0],&redV[0],render,&cajas[0],&flota[0],fuente);
+            }while(ingresado!=1);
+            //luego de crear la matriz del jugador 1 liberamos las imagenes rojas
+            SDL_FreeSurface(redH[0]);
+            SDL_FreeSurface(redH[1]);
+            SDL_FreeSurface(redH[2]);
+            SDL_FreeSurface(redH[3]);
+            SDL_FreeSurface(redH[4]);
+
+            SDL_FreeSurface(redV[0]);
+            SDL_FreeSurface(redV[1]);
+            SDL_FreeSurface(redV[2]);
+            SDL_FreeSurface(redV[3]);
+            SDL_FreeSurface(redV[4]);
 
 
-        //liberamos las imagenes verdes... si ya no las vamos a ocupar
-        SDL_FreeSurface(grnH[0]);
-        SDL_FreeSurface(grnH[1]);
-        SDL_FreeSurface(grnH[2]);
-        SDL_FreeSurface(grnH[3]);
-        SDL_FreeSurface(grnH[4]);
+            CrearMatriz(&mat1[0][0],&cajas[0],&flota[0]);
 
-        SDL_FreeSurface(grnV[0]);
-        SDL_FreeSurface(grnV[1]);
-        SDL_FreeSurface(grnV[2]);
-        SDL_FreeSurface(grnV[3]);
-        SDL_FreeSurface(grnV[4]);
 
-        CrearMatriz(&mat2[0][0],&cajas[0],&flota[0]);
-        juego(&mat1[0][0],&mat2[0][0],render);
-        printf("fin del juego\n");
+            //reseteamos cajas y flotas para poner los barcos verdes...ahora la matriz guarda la informacion
+
+            do
+            {
+
+                for(i=0;i<5;i++)
+                { 
+                    cajas[i].w=0;
+                    cajas[i].h=0;
+                    flota[i].orientacion=1;
+                    flota[i].disponible=1;
+                }
+
+                ingresado=ponerBarcos(&grnH[0],&grnV[0],render,&cajas[0],&flota[0],fuente);
+            }while(ingresado!=1);
+
+
+            //liberamos las imagenes verdes... si ya no las vamos a ocupar
+            SDL_FreeSurface(grnH[0]);
+            SDL_FreeSurface(grnH[1]);
+            SDL_FreeSurface(grnH[2]);
+            SDL_FreeSurface(grnH[3]);
+            SDL_FreeSurface(grnH[4]);
+
+            SDL_FreeSurface(grnV[0]);
+            SDL_FreeSurface(grnV[1]);
+            SDL_FreeSurface(grnV[2]);
+            SDL_FreeSurface(grnV[3]);
+            SDL_FreeSurface(grnV[4]);
+
+            CrearMatriz(&mat2[0][0],&cajas[0],&flota[0]);
+            juego(&mat1[0][0],&mat2[0][0],render,fuente);
+            printf("fin del juego\n");
+            scanf("%d",&deNuevo);
+        }while(deNuevo==1);
 
     }
     
