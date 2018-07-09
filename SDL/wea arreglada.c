@@ -2,6 +2,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
 
 typedef struct
 {
@@ -26,11 +27,17 @@ int menuPrincipal(SDL_Renderer *render, TTF_Font* fuente)
     SDL_Rect posPuntero={185,360,0,0};
     SDL_Rect posMSN1={245,360,0,0};
     SDL_Rect posMSN2={245,420,0,0};
-
+    Mix_Music *StarWhat=Mix_LoadMUS("./Data/musica para probar weas/Riviera The Promised Land Soundtrack 24 Triumph.wav");
     int aux=1;
+
+    if(Mix_PlayMusic(StarWhat,-1)<0)
+        {
+            printf("hubo un error en la reproduccion de musica del menu\n");
+        }
 
     while (aux==1)
     {
+
         while(SDL_PollEvent(&evento) && evento.type!=SDL_MOUSEMOTION)
         {
 
@@ -89,6 +96,12 @@ int menuPrincipal(SDL_Renderer *render, TTF_Font* fuente)
                             return 0;
                         }
                         break;
+
+                    case SDL_SCANCODE_D:
+
+                        Mix_RewindMusic();
+                        printf("reinicio musica\n");
+                        break;
                 }
             } 
 
@@ -98,8 +111,13 @@ int menuPrincipal(SDL_Renderer *render, TTF_Font* fuente)
             SDL_RenderCopy(render, textura, NULL, NULL);
             SDL_DestroyTexture(textura);
             SDL_RenderPresent(render);
+
         }
     }
+
+    Mix_PauseMusic();
+
+    Mix_FreeMusic(StarWhat);
 }
 
 
@@ -474,6 +492,14 @@ int ponerBarcos(SDL_Surface** H, SDL_Surface** V, SDL_Renderer* render,
     SDL_Rect posActual;
     posActual.x=0;
     posActual.y=0;
+    Mix_Chunk *incorrectSound=NULL;
+
+    incorrectSound=Mix_LoadWAV("direccion");
+
+    if(Mix_AllocateChannels(2)<0)
+    {
+        printf("hubo un error en la configuracion de canales\n");
+    }
 
     SDL_Color colorLetra={255,0,255};
     SDL_Surface* confirmacion= TTF_RenderText_Blended_Wrapped(fuente,"Es correcta esta formacion?",
@@ -577,6 +603,10 @@ int ponerBarcos(SDL_Surface** H, SDL_Surface** V, SDL_Renderer* render,
                         if(interseccion==1)
                         {
                             interseccion=0;
+                            if(Mix_PlayChannel(1,incorrectSound,0)<0)
+                            {
+                                printf("hubo un error en la reproduccion de sonido incorrecto\n");
+                            }
                             break;
                         }
 
@@ -796,6 +826,7 @@ int ponerBarcos(SDL_Surface** H, SDL_Surface** V, SDL_Renderer* render,
                 scanf("%d",&retorno);
                 SDL_FreeSurface(fondo);
                 SDL_FreeSurface(confirmacion);
+                Mix_FreeChunk(incorrectSound);
                 return retorno;
             }
 
@@ -1117,7 +1148,17 @@ int main ()
 {
 
     SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_AUDIO);
     TTF_Init();
+
+    if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT,\
+             MIX_DEFAULT_CHANNELS, 4096) < 0) {
+    
+            printf("error\n");
+    exit(1);
+    }
+
+    //atexit(Mix_CloseAudio);
 
     barco flota[5];
     SDL_Rect cajas[5];
