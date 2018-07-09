@@ -31,11 +31,15 @@ int menuPrincipal(SDL_Renderer *render)
     SDL_Rect posMSN2={245,420,0,0};
     int aux=1;
 
+    //apartado de musica
+    Mix_VolumeMusic(30);
     if(Mix_PlayMusic(StarWhat,-1)<0)
     {
         printf("hubo un error en la reproduccion de musica del menu\n");
     }
 
+
+    //apartado de eventos
     while (aux==1)
     {
         while(SDL_PollEvent(&evento) && evento.type!=SDL_MOUSEMOTION)
@@ -933,15 +937,9 @@ int disparoValido(char* mat, int* vidasEnemigo, int* hundidos, SDL_Rect disparo)
     y=(disparo.y/60);
     int retorno=0; // 0.tiro invalido 1.tiro correcto 2.tiro al agua
 
-    if(mat[(y*10)+x]=='O' || mat[(y*10)+x]=='X')
-    {
-        printf("tiro invalido, de nuevo\n");
-    }
-
     if(mat[(y*10)+x]=='A')
     {
         vidasEnemigo[0]-=1;
-        printf("A restantes %d\n",vidasEnemigo[0]);
         mat[(y*10)+x]='O';
         retorno=1;
 
@@ -954,7 +952,6 @@ int disparoValido(char* mat, int* vidasEnemigo, int* hundidos, SDL_Rect disparo)
     if(mat[(y*10)+x]=='B')
     {
         vidasEnemigo[1]-=1;
-        printf("B restantes %d\n",vidasEnemigo[1]);
         mat[(y*10)+x]='O';
         retorno=1;
 
@@ -967,7 +964,6 @@ int disparoValido(char* mat, int* vidasEnemigo, int* hundidos, SDL_Rect disparo)
     if(mat[(y*10)+x]=='C')
     {
         vidasEnemigo[2]-=1;
-        printf("C restantes %d\n",vidasEnemigo[2]);
         mat[(y*10)+x]='O';
         retorno=1;
 
@@ -980,7 +976,6 @@ int disparoValido(char* mat, int* vidasEnemigo, int* hundidos, SDL_Rect disparo)
     if(mat[(y*10)+x]=='D')
     {
         vidasEnemigo[3]-=1;
-        printf("D restantes %d\n",vidasEnemigo[3]);
         mat[(y*10)+x]='O';
         retorno=1;
 
@@ -994,7 +989,6 @@ int disparoValido(char* mat, int* vidasEnemigo, int* hundidos, SDL_Rect disparo)
     if(mat[(y*10)+x]=='E')
     {
         vidasEnemigo[4]-=1;
-        printf("E restantes %d\n",vidasEnemigo[4]);
         mat[(y*10)+x]='O';
         retorno=1;
 
@@ -1055,6 +1049,8 @@ int juego(char* mat1, char* mat2, SDL_Renderer* render)
     cuadro= IMG_Load("./Data/cuadro.png");
     puntero= IMG_Load("./Data/puntero.png");
 
+
+    Mix_VolumeMusic(40);
     if(Mix_PlayMusic(encuentro,-1)<0)
     {
         printf("hubo un error en la reproduccion de musica del jugador 1\n");
@@ -1249,7 +1245,7 @@ int juego(char* mat1, char* mat2, SDL_Renderer* render)
             if((J1hundidos==5 || J2hundidos==5) && auxMusic==0)
             {
                 Mix_FreeMusic(encuentro);
-
+                Mix_VolumeMusic(60);
                 if(Mix_PlayMusic(victoria,-1)<0)
                 {
                     printf("hubo un error en la reproduccion de musica de victoria\n");
@@ -1264,8 +1260,8 @@ int juego(char* mat1, char* mat2, SDL_Renderer* render)
             {
 
                 SDL_BlitSurface(cuadro,NULL,detras,&posCuadro);
-                if(J1hundidos==5)mensaje(detras,30,50,490,"J1 ganaste!!!. ¿Jugar de nuevo?");
-                if(J2hundidos==5)mensaje(detras,30,50,490,"J2 ganaste!!!. ¿Jugar de nuevo?");
+                if(J1hundidos==5)mensaje(detras,30,50,490,"J1 ganaste!!!. Jugar de nuevo?");
+                if(J2hundidos==5)mensaje(detras,30,50,490,"J2 ganaste!!!. Jugar de nuevo?");
                 mensaje(detras,30,250,530,"Si");
                 mensaje(detras,30,500,530,"No");
 
@@ -1362,11 +1358,10 @@ int main ()
     SDL_Init(SDL_INIT_AUDIO);
     TTF_Init();
 
-    if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT,\
-             MIX_DEFAULT_CHANNELS, 4096) < 0) {
-    
-            printf("error\n");
-    exit(1);
+    if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096) < 0) 
+    {
+        printf("error\n");
+        exit(1);
     }
 
     //creacion de variables
@@ -1440,6 +1435,9 @@ int main ()
             grnV[3]= IMG_Load("./Data/verdes/acorazado_v.png"); 
             grnV[4]= IMG_Load("./Data/verdes/portaaviones_v.png");
 
+            //musica
+            Mix_ResumeMusic();
+            Mix_VolumeMusic(50);
             if(Mix_PlayMusic(preparacion,-1)<0)
             {
                 printf("hubo un error en la reproduccion de musica de poner barco\n");
