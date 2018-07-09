@@ -23,7 +23,7 @@ int menuPrincipal(SDL_Renderer *render)
     SDL_Surface* vacio;
     SDL_Surface* msn1= TTF_RenderText_Blended_Wrapped(fuente,"Iniciar partida",colorLetra,650);
     SDL_Surface* msn2= TTF_RenderText_Blended_Wrapped(fuente,"Salir",colorLetra,650);
-    Mix_Music *StarWhat=Mix_LoadMUS("./Data/musica/StartWhat.wav");
+    Mix_Music *StarWhat=Mix_LoadMUS("./Data/musica/StarWhat.ogg");
     SDL_Texture* textura;
     SDL_Event evento;
     SDL_Rect posPuntero={185,360,0,0};
@@ -1036,8 +1036,8 @@ int juego(char* mat1, char* mat2, SDL_Renderer* render)
     SDL_Texture* textura=NULL;
     SDL_Event evento;
 
-    Mix_Music *encuentro=Mix_LoadMUS("./Data/musica/encuentro.wav");
-    Mix_Music *victoria=Mix_LoadMUS("./Data/musica/victory.wav");
+    Mix_Music *encuentro=Mix_LoadMUS("./Data/musica/Duelo.ogg");
+    Mix_Music *victoria=Mix_LoadMUS("./Data/musica/victoria.ogg");
 
     SDL_Rect posActual; //para mover el marcador, cursor o como le llamen
     posActual.x=0;
@@ -1378,7 +1378,7 @@ int main ()
     SDL_Surface  *redV[5]={NULL};
     SDL_Surface  *grnH[5]={NULL}; 
     SDL_Surface  *grnV[5]={NULL};
-    Mix_Music* preparacion= Mix_LoadMUS("./Data/musica/preparacion.wav");
+    Mix_Music* preparacion= Mix_LoadMUS("./Data/musica/preparacion.ogg");
 
     char mat1[10][10];
     char mat2[10][10];
