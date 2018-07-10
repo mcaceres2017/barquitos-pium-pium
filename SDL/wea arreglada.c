@@ -18,17 +18,19 @@ int menuPrincipal(SDL_Renderer *render)
     //creando variables y cargando cosas
     TTF_Font* fuente= TTF_OpenFont("./Data/fuente/pokemon.ttf",30);
     SDL_Color colorLetra={255,255,255};
-    SDL_Surface* fondo= IMG_Load("./Data/menu.png");; //rgb 0 255 240
+    SDL_Surface* fondo= IMG_Load("./Data/menu.png");
     SDL_Surface* puntero= IMG_Load("./Data/puntero.png");
     SDL_Surface* vacio;
-    SDL_Surface* msn1= TTF_RenderText_Blended_Wrapped(fuente,"Iniciar partida",colorLetra,650);
-    SDL_Surface* msn2= TTF_RenderText_Blended_Wrapped(fuente,"Salir",colorLetra,650);
+    SDL_Surface* msn1= TTF_RenderText_Blended_Wrapped(fuente,"Iniciar partida",colorLetra,700);
+    SDL_Surface* msn2= TTF_RenderText_Blended_Wrapped(fuente,"Instrucciones",colorLetra,700);
+    SDL_Surface* msn3= TTF_RenderText_Blended_Wrapped(fuente,"Salir",colorLetra,700);
     Mix_Music *StarWhat=Mix_LoadMUS("./Data/musica/StarWhat.ogg");
     SDL_Texture* textura;
     SDL_Event evento;
     SDL_Rect posPuntero={185,360,0,0};
     SDL_Rect posMSN1={245,360,0,0};
     SDL_Rect posMSN2={245,420,0,0};
+    SDL_Rect posMSN3={245,480,0,0};
     int aux=1;
 
     //apartado de musica
@@ -51,6 +53,7 @@ int menuPrincipal(SDL_Renderer *render)
             SDL_BlitSurface(fondo,NULL,vacio,NULL);
             SDL_BlitSurface(msn1,NULL,vacio,&posMSN1);
             SDL_BlitSurface(msn2,NULL,vacio,&posMSN2);
+            SDL_BlitSurface(msn3,NULL,vacio,&posMSN3);
 
 
             //evento de salida
@@ -76,7 +79,7 @@ int menuPrincipal(SDL_Renderer *render)
 
                         if(posPuntero.y<360)
                         {
-                            posPuntero.y=420;
+                            posPuntero.y=480;
                         }
                         break;
 
@@ -85,7 +88,7 @@ int menuPrincipal(SDL_Renderer *render)
 
                         posPuntero.y+=60;
 
-                        if(posPuntero.y>420)
+                        if(posPuntero.y>480)
                         {
                             posPuntero.y=360;
                         }
@@ -100,12 +103,20 @@ int menuPrincipal(SDL_Renderer *render)
                         SDL_FreeSurface(vacio);
                         SDL_FreeSurface(msn1);
                         SDL_FreeSurface(msn2);
+                        SDL_FreeSurface(msn3);
                         TTF_CloseFont(fuente);
+
+
+                        if(posPuntero.y==480)
+                        {
+
+                            Mix_FreeMusic(StarWhat);
+
+                            return 0;
+                        }
                         
                         if(posPuntero.y==360)
                         {
-
-                            Mix_PauseMusic();
 
                             Mix_FreeMusic(StarWhat);
 
@@ -115,12 +126,12 @@ int menuPrincipal(SDL_Renderer *render)
                         if(posPuntero.y==420)
                         {
 
-                            Mix_PauseMusic();
-
                             Mix_FreeMusic(StarWhat);
 
-                            return 0;
+                            return 2;
                         }
+
+                        
 
                         break;
                 }
@@ -134,6 +145,106 @@ int menuPrincipal(SDL_Renderer *render)
             SDL_RenderCopy(render, textura, NULL, NULL);
             SDL_DestroyTexture(textura);
             SDL_RenderPresent(render);
+        }
+    }
+}
+
+
+//funcion que solo se encarga de mostrar las instrucciones... nada del otro mundo
+void instrucciones(SDL_Renderer *render)
+{
+
+    //creando y preparando variables
+    TTF_Font* fuente= TTF_OpenFont("./Data/fuente/pokemon.ttf",40);
+    SDL_Color colorLetra={255,255,255};
+    SDL_Surface* fondo= IMG_Load("./Data/fondo.png");
+    SDL_Surface* puntero= IMG_Load("./Data/puntero.png");
+    SDL_Surface* msn1= TTF_RenderText_Blended(fuente,"Flechas para moverte",colorLetra);
+    SDL_Surface* msn2= TTF_RenderText_Blended(fuente,"A para seleccionar / disparar",colorLetra);
+    SDL_Surface* msn3= TTF_RenderText_Blended(fuente,"S para quitar barco",colorLetra);
+    SDL_Surface* msn4= TTF_RenderText_Blended(fuente,"R para rotar barco",colorLetra);
+    SDL_Surface* msn5= TTF_RenderText_Blended(fuente,"Volver al menu",colorLetra);
+    SDL_Surface* vacio;
+    SDL_Texture* textura;
+    SDL_Event evento;
+    int aux=1;
+    SDL_Rect posPuntero={125,480,0,0};
+    SDL_Rect posMSN1={185,100,0,0};
+    SDL_Rect posMSN2={185,160,0,0};
+    SDL_Rect posMSN3={185,220,0,0};
+    SDL_Rect posMSN4={185,280,0,0};
+    SDL_Rect posMSN5={185,480,0,0};
+    SDL_SetSurfaceAlphaMod(fondo,170);
+
+    Mix_Music *Temmie=Mix_LoadMUS("./Data/musica/instrucciones.ogg");
+    Mix_VolumeMusic(60);
+    Mix_PlayMusic(Temmie,-1);
+
+
+    //ciclo infinito
+    while(aux==1)
+    {
+        while(SDL_PollEvent(&evento) && evento.type!=SDL_MOUSEMOTION)
+        {   
+
+            //bliteamos el fondo y los mensajes
+            vacio=SDL_CreateRGBSurface(0,800,600,32,0,0,0,0);
+            SDL_BlitSurface(fondo,NULL,vacio,NULL);
+            SDL_BlitSurface(msn1,NULL,vacio,&posMSN1);
+            SDL_BlitSurface(msn2,NULL,vacio,&posMSN2);
+            SDL_BlitSurface(msn3,NULL,vacio,&posMSN3);
+            SDL_BlitSurface(msn4,NULL,vacio,&posMSN4);
+            SDL_BlitSurface(msn5,NULL,vacio,&posMSN5);
+            SDL_BlitSurface(puntero,NULL,vacio,&posPuntero);
+
+            if(evento.type==SDL_QUIT) 
+            { 
+
+                Mix_PauseMusic();
+
+                Mix_FreeMusic(Temmie);
+
+                exit(0);
+            }
+
+            if(evento.type==SDL_KEYDOWN)
+            { 
+                switch(evento.key.keysym.scancode) 
+                { 
+                    case SDL_SCANCODE_A:
+
+                        aux=0;
+                }
+            }
+
+            if(aux==0)
+            {
+                Mix_FreeMusic(Temmie);    
+                SDL_FreeSurface(vacio);
+                SDL_FreeSurface(fondo);
+                SDL_FreeSurface(puntero);
+                SDL_FreeSurface(msn1);
+                SDL_FreeSurface(msn2);
+                SDL_FreeSurface(msn3);
+                SDL_FreeSurface(msn4);
+                SDL_FreeSurface(msn5);
+                TTF_CloseFont(fuente);
+                break;
+
+            }
+
+            //printf("antes de texutra\n");
+            textura= SDL_CreateTextureFromSurface(render,vacio);
+            //printf("despues de texutra\n");
+            SDL_FreeSurface(vacio);
+            //printf("despues de vacio\n");
+            SDL_RenderCopy(render, textura, NULL, NULL);
+            //printf("despues de Rcopy\n");
+            SDL_DestroyTexture(textura);
+            //printf("despues de D textura\n");
+            SDL_RenderPresent(render);
+            //printf("despues de R present\n");
+
         }
     }
 }
@@ -1394,7 +1505,15 @@ int main ()
 
 
     //llamado a menu principal
-    ingresado=menuPrincipal(render);
+    do
+    {
+        ingresado=menuPrincipal(render);
+        if(ingresado==2)
+        {
+            instrucciones(render);
+            printf("violado al salir\n");
+        }
+    }while(ingresado==2);
 
 
     //inicio del juego
@@ -1436,7 +1555,6 @@ int main ()
             grnV[4]= IMG_Load("./Data/verdes/portaaviones_v.png");
 
             //musica
-            Mix_ResumeMusic();
             Mix_VolumeMusic(50);
             if(Mix_PlayMusic(preparacion,-1)<0)
             {
